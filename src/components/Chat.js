@@ -73,7 +73,7 @@ function Chat() {
               {messages.map(message => {
                 return (
                   <div>
-                    <Typography variant="caption">{ userInfo.username }: </Typography>
+                    <Typography sx={{ color: userInfo.color }} variant="caption">{ userInfo.username }: </Typography>
                     <Chip label={ message } />
                   </div>
                 )

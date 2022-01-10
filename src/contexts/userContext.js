@@ -2,7 +2,7 @@ import React from 'react'
 import { createContext, useState } from 'react'
 
 
-const userContext = createContext({ username: 'Unknown' })
+const userContext = createContext({})
 
 function UserProvider({ children }) {
     const [userInfo, setUserInfo] = useState({ username: 'Anonymous'})
