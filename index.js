@@ -12,17 +12,10 @@ const PORT = process.env.PORT || 8080
 app.use(express.static(path.join(__dirname, '/client/build')));
 
 
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
     console.log('page requested')
     res.sendFile(__dirname + '/client/build/index.html')
 })
-
-app.get('/favicon.ico', (req, res) => {
-    console.log('requesting favicon')
-    res.status(204)
-})
-
-
 
 
 server.listen(PORT, () => {
