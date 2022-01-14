@@ -25,6 +25,6 @@ app.get('/favicon.ico', (req, res) => {
 
 
 
-server.listen(8080, () => {
+server.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`)
 })
