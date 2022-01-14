@@ -7,7 +7,7 @@ const app = express()
 const server = http.createServer(app)
 const io = new Server(server)
 
-const PORT = 8080
+const PORT = process.env.PORT || 8080
 
 app.use(express.static(path.join(__dirname, '/client/build')));
 
