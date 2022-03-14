@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,11 +8,16 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
 import { userContext } from '../contexts/userContext'
+import { socketContext } from '../contexts/socketContext'
+
+import { io } from 'socket.io-client'
 
 
 function Login() {
 
-    const { setUserInfo } = useContext(userContext)
+    const { userInfo, setUserInfo } = useContext(userContext)
+    const { socket, setSocket } = useContext(socketContext)
+    console.log(socket)
 
     const navigate = useNavigate()
 
@@ -34,19 +39,33 @@ function Login() {
         const name = e.target.username.value
 
         if (name) {
-            const color = generateColor()
-            console.log(color)
-
-            setUserInfo({
-                username: name,
-                color: color
-            })
-            navigate('/chat')
+            initiateConnection(name)
         }
 
         e.target.username.focus()
         e.target.reset()
     }
+
+    const initiateConnection = (name) => {
+        const color = generateColor()
+        console.log(color)
+        setUserInfo({
+            username: name,
+            color: color
+        })
+        setSocket(io(), { 
+            userInfo: userInfo
+        })
+    }
+
+    useEffect(() => {
+        if (socket) {
+            socket.on('connect', () => {
+                console.log('connected')
+                navigate('/chat')
+            })
+        }
+    }, [socket])
 
     return (
         <Box 

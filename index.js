@@ -17,6 +17,37 @@ app.get('*', (req, res) => {
     res.sendFile(__dirname + '/client/build/index.html')
 })
 
+const users = []
+
+io.on('connection', socket => {
+    console.log(`A user connected: ${socket}`)
+
+    socket.on('login', userInfo => {
+        users.push({
+            id: socket.id,
+            userInfo: userInfo
+        })
+    })
+
+    socket.on('message', message => {
+        console.log(`Message: ${message}`)
+        console.log('Broadcasting message...')
+        
+        io.emit('message', message)
+    })
+
+    socket.on('disconnect', () => {
+        console.log('a user disconnected')
+    })
+})
+
+
+
+
+
+
+
+
 
 server.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`)

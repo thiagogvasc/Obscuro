@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 
 import { userContext } from '../contexts/userContext'
+import { socketContext } from '../contexts/socketContext'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -19,10 +20,23 @@ function Chat() {
   const [messages, setMessages] = useState([])
 
   const { userInfo } = useContext(userContext)
+  const { socket } = useContext(socketContext)
+  console.log(socket)
 
   const navigate = useNavigate()
 
   const chatBottom = useRef(null)
+
+  useEffect(() => {
+    socket.on('connection', () => {
+      console.log('connected to server')
+    })
+
+    socket.on('message', message => {
+      console.log(message)
+      setMessages(arr => [...arr, message])
+    })
+  }, [])
 
   useEffect(() => {
     scrollToBottom()
@@ -32,8 +46,10 @@ function Chat() {
     e.preventDefault()
 
     const message = e.target.message.value
-    if (message) 
-      setMessages(arr => [...arr, message])
+    if (message) {
+      console.log('emitting message...')
+      socket.emit('message', message)
+    }
 
     e.target.reset()
     e.target.message.focus()
