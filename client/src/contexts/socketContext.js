@@ -11,7 +11,7 @@ export function SocketProvider({ children }) {
     const [socket, setSocket] = useState(null)
 
     const initiateConnection = (initialState, callback) => {
-        const newSocket = io('http://localhost:8080', initialState)
+        const newSocket = io(initialState)
         newSocket.on('connect', () => {
             callback()
         })
