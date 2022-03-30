@@ -1,71 +1,27 @@
 import React, { useEffect } from 'react'
-import { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
-import { userContext } from '../contexts/userContext'
-import { socketContext } from '../contexts/socketContext'
-
-import { io } from 'socket.io-client'
+import { useUser } from '../contexts/userContext'
+import { generateColor } from '../util/generateColor'
 
 
 function Login() {
-
-    const { userInfo, setUserInfo } = useContext(userContext)
-    const { socket, setSocket } = useContext(socketContext)
-    console.log(socket)
-
-    const navigate = useNavigate()
-
-    const generateColor = () => {
-        const hexValues = '456789ABC'
-        let color = ''
-        color += '#'
-        for (let i = 0; i < 6; i++) {
-            const value = Math.floor(Math.random() * 9)
-            color += hexValues[value]
-        }
-
-        return color
-    }
+    const user = useUser()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-
         const name = e.target.username.value
-
-        if (name) {
-            initiateConnection(name)
+        if (name !== '') {
+            user.login(name, generateColor())
         }
 
         e.target.username.focus()
         e.target.reset()
     }
-
-    const initiateConnection = (name) => {
-        const color = generateColor()
-        console.log(color)
-        setUserInfo({
-            username: name,
-            color: color
-        })
-        setSocket(io(), { 
-            userInfo: userInfo
-        })
-    }
-
-    useEffect(() => {
-        if (socket) {
-            socket.on('connect', () => {
-                console.log('connected')
-                navigate('/chat')
-            })
-        }
-    }, [socket])
 
     return (
         <Box 
@@ -77,7 +33,7 @@ function Login() {
             }}
         >   
             <form onSubmit={ handleSubmit }>
-                <Box
+                <Box 
                     sx={{
                         display: "flex",
                         flexDirection: "column",

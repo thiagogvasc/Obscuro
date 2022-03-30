@@ -10,32 +10,24 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 
-import { userContext } from '../contexts/userContext'
-import { socketContext } from '../contexts/socketContext'
-
-import { useNavigate } from 'react-router-dom'
+import { useUser } from '../contexts/userContext'
+import { useSocket } from '../contexts/socketContext'
 
 
 function Chat() {
   const [messages, setMessages] = useState([])
 
-  const { userInfo } = useContext(userContext)
-  const { socket } = useContext(socketContext)
-  console.log(socket)
-
-  const navigate = useNavigate()
+  const { user, logout } = useUser()
+  const socket = useSocket()
 
   const chatBottom = useRef(null)
 
   useEffect(() => {
-    socket.on('connection', () => {
-      console.log('connected to server')
-    })
-
-    socket.on('message', message => {
-      console.log(message)
-      setMessages(arr => [...arr, message])
-    })
+    if (socket != null) {
+      socket.onMessage(message => {
+        setMessages(arr => [...arr, message])
+      })
+    }
   }, [])
 
   useEffect(() => {
@@ -44,19 +36,18 @@ function Chat() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const text = e.target.message.value
 
-    const message = e.target.message.value
-    if (message) {
-      console.log('emitting message...')
-      socket.emit('message', message)
+    if (text !== '') {
+      socket.emitMessage({
+        text,
+        sender: user.username,
+        senderColor: user.color
+      })
     }
 
     e.target.reset()
     e.target.message.focus()
-  }
-
-  const logout = () => {
-    navigate('/')
   }
 
   const scrollToBottom = () => {
@@ -66,35 +57,25 @@ function Chat() {
   return (
         <Box 
           sx={{ 
+            flexGrow: 1,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            gap: "5vh"
+            border: "5px solid black",
+            padding: "5vh 5vw",
+            overflowY: "auto"
           }}
         >
-          <Button sx={{ alignSelf: "start" }} onClick={ logout }><ArrowBackIosNewIcon />Back</Button>
-          <Paper
-            sx={{
-              width: "50vw", 
-              height: "50vh", 
-              padding: "1vh 1vw",
-              overflow: "scroll"
-            }}
-            elevation={3}
-          >
-            <Stack sx={{ width: "100%", height: "100%" }} spacing={1} direction="column" alignItems="end">
+          <Stack sx={{ flexGrow: 1, overflowY: "auto" }} spacing={1} direction="column" alignItems="end">
               {messages.map(message => {
                 return (
                   <div>
-                    <Typography sx={{ color: userInfo.color }} variant="caption">{ userInfo.username }: </Typography>
-                    <Chip label={ message } />
+                    <Typography sx={{ color: message.senderColor }} variant="caption">{ message.sender }: </Typography>
+                    <Chip label={ message.text } />
                   </div>
                 )
               })}
             <div ref={chatBottom} />
-            </Stack>
-          </Paper>
+          </Stack>
 
           <form onSubmit={ handleSubmit }>
             <Box 
@@ -103,12 +84,11 @@ function Chat() {
                 flexDirection: "row",
                 justifyContent: "flex-end",
                 alignItems: "center",
-                gap: "1vw"
+                gap: 2
               }}
             >
-                <Textfield autoComplete="off" name="message" />
+                <Textfield autoComplete="off" name="message" fullWidth />
                 <Button type="submit" variant="contained">Send</Button>
-
             </Box>
           </form>
         </Box>
