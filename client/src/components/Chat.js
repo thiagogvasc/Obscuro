@@ -55,43 +55,43 @@ function Chat() {
   }
 
   return (
+    <Box 
+      sx={{ 
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "column",
+        border: "5px solid black",
+        padding: "5vh 5vw",
+        overflowY: "auto"
+      }}
+    >
+      <Stack sx={{ flexGrow: 1, overflowY: "auto" }} spacing={1} direction="column" alignItems="end">
+          {messages.map(message => {
+            return (
+              <>
+                <Typography sx={{ color: message.senderColor }} variant="caption">{ message.sender }: </Typography>
+                <Chip label={ message.text } />
+              </>
+            )
+          })}
+        <div ref={ chatBottom } />
+      </Stack>
+
+      <form onSubmit={ handleSubmit }>
         <Box 
-          sx={{ 
-            flexGrow: 1,
+          sx={{
             display: "flex",
-            flexDirection: "column",
-            border: "5px solid black",
-            padding: "5vh 5vw",
-            overflowY: "auto"
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: 2
           }}
         >
-          <Stack sx={{ flexGrow: 1, overflowY: "auto" }} spacing={1} direction="column" alignItems="end">
-              {messages.map(message => {
-                return (
-                  <div>
-                    <Typography sx={{ color: message.senderColor }} variant="caption">{ message.sender }: </Typography>
-                    <Chip label={ message.text } />
-                  </div>
-                )
-              })}
-            <div ref={chatBottom} />
-          </Stack>
-
-          <form onSubmit={ handleSubmit }>
-            <Box 
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                alignItems: "center",
-                gap: 2
-              }}
-            >
-                <Textfield autoComplete="off" name="message" fullWidth />
-                <Button type="submit" variant="contained">Send</Button>
-            </Box>
-          </form>
+            <Textfield autoComplete="off" name="message" fullWidth />
+            <Button type="submit" variant="contained">Send</Button>
         </Box>
+      </form>
+    </Box>
   );
 }
 

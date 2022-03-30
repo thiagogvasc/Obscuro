@@ -12,12 +12,12 @@ import { generateColor } from '../util/generateColor'
 function Login() {
     const user = useUser()
 
+
     const handleSubmit = (e) => {
         e.preventDefault()
+
         const name = e.target.username.value
-        if (name !== '') {
-            user.login(name, generateColor())
-        }
+        if (name !== '') user.login(name, generateColor())
 
         e.target.username.focus()
         e.target.reset()
