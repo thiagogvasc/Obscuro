@@ -17,8 +17,9 @@ import SideBar from '../components/SideBar'
 
 
 function Chat() {
-  const [messages, setMessages] = useState([])
-  const [receiver, setReceiver] = useState('general')
+  const [messages, setMessages] = useState({})
+  const [currentRoomMessages, setCurrentRoomMessages] = useState([])
+  const [receiver, setReceiver] = useState({id: 'general', isRoom: true})
   const [users, setUsers] = useState([])
   const { user } = useUser()
   const socket = useSocket()
@@ -33,7 +34,12 @@ function Chat() {
   })
 
   useEffect(() => {
-    socket.emitFetchMessages(receiver)
+    //socket.emitFetchMessages(receiver)
+      console.log(receiver.id)
+      if (messages[receiver.id]) {
+        console.log('reading messages from' + receiver.id)
+        setCurrentRoomMessages(messages[receiver.id])
+      }
   }, [receiver])
 
   useEffect(() => {
@@ -41,7 +47,22 @@ function Chat() {
     // when receive message, set it on a variable, then when user box is clicked it 
     // just renders it on the chat
     socket.onMessage(message => {
-      setMessages(arr => [...arr, message])
+      //setMessages(arr => [...arr, message])
+      setMessages(currMessages => {
+        if (message.receiver.isRoom) {
+          if (!currMessages[message.receiver.id])
+            currMessages[message.receiver.id] = []
+          currMessages[message.receiver.id] = [...currMessages[message.receiver.id], message]
+        } else { // is private message
+          if (!currMessages[message.sender.id])
+            currMessages[message.sender.id] = []
+          console.log('adding message from sender : ' + message.sender.id)
+          currMessages[message.sender.id] = [...currMessages[message.sender.id], message]
+          console.log(currMessages[message.sender.id])
+        }
+        console.log(currMessages)
+        return currMessages
+      })
     })
     socket.onUsers(users => {
       console.log('got users')
@@ -77,9 +98,9 @@ function Chat() {
     e.target.message.focus()
   }
 
-  const selectReceiver = (id) => {
+  const selectReceiver = (id, isRoom) => {
     //socket.joinRoom(id) // test
-    setReceiver(id)
+    setReceiver({id, isRoom})
   }
 
   const scrollToBottom = () => {
@@ -103,7 +124,7 @@ function Chat() {
         </Grid>
         <Grid item xs={8}>
           <Stack sx={{ flexGrow: 1, overflowY: "auto" }} spacing={1} direction="column" alignItems="end">
-              {messages.map(message => {
+              {currentRoomMessages.map(message => {
                 return (
                   <>
                     <Typography sx={{ color: message.sender.color }} variant="caption">{ message.sender.username }: </Typography>

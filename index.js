@@ -95,7 +95,7 @@ io.on('connection', socket => {
         if (messages[room]) {
             // if private 
             if (room.length === 20) {
-                const sentToMeOrSentByMeFilter = message => message.receiver === socket.id || message.sender.id === socket.id
+                const sentToMeOrSentByMeFilter = message => message.receiver.id === socket.id || message.sender.id === socket.id
                 const filteredMessages = messages[room].filter(sentToMeOrSentByMeFilter)
                 socket.emit('messages', filteredMessages)
             } else { // is channel
@@ -110,15 +110,15 @@ io.on('connection', socket => {
     })
 
     socket.on('message', (message) => {
-        console.log(`Message: ${message.text} to ${message.receiver}`)
+        console.log(`Message: ${message.text} to ${message.receiver.id}`)
         console.log('Broadcasting message...')
-        io.to(message.receiver).to(message.sender.id).emit('message', message)
+        io.to(message.receiver.id).to(message.sender.id).emit('message', message)
 
-        if (messages[message.receiver]) {
-            messages[message.receiver].push(message)
+        if (messages[message.receiver.id]) {
+            messages[message.receiver.id].push(message)
 
             // is private message
-            if (message.receiver.length === 20)  {
+            if (message.receiver.id.length === 20)  {
                 if (messages[message.sender.id]) {
                     messages[message.sender.id].push(message)
                 } else {
@@ -127,10 +127,10 @@ io.on('connection', socket => {
                 }
             }
         } else {
-            messages[message.receiver] = []
-            messages[message.receiver].push(message)
+            messages[message.receiver.id] = []
+            messages[message.receiver.id].push(message)
 
-            if (message.receiver.length === 20)  {
+            if (message.receiver.id.length === 20)  {
                 if (messages[message.sender.id]) {
                     messages[message.sender.id].push(message)
                 } else {

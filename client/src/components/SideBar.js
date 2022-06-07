@@ -6,7 +6,7 @@ export default function SideBar({users, selectReceiver}) {
   return (
     <Box>
       <h1>Side Bar</h1>
-      <Box onClick={() => selectReceiver('general')} sx={{
+      <Box onClick={() => selectReceiver('general', true)} sx={{
         backgroundColor: 'red',
         '&:hover': {
           backgroundColor: 'black',
@@ -19,7 +19,7 @@ export default function SideBar({users, selectReceiver}) {
           return (
             <>
               {console.log(user.username)}
-              <Box onClick={() => selectReceiver(user.id)} sx={{
+              <Box onClick={() => selectReceiver(user.id, false)} sx={{
                 backgroundColor: 'red',
                 '&:hover': {
                   backgroundColor: 'black',

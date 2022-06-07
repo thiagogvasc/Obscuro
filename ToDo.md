@@ -6,3 +6,8 @@
   new messages will be the chat box appear first.
 
   search box will be added above the side bar
+
+
+# client side messages state
+  messages = useState({})
+  onMessage = setState(currMessages => {...currMessages, 'message.receiver': currMessages[message.receiver].push(message)})
