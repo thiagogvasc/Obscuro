@@ -34,34 +34,30 @@ function Chat() {
   })
 
   useEffect(() => {
-    //socket.emitFetchMessages(receiver)
-      console.log(receiver.id)
-      if (messages[receiver.id]) {
-        console.log('reading messages from' + receiver.id)
-        setCurrentRoomMessages(messages[receiver.id])
-      }
-  }, [receiver])
+      setCurrentRoomMessages(messages[receiver.id] || [])
+  }, [receiver, messages])
 
   useEffect(() => {
-    console.log('useeffect chat')
-    // when receive message, set it on a variable, then when user box is clicked it 
-    // just renders it on the chat
     socket.onMessage(message => {
-      //setMessages(arr => [...arr, message])
       setMessages(currMessages => {
+        const currMessagesDraft = {...currMessages}
         if (message.receiver.isRoom) {
-          if (!currMessages[message.receiver.id])
-            currMessages[message.receiver.id] = []
-          currMessages[message.receiver.id] = [...currMessages[message.receiver.id], message]
+          if (!currMessagesDraft[message.receiver.id]) {
+            currMessagesDraft[message.receiver.id] = []
+          }
+          currMessagesDraft[message.receiver.id] = [...currMessagesDraft[message.receiver.id], message]
         } else { // is private message
-          if (!currMessages[message.sender.id])
-            currMessages[message.sender.id] = []
-          console.log('adding message from sender : ' + message.sender.id)
-          currMessages[message.sender.id] = [...currMessages[message.sender.id], message]
-          console.log(currMessages[message.sender.id])
+          if (!currMessagesDraft[message.sender.id])
+            currMessagesDraft[message.sender.id] = []
+          currMessagesDraft[message.sender.id] = [...currMessagesDraft[message.sender.id], message]
+
+          if (!currMessagesDraft[message.receiver.id])
+          currMessagesDraft[message.receiver.id] = []
+          if (message.sender.id === user.id) {
+            currMessagesDraft[message.receiver.id] = [...currMessagesDraft[message.receiver.id], message]
+          }
         }
-        console.log(currMessages)
-        return currMessages
+        return currMessagesDraft
       })
     })
     socket.onUsers(users => {
@@ -71,16 +67,16 @@ function Chat() {
     })
     // when receive message, set it on a variable, then when user box is clicked it 
     // just renders it on the chat
-    socket.onMessages(messages => {
-      console.log(messages)
-      setMessages(messages)
-    })
+    // socket.onMessages(messages => {
+    //   console.log(messages)
+    //   setMessages(messages)
+    // })
     socket.joinRoom('general')
   }, [])
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+  }, [currentRoomMessages])
 
   const handleSubmit = (e) => {
     e.preventDefault()
