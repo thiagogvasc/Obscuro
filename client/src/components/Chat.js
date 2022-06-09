@@ -9,11 +9,12 @@ import Chip from '@mui/material/Chip'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
+import SendIcon from '@mui/icons-material/Send';
 
 import { useUser } from '../contexts/userContext'
 import { useSocket } from '../contexts/socketContext'
 
-import SideBar from '../components/SideBar'
+import Sidebar from './Sidebar'
 
 
 function Chat() {
@@ -108,48 +109,59 @@ function Chat() {
       sx={{ 
         flexGrow: 1,
         display: "flex",
-        flexDirection: "column",
-        border: "5px solid black",
-        padding: "5vh 5vw",
-        overflowY: "auto"
+        flexDirection: "row",
+        overflowY: "auto",
+        gap: 3
       }}
     >
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <SideBar users={users} selectReceiver={selectReceiver} />
-        </Grid>
-        <Grid item xs={8}>
-          <Stack sx={{ flexGrow: 1, overflowY: "auto" }} spacing={1} direction="column" alignItems="end">
-              {currentRoomMessages.map(message => {
-                return (
-                  <>
-                    <Typography sx={{ color: message.sender.color }} variant="caption">{ message.sender.username }: </Typography>
-                    <Chip label={ message.text } />
-                  </>
-                )
-              })}
-            <div ref={ chatBottom } />
-          </Stack>
-
-          <form onSubmit={ handleSubmit }>
-            <Box 
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                alignItems: "center",
-                gap: 2
-              }}
+      <Sidebar users={users} selectReceiver={selectReceiver} />
+      <Box sx={{ display: "flex", flexGrow: 1, flexDirection: "column", backgroundColor: '#3E3E42', borderRadius: '25px'}}>
+        <Stack sx={{ p: 5, flexGrow: 1, overflowY: "scroll" }} spacing={1} direction="column" alignItems="end">
+            {currentRoomMessages.map(message => {
+              return (
+                <Box sx={{
+                  alignSelf: message.sender.id === user.id ? 'end' : 'start',
+                  textAlign: message.sender.id === user.id ? 'right' : 'left',
+                }}>
+                  <Typography sx={{ color: 'white'/*color: message.sender.color */}} variant="caption">{ message.sender.username }: </Typography>
+                  <Typography sx={{
+                    backgroundColor: '#1976d2',
+                    color: 'white',
+                    borderRadius: '10px',
+                    p: 1,
+                    maxWidth: '200px',
+                    wordWrap: 'break-word',
+                  }}>
+                    { message.text }
+                  </Typography>
+                </Box>
+              )
+            })}
+          <div ref={ chatBottom } />
+        </Stack>
+        <form onSubmit={ handleSubmit }>
+          <Box 
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: 2,
+              m: 2,
+            }}
             >
-                <Textfield autoComplete="off" name="message" fullWidth />
-                <Button type="submit" variant="contained">Send</Button>
-            </Box>
-          </form>
-          
-        </Grid>
-      </Grid>
-
-
+              <Textfield autoComplete="off" name="message" variant="outlined" fullWidth 
+              InputProps={{
+                sx: {
+                  color: 'black',
+                  backgroundColor: 'white',
+                  borderRadius: '25px'
+                }
+              }}/>
+              <Button sx={{minWidth: '50px', minHeight: '50px', borderRadius: '50%'}} type="submit" variant="contained"><SendIcon/></Button>
+          </Box>
+        </form>
+      </Box>
     </Box>
   );
 }

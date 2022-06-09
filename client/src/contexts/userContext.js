@@ -11,9 +11,10 @@ export function UserProvider({ children }) {
     const navigate = useNavigate()
 
     const logout = () => {
-        // REFACTORRR
-        // setUser({ ...user, isLoggedIn: false })
-        // navigate('/')
+        console.log('logout called')
+        sessionStorage.clear()
+        setUser(null)
+        navigate('/')
     }
 
     const value = {
