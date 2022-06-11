@@ -149,12 +149,19 @@ io.on('connection', socket => {
         // io.emit('message', message)
     })
 
+    socket.on('logout', () => {
+        delete sessions[socket.sessionID]
+        const index = users.findIndex(user => user.id === socket.id)
+        users.splice(index, 1)
+        socket.disconnect()
+    })
+
     socket.on('disconnect', () => {
         console.log('disconnect')
 
         const index = users.findIndex(user => !sessions[socket.sessionID])
         if (index !== -1)
-        users.splice(index, 1)
+            users.splice(index, 1)
         console.log(users);
     })
 })
