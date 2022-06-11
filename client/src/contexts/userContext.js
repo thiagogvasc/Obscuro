@@ -9,9 +9,11 @@ const userContext = createContext({})
 export function UserProvider({ children }) {
     const [user, setUser] = useState({ username: 'Anonymous', color: '#000000', isLoggedIn: false  })
     const navigate = useNavigate()
+    const socket = useSocket()
 
     const logout = () => {
         console.log('logout called')
+        socket.emitLogout()
         sessionStorage.clear()
         setUser(null)
         navigate('/')

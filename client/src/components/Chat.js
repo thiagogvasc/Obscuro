@@ -66,12 +66,7 @@ function Chat() {
       console.log(users)
       setUsers(users)
     })
-    // when receive message, set it on a variable, then when user box is clicked it 
-    // just renders it on the chat
-    // socket.onMessages(messages => {
-    //   console.log(messages)
-    //   setMessages(messages)
-    // })
+    
     socket.joinRoom('general')
   }, [])
 
@@ -123,17 +118,19 @@ function Chat() {
                   alignSelf: message.sender.id === user.id ? 'end' : 'start',
                   textAlign: message.sender.id === user.id ? 'right' : 'left',
                 }}>
-                  <Typography sx={{ color: 'white'/*color: message.sender.color */}} variant="caption">{ message.sender.username }: </Typography>
-                  <Typography sx={{
+                  <Typography sx={{color: 'white'/*color: message.sender.color */}} variant="body1">{ message.sender.username }: </Typography>
+                  <Typography fontWeight="300" variant="body2" sx={{
                     backgroundColor: '#1976d2',
                     color: 'white',
                     borderRadius: '10px',
                     p: 1,
                     maxWidth: '200px',
                     wordWrap: 'break-word',
+                    float: message.sender.id === user.id ? 'right' : 'left',
                   }}>
                     { message.text }
                   </Typography>
+                 
                 </Box>
               )
             })}

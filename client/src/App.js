@@ -9,6 +9,8 @@ import Chat from './components/Chat'
 import Login from './components/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+
 import { useUser, UserProvider } from './contexts/userContext'
 import { SocketProvider } from './contexts/socketContext'
 
@@ -17,17 +19,22 @@ import { Button } from '@mui/material'
 
 
 function App() { 
+  const theme = createTheme({
+  
+  })
   return (
     <BrowserRouter>
       <SocketProvider>
         <UserProvider>
-          <Box sx={{ display: "flex", flexDirection: "column", width: "100vw", height: "100vh", backgroundColor: '#2D2D30', padding: '2vh 5vw' }}>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={ <Login /> } />
-              <Route path="/chat" element={ <ProtectedRoute> <Chat /> </ProtectedRoute> } />
-            </Routes>
-          </Box>
+          <ThemeProvider theme={theme}>
+            <Box sx={{ display: "flex", flexDirection: "column", width: "100vw", height: "100vh", backgroundColor: '#2D2D30', padding: '2vh 5vw' }}>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={ <Login /> } />
+                <Route path="/chat" element={ <ProtectedRoute> <Chat /> </ProtectedRoute> } />
+              </Routes>
+            </Box>
+          </ThemeProvider>
         </UserProvider>
       </SocketProvider>
     </BrowserRouter>

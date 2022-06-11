@@ -12,14 +12,13 @@ export function SocketProvider({ children }) {
     const [connectError, setConnectError] = useState(null)
 
     const initConnection = () => {
-        console.log('connecint')
         const persistedUser = JSON.parse(sessionStorage.getItem('user'))
-        console.log('init connection - pesrsisted user: ' + persistedUser)
         const newSocket = io('http://localhost:8080', {
             auth: {
                 sessionID: persistedUser?.sessionID
             }
         })
+
         newSocket.on('connect', () => {
             setConnected(true)
         })
@@ -45,8 +44,11 @@ export function SocketProvider({ children }) {
     }
 
     const joinRoom = (room) => {
-        console.log("emitting join room")
         socketRef.current.emit('join-room', room)
+    }
+
+    const emitLogout = () => {
+        socketRef.current.emit('logout')
     }
     
     const onMessage = (callback) => {
@@ -77,6 +79,7 @@ export function SocketProvider({ children }) {
         emitLogin,
         emitFetchMessages,
         joinRoom,
+        emitLogout,
         onMessage,
         onMessages,
         onLoginSuccess,

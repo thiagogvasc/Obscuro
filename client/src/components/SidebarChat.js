@@ -11,22 +11,16 @@ export default function SidebarChat({chatName, receiver, selectReceiver, isRoom}
     // mayve just pass the whole receiver
     <Box onClick={select} sx={{
       display: 'flex',
+      transition: 'background-color .2s',
       '&:hover': {
-        backgroundColor: 'black',
+        backgroundColor: 'dimgray',
         cursor: 'pointer'
       }
     }}>
-      <Avatar sx={{
-        width: '50px',
-        height: '50px',
-        m: 2
-      }}/>
-      <Box sx={{
-        alignSelf: 'center',
-        fontWeight:'100'
-      }}>
-        <Typography sx={{ fontWeight: '100', color: '#FFFFFF'}}>{chatName}</Typography>
-        <Typography sx={{color: '#FFFFFF'}}>{'last message from chat...'}</Typography>
+      <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
+      <Box sx={{ alignSelf: 'center', fontWeight:'100' }}>
+        <Typography variant="body1" sx={{ color: '#FFFFFF'}}>{chatName}</Typography>
+        <Typography variant="body2" sx={{ color: 'darkgray'}}>{'last message from chat...'}</Typography>
       </Box>
     </Box>
   )
