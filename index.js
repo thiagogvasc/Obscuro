@@ -10,7 +10,7 @@ const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
         // origin: "https://obscuro.herokuapp.com",
-        origin: "http://localhost:3000",
+        origin: ["http://192.168.0.16:3000"],
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -152,16 +152,21 @@ io.on('connection', socket => {
     socket.on('logout', () => {
         delete sessions[socket.sessionID]
         const index = users.findIndex(user => user.id === socket.id)
+        console.log(users)
+        console.log('logout index: ' + index)
         users.splice(index, 1)
+        console.log(users)
         socket.disconnect()
     })
 
     socket.on('disconnect', () => {
         console.log('disconnect')
-
-        const index = users.findIndex(user => !sessions[socket.sessionID])
-        if (index !== -1)
+        console.log(socket.id)
+        const index = users.findIndex(user => socket.id === user.id && !sessions[socket.sessionID])
+        if (index !== -1) {
+            console.log('not -1')
             users.splice(index, 1)
+        }
         console.log(users);
     })
 })
