@@ -15,6 +15,7 @@ import { useUser } from '../contexts/userContext'
 import { useSocket } from '../contexts/socketContext'
 
 import Sidebar from './Sidebar'
+import Message from './Message'
 
 
 function Chat() {
@@ -26,6 +27,7 @@ function Chat() {
   const socket = useSocket()
   const chatBottom = useRef(null)
   const navigate = useNavigate()
+  const [shouldOpenSideBar, setShouldOpenSideBar] = useState(false)
 
   useEffect(() => {
     if (socket.connectError?.message === 'invalid session') {
@@ -93,10 +95,21 @@ function Chat() {
   const selectReceiver = (id, isRoom) => {
     //socket.joinRoom(id) // test
     setReceiver({id, isRoom})
+    setShouldOpenSideBar(false)
   }
 
   const scrollToBottom = () => {
     chatBottom.current.scrollIntoView()
+  }
+
+  const getUsername = (id) => {
+    let username = ''
+    users.forEach(user => {
+      if (user.id === id) {
+        username = user.username
+      }
+    })
+    return username
   }
 
   return (
@@ -109,30 +122,15 @@ function Chat() {
         gap: 3
       }}
     >
-      <Sidebar users={users} selectReceiver={selectReceiver} />
-      <Box sx={{ display: "flex", flexGrow: 1, flexDirection: "column", backgroundColor: '#3E3E42', borderRadius: '25px'}}>
+      <Sidebar messages={messages} shouldOpenSideBar={shouldOpenSideBar} users={users} selectReceiver={selectReceiver} />
+      <Box sx={{ display: shouldOpenSideBar ? 'none' : 'flex', flexGrow: 1, flexDirection: "column", backgroundColor: '#3E3E42', borderRadius: '25px'}}>
+        <Button sx={{ display: {xs: 'block', sm: 'none'}, alignSelf: "flex-start"}} onClick={() => setShouldOpenSideBar(true)}>
+          back
+        </Button>
+        <Box sx={{ backgroundColor: 'dimgray', textAlign: 'center', color: 'white'}}><Typography variant="h5">{receiver.isRoom ? receiver.id : getUsername(receiver.id)}</Typography></Box>
         <Stack sx={{ p: 5, flexGrow: 1, overflowY: "scroll" }} spacing={1} direction="column" alignItems="end">
             {currentRoomMessages.map(message => {
-              return (
-                <Box sx={{
-                  alignSelf: message.sender.id === user.id ? 'end' : 'start',
-                  textAlign: message.sender.id === user.id ? 'right' : 'left',
-                }}>
-                  <Typography sx={{color: 'white'/*color: message.sender.color */}} variant="body1">{ message.sender.username }: </Typography>
-                  <Typography fontWeight="300" variant="body2" sx={{
-                    backgroundColor: '#1976d2',
-                    color: 'white',
-                    borderRadius: '10px',
-                    p: 1,
-                    maxWidth: '200px',
-                    wordWrap: 'break-word',
-                    float: message.sender.id === user.id ? 'right' : 'left',
-                  }}>
-                    { message.text }
-                  </Typography>
-                 
-                </Box>
-              )
+              return (<Message message={message} user={user}/>)
             })}
           <div ref={ chatBottom } />
         </Stack>
