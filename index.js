@@ -147,6 +147,7 @@ io.on('connection', socket => {
         }
 
         // io.emit('message', message)
+        setTimeout(() => {console.log('timeout')}, 5000)
     })
 
     socket.on('logout', () => {

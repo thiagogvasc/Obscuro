@@ -21,7 +21,7 @@ import Message from './Message'
 function Chat() {
   const [messages, setMessages] = useState({})
   const [currentRoomMessages, setCurrentRoomMessages] = useState([])
-  const [receiver, setReceiver] = useState({id: 'general', isRoom: true})
+  const [receiver, setReceiver] = useState({id: 'general', chatName: 'general', isRoom: true})
   const [users, setUsers] = useState([])
   const { user } = useUser()
   const socket = useSocket()
@@ -122,13 +122,46 @@ function Chat() {
         gap: 3
       }}
     >
-      <Sidebar messages={messages} shouldOpenSideBar={shouldOpenSideBar} users={users} selectReceiver={selectReceiver} />
-      <Box sx={{ display: shouldOpenSideBar ? 'none' : 'flex', flexGrow: 1, flexDirection: "column", backgroundColor: '#3E3E42', borderRadius: '25px'}}>
-        <Button sx={{ display: {xs: 'block', sm: 'none'}, alignSelf: "flex-start"}} onClick={() => setShouldOpenSideBar(true)}>
+      <Sidebar 
+        currentReceiver={receiver} 
+        messages={messages} 
+        shouldOpenSideBar={shouldOpenSideBar} 
+        users={users} 
+        selectReceiver={selectReceiver} 
+      />
+      <Box sx={{
+        display: shouldOpenSideBar ? 'none' : 'flex', 
+        flexGrow: 1, 
+        flexDirection: "column", 
+        backgroundColor: '#3E3E42', 
+        borderRadius: '25px'
+      }}>
+        <Button sx={{
+          display: {xs: 'block', sm: 'none'}, 
+          alignSelf: "flex-start"}} 
+          onClick={() => setShouldOpenSideBar(true)}
+        >
           back
         </Button>
-        <Box sx={{ backgroundColor: 'dimgray', textAlign: 'center', color: 'white'}}><Typography variant="h5">{receiver.isRoom ? receiver.id : getUsername(receiver.id)}</Typography></Box>
-        <Stack sx={{ p: 5, flexGrow: 1, overflowY: "scroll" }} spacing={1} direction="column" alignItems="end">
+        <Box sx={{ 
+          backgroundColor: 'dimgray', 
+          textAlign: 'center', 
+          color: 'white'
+        }}>
+          <Typography variant="h5">
+            {receiver.isRoom ? receiver.id : getUsername(receiver.id)}
+          </Typography>
+        </Box>
+        <Stack 
+          spacing={1} 
+          direction="column" 
+          alignItems="end"
+          sx={{ 
+            p: 5, 
+            flexGrow: 1, 
+            overflowY: "scroll",
+          }} 
+        >
             {currentRoomMessages.map(message => {
               return (<Message message={message} user={user}/>)
             })}
@@ -145,14 +178,19 @@ function Chat() {
               m: 2,
             }}
             >
-              <Textfield autoComplete="off" name="message" variant="outlined" fullWidth 
-              InputProps={{
-                sx: {
-                  color: 'black',
-                  backgroundColor: 'white',
-                  borderRadius: '25px'
-                }
-              }}/>
+              <Textfield 
+                autoComplete="off" 
+                name="message" 
+                variant="outlined" 
+                fullWidth 
+                InputProps={{
+                  sx: {
+                    color: 'black',
+                    backgroundColor: 'white',
+                    borderRadius: '25px'
+                  }
+                }}
+              />
               <Button sx={{minWidth: '50px', minHeight: '50px', borderRadius: '50%'}} type="submit" variant="contained"><SendIcon/></Button>
           </Box>
         </form>

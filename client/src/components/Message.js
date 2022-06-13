@@ -8,10 +8,11 @@ import { Button } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function Message({message, user}) {
+  const fromSelf = message.sender.id === user.id
   return (
     <Box sx={{
-      alignSelf: message.sender.id === user.id ? 'flex-end' : 'flex-start',
-      textAlign: message.sender.id === user.id ? 'right' : 'left',
+      alignSelf: fromSelf ? 'flex-end' : 'flex-start',
+      textAlign: fromSelf ? 'right' : 'left',
     }}>
       <Typography sx={{color: 'white'/*color: message.sender.color */}} variant="body1">{ message.sender.username }: </Typography>
       <Typography fontWeight="300" variant="body2" sx={{
@@ -21,7 +22,7 @@ export default function Message({message, user}) {
         p: 1,
         maxWidth: '200px',
         wordWrap: 'break-word',
-        float: message.sender.id === user.id ? 'right' : 'left',
+        float: fromSelf ? 'right' : 'left',
       }}>
         { message.text }
       </Typography>
