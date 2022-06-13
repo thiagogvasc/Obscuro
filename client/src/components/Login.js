@@ -58,10 +58,11 @@ function Login() {
                 flexDirection: "column",
                 justifyContent: "space-between",
                 alignItems: "center",
+                color: "white"
             }}
         >   
-        {socket.connected ? <div>connected</div> : <div>not connected</div>}
-        {socket.connectError ? <div>{socket.connectError.message}</div> : <div>no error: {socket.connectError}</div>}
+        <Typography>{socket.connected ? 'connected' : 'not connected'}</Typography>
+        <Typography>{socket.connectError ? <div>{socket.connectError.message}</div> : <div>no error: {socket.connectError}</div>}</Typography>
             <form onSubmit={ handleSubmit }>
                 <Box 
                     sx={{
@@ -73,7 +74,19 @@ function Login() {
                     }}
                 >
                     <Typography variant="body2">Username:</Typography>
-                    <TextField onChange={handleChange} value={username} autoComplete="off" name="username"></TextField>
+                    <TextField 
+                        onChange={handleChange} 
+                        value={username} 
+                        autoComplete="off" 
+                        name="username"
+                        InputProps={{
+                            sx: {
+                              color: 'black',
+                              backgroundColor: 'white',
+                              borderRadius: '25px'
+                            }
+                        }}
+                    />
                     <Button sx={{ display: "block" }} type="submit" variant="contained">Enter chat</Button>
                 </Box>
             </form>

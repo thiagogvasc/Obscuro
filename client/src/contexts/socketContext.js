@@ -12,6 +12,7 @@ export function SocketProvider({ children }) {
     const [connectError, setConnectError] = useState(null)
 
     const initConnection = () => {
+        // put this in user.login
         const persistedUser = JSON.parse(sessionStorage.getItem('user'))
         const newSocket = io('http://localhost:8080', {
             auth: {

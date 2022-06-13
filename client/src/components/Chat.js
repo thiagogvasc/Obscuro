@@ -17,12 +17,15 @@ import { useSocket } from '../contexts/socketContext'
 import Sidebar from './Sidebar'
 import Message from './Message'
 
+import { useMessages } from '../hooks/useMessages'
+import { useUsers } from '../hooks/useUsers'
+
 
 function Chat() {
-  const [messages, setMessages] = useState({})
+  const { messages } = useMessages()
   const [currentRoomMessages, setCurrentRoomMessages] = useState([])
   const [receiver, setReceiver] = useState({id: 'general', chatName: 'general', isRoom: true})
-  const [users, setUsers] = useState([])
+  const { users } = useUsers()
   const { user } = useUser()
   const socket = useSocket()
   const chatBottom = useRef(null)
@@ -39,38 +42,6 @@ function Chat() {
   useEffect(() => {
       setCurrentRoomMessages(messages[receiver.id] || [])
   }, [receiver, messages])
-
-  useEffect(() => {
-    socket.onMessage(message => {
-      setMessages(currMessages => {
-        const currMessagesDraft = {...currMessages}
-        if (message.receiver.isRoom) {
-          if (!currMessagesDraft[message.receiver.id]) {
-            currMessagesDraft[message.receiver.id] = []
-          }
-          currMessagesDraft[message.receiver.id] = [...currMessagesDraft[message.receiver.id], message]
-        } else { // is private message
-          if (!currMessagesDraft[message.sender.id])
-            currMessagesDraft[message.sender.id] = []
-          currMessagesDraft[message.sender.id] = [...currMessagesDraft[message.sender.id], message]
-
-          if (!currMessagesDraft[message.receiver.id])
-          currMessagesDraft[message.receiver.id] = []
-          if (message.sender.id === user.id) {
-            currMessagesDraft[message.receiver.id] = [...currMessagesDraft[message.receiver.id], message]
-          }
-        }
-        return currMessagesDraft
-      })
-    })
-    socket.onUsers(users => {
-      console.log('got users')
-      console.log(users)
-      setUsers(users)
-    })
-    
-    socket.joinRoom('general')
-  }, [])
 
   useEffect(() => {
     scrollToBottom()
