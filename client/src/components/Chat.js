@@ -17,14 +17,15 @@ import { useSocket } from '../contexts/socketContext'
 import Sidebar from './Sidebar'
 import Message from './Message'
 
-import { useMessages } from '../hooks/useMessages'
+import { useMessages } from '../contexts/messagesContext'
 import { useUsers } from '../hooks/useUsers'
+import { blue, grey } from '@mui/material/colors'
 
 
 function Chat() {
   const { messages } = useMessages()
   const [currentRoomMessages, setCurrentRoomMessages] = useState([])
-  const [receiver, setReceiver] = useState({id: 'general', chatName: 'general', isRoom: true})
+  const [receiver, setReceiver] = useState({id: 'General', chatName: 'General', isRoom: true})
   const { users } = useUsers()
   const { user } = useUser()
   const socket = useSocket()
@@ -89,8 +90,8 @@ function Chat() {
         flexGrow: 1,
         display: "flex",
         flexDirection: "row",
-        overflowY: "auto",
-        gap: 3
+        gap: 3,
+        // overflow: 'hidden'
       }}
     >
       <Sidebar 
@@ -104,8 +105,9 @@ function Chat() {
         display: shouldOpenSideBar ? 'none' : 'flex', 
         flexGrow: 1, 
         flexDirection: "column", 
-        backgroundColor: '#3E3E42', 
-        borderRadius: '25px'
+        backgroundColor: grey[800],
+        borderRadius: '25px',
+        overflow: 'hidden'
       }}>
         <Button sx={{
           display: {xs: 'block', sm: 'none'}, 
@@ -115,9 +117,10 @@ function Chat() {
           back
         </Button>
         <Box sx={{ 
-          backgroundColor: 'dimgray', 
+          backgroundColor: grey[700], 
           textAlign: 'center', 
-          color: 'white'
+          color: 'white',
+          p: 1
         }}>
           <Typography variant="h5">
             {receiver.isRoom ? receiver.id : getUsername(receiver.id)}
@@ -127,10 +130,12 @@ function Chat() {
           spacing={1} 
           direction="column" 
           alignItems="end"
+          height={0} // Allows overflow to scroll
           sx={{ 
             p: 5, 
             flexGrow: 1, 
             overflowY: "scroll",
+            scrollBehavior: 'smooth'
           }} 
         >
             {currentRoomMessages.map(message => {

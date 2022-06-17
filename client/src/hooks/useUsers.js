@@ -10,7 +10,7 @@ export function useUsers() {
       setUsers(users)
     })
     
-    socket.joinRoom('general')
+    socket.joinRoom('General')
   }, [])
 
   return { users }

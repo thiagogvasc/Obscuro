@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import { Avatar, Typography } from '@mui/material'
 
 import {useUser} from '../contexts/userContext'
+import { grey } from '@mui/material/colors'
 
 export default function SidebarChat({currentReceiver, lastMessage, chatName, receiver, selectReceiver, isRoom}) { 
   const select = () => {
@@ -16,9 +17,9 @@ export default function SidebarChat({currentReceiver, lastMessage, chatName, rec
     <Box onClick={select} sx={{
       display: 'flex',
       transition: 'background-color .2s',
-      backgroundColor: shouldHighlight ? 'dimgray' : 'inherit',
+      backgroundColor: shouldHighlight ? grey[700] : 'inherit',
       '&:hover': {
-        backgroundColor: 'dimgray',
+        backgroundColor: grey[600],
         cursor: 'pointer'
       }
     }}>

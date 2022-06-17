@@ -13,6 +13,9 @@ export function SocketProvider({ children }) {
 
     const initConnection = () => {
         // put this in user.login
+        // actually no
+        // yes actually
+        // pass user as an argument
         const persistedUser = JSON.parse(sessionStorage.getItem('user'))
         const newSocket = io('http://localhost:8080', {
             auth: {

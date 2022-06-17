@@ -1,11 +1,26 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, createContext, useContext } from 'react'
 import { useSocket } from '../contexts/socketContext'
 import { useUser } from '../contexts/userContext'
 
-export function useMessages() {
+
+const messagesContext = createContext()
+
+export function MessagesProvider({ children }) {
   const [messages, setMessages] = useState({})
   const socket = useSocket()
   const { user } = useUser()
+
+  const testSomething = () => {
+    console.log('test')
+  }
+
+  useEffect(() => {
+    socket.emitFetchMessages()
+    socket.onMessages(messages1 => {
+      console.log(messages1)
+      setMessages(messages1)
+    })
+  }, [])
 
   useEffect(() => {
     socket.onMessage(message => {
@@ -32,5 +47,18 @@ export function useMessages() {
     })
   }, [])
 
-  return { messages }
+  const value = {
+    messages,
+    testSomething
+  }
+
+  return (
+      <messagesContext.Provider value={ value }>
+          { children }
+      </messagesContext.Provider>
+  )
+}
+
+export const useMessages = () => {
+    return useContext(messagesContext)
 }

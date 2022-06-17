@@ -13,10 +13,11 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 import { useUser, UserProvider } from './contexts/userContext'
 import { SocketProvider } from './contexts/socketContext'
+import { MessagesProvider } from './contexts/messagesContext'
 
 import './App.css'
 import { Button } from '@mui/material'
-
+import { grey } from '@mui/material/colors/'
 
 function App() { 
   const theme = createTheme({
@@ -27,11 +28,18 @@ function App() {
       <SocketProvider>
         <UserProvider>
           <ThemeProvider theme={theme}>
-            <Box sx={{ display: "flex", flexDirection: "column", width: "100vw", height: "100vh", backgroundColor: '#2D2D30', padding: '2vh 5vw' }}>
+            <Box sx={{ 
+              display: "flex", 
+              flexDirection: "column", 
+              width: "100vw", 
+              height: "100vh", 
+              backgroundColor: grey[900],
+              padding: '2vh 5vw' 
+            }}>
               <Navbar />
               <Routes>
                 <Route path="/" element={ <Login /> } />
-                <Route path="/chat" element={ <ProtectedRoute> <Chat /> </ProtectedRoute> } />
+                <Route path="/chat" element={ <ProtectedRoute> <MessagesProvider> <Chat /> </MessagesProvider></ProtectedRoute> } />
               </Routes>
             </Box>
           </ThemeProvider>
