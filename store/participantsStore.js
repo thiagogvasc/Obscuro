@@ -1,14 +1,22 @@
 const participants = []
 
-const getAllParticipantsFromConversation = conversationID => {
-  participants.filter(participant => participant.conversationID === conversationID)
+const addConversationParticipant = (conversationID, userID) => {
+  participants.push({
+    conversationID,
+    userID
+  })
 }
 
-const getAllConversationsFromParticipant = userID => {
-  participants.filter(participant => participant.userID === userID)
+const getAllParticipantsByConversationID = conversationID => {
+  return participants.filter(participant => participant.conversationID === conversationID)
+}
+
+const getAllParticipantsByUserID = userID => {
+  return participants.filter(participant => participant.userID === userID)
 }
 
 module.exports = {
-  getAllParticipantsFromConversation, 
-  getAllConversationsFromParticipant
+  addConversationParticipant,
+  getAllParticipantsByConversationID,
+  getAllParticipantsByUserID
 }

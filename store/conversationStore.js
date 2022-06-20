@@ -3,20 +3,27 @@ const { uuid } = require('uuidv4')
 conversations = []
 
 const createConversation = (name, isPublic, isDM) => {
-  conversations.push({
+  const conversation = {
     id: uuid(),
-    name,
+    name, // unique
     isPublic,
     isDM
-  })
+  }
+  conversations.push(conversation)
+  return conversation
 }
 
 const getConversationById = id => {
-  conversations.filter(conversation => conversation.id === id)
+  return conversations.find(conversation => conversation.id === id)
+}
+
+const getConversationByName = name => {
+  return conversations.find(conversation => conversation.name === name)
 }
 
 
 module.exports = {
   createConversation, 
-  getConversationById
+  getConversationById,
+  getConversationByName
 }

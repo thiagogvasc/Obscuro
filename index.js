@@ -3,6 +3,23 @@ const http = require('http')
 const path = require('path')
 const { Server } = require('socket.io')
 
+const mongoose = require('mongoose')
+const { MongoMemoryServer } = require('mongodb-memory-server')
+
+const dbConnect = async () => {
+    const mongoServer = await MongoMemoryServer.create()
+    console.log('connecting...')
+    await mongoose.connect(mongoServer.getUri(), { dbName: "verifyMASTER" });
+    console.log('conneced')
+    // your code here
+    console.log(mongoServer)
+    
+    //await mongoose.disconnect();
+  }
+  dbConnect()
+
+
+
 const authMiddleware = require('./middleware/auth')
 const registerMessageHandler = require('./eventHandlers/messageHandler')
 const registerUserHandler = require('./eventHandlers/userHandler')
@@ -28,16 +45,23 @@ app.get('*', (req, res) => {
     res.sendFile(__dirname + '/client/build/index.html')
 })
 
+// Initial store setup
+const conversationStore = require('./store/conversationStore')
+const registerConversationEvents = require('./eventHandlers/conversationHandler')
+conversationStore.createConversation('General', true, false)
+
 io.use(authMiddleware)
 io.on('connection', socket => {
-    socket.on('join-room', room => {
-        console.log('joinging room: ' + room)
-        socket.join(room)
-        io.emit('users', users)
-    })
+    // socket.on('join-room', room => {
+    //     console.log('joinging room: ' + room)
+    //     socket.join(room)
+    //     io.emit('users', users)
+    // })
+    
 
     registerUserHandler(socket, io)
     registerMessageHandler(socket, io)
+    registerConversationEvents(socket, io)
 
     socket.on('disconnect', () => {
         console.log('disconnect')

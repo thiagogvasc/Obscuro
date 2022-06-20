@@ -2,9 +2,9 @@ const { uuid } = require('uuidv4')
 
 const messages = []
 
-// const addMessage = message => {
-//   messages.push(message)
-// }
+const addMessage = message => {
+  messages.push(message)
+}
 
 const createMessage = message => {
   const {senderID, conversationID, text} = message
@@ -52,6 +52,7 @@ const getAllMessagesByConversationID = conversationID => {
 // module.exports = { addMessage, getAllMessagesTo }
 
 module.exports = {
+  addMessage,
   createMessage,
   getAllMessagesByConversationID
 }

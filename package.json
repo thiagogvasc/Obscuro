@@ -4,7 +4,7 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node index",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
@@ -21,7 +21,11 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.2",
+    "jest": "^28.1.1",
+    "mongodb-memory-server": "^8.6.1",
+    "mongoose": "^6.4.0",
     "socket.io": "^4.4.1",
+    "socket.io-client": "^4.5.1",
     "uuidv4": "^6.2.13"
   }
 }
