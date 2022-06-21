@@ -6,15 +6,8 @@ const conversationStore = require('../store/conversationStore')
 const userService = require('../service/user')
 
 module.exports = (socket, io) => {
-  socket.on('login', userInfo => {
-    // const user = {
-    //     id: socket.id,
-    //     sessionID: socket.sessionID,
-    //     ...userInfo
-    // }
-    // users.push(user)
-    const user = userService.createUser(socket.id, userInfo.username)
-    console.log(user)
+  socket.on('login', async userInfo => {
+    const user = await userService.createUser(socket.id, userInfo.username)
     socket.emit('login-success', user)
 
     // Join general conversation

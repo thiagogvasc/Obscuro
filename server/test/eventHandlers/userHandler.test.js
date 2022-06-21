@@ -2,7 +2,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const Client = require("socket.io-client");
 
-const registerMessageEvents = require('./messageHandler')
+const registerMessageEvents = require('../../src/eventHandlers/messageHandler')
 
 describe("my awesome project", () => {
   let io, serverSocket, clientSocket;

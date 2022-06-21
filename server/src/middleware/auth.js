@@ -2,6 +2,7 @@ const {sessions} = require('../store/sessionStore')
 const { uuid } = require('uuidv4')
 
 module.exports = (socket, next) => {
+  console.log('middlware')
   const sessionID = socket.handshake.auth.sessionID;
   if (sessionID) {
       if (sessions[sessionID]) {

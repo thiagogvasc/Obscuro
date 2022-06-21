@@ -20,18 +20,18 @@ const dbConnect = async () => {
 
 
 
-const authMiddleware = require('./middleware/auth')
-const registerMessageHandler = require('./eventHandlers/messageHandler')
-const registerUserHandler = require('./eventHandlers/userHandler')
-const {users} = require('./store/userStore')
-const {sessions} = require('./store/sessionStore')
+const authMiddleware = require('./src/middleware/auth')
+const registerMessageHandler = require('./src/eventHandlers/messageHandler')
+const registerUserHandler = require('./src/eventHandlers/userHandler')
+const {users} = require('./src/store/userStore')
+const {sessions} = require('./src/store/sessionStore')
 
 const app = express()
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
         // origin: "https://obscuro.herokuapp.com",
-        origin: ["http://localhost:3000"],
+        origin: ["http://localhost:3000", "http://localhost:8080"],
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -46,19 +46,12 @@ app.get('*', (req, res) => {
 })
 
 // Initial store setup
-const conversationStore = require('./store/conversationStore')
-const registerConversationEvents = require('./eventHandlers/conversationHandler')
+const conversationStore = require('./src/store/conversationStore')
+const registerConversationEvents = require('./src/eventHandlers/conversationHandler')
 conversationStore.createConversation('General', true, false)
 
 io.use(authMiddleware)
 io.on('connection', socket => {
-    // socket.on('join-room', room => {
-    //     console.log('joinging room: ' + room)
-    //     socket.join(room)
-    //     io.emit('users', users)
-    // })
-    
-
     registerUserHandler(socket, io)
     registerMessageHandler(socket, io)
     registerConversationEvents(socket, io)

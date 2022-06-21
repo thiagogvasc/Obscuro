@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "clear_jest": "jest --clearCache",
     "start": "node index",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
