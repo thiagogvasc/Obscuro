@@ -1,7 +1,9 @@
 const Conversation = require('../models/conversation')
+const { uuid } = require('uuidv4')
 
 const createConversation = async (name, isPublic, isDM, participants) => {
   const newConversation = new Conversation({
+    _id: uuid(),
     name, isPublic, isDM, participants
   })
   return await newConversation.save()

@@ -56,29 +56,29 @@ describe("user event handler", () => {
     })
   })
 
-  test("should login properly", (done) => {
-    clientSocket.on("login-success", user => {
-      expect(user).toMatchObject({
-        _id: serverSocket.id,
-        username: 'thiago'
-      })
+  // test("should login properly", (done) => {
+  //   clientSocket.on("login-success", user => {
+  //     expect(user).toMatchObject({
+  //       _id: serverSocket.id,
+  //       username: 'thiago'
+  //     })
 
-      console.log(user)
-      done()
-    })
+  //     console.log(user)
+  //     done()
+  //   })
 
-    clientSocket.emit('login', {
-      username: 'thiago'
-    })
-  })
+  //   clientSocket.emit('login', {
+  //     username: 'thiago'
+  //   })
+  // })
 
   // separate loginHandler file so i can reuse the login function here
   // so that the tests can be independendt
-  test('should join general chat', async () => {
-    const conversation = await Conversation.findOne({name: 'General'})
-    expect(conversation.participants).toEqual([serverSocket.id])
+  // test('should join general chat', async () => {
+  //   const conversation = await Conversation.findOne({name: 'General'})
+  //   expect(conversation.participants).toEqual([serverSocket.id])
     
-    const user = await User.findOne({_id: serverSocket.id})
-    expect(user.conversations).toEqual([conversation._id.toString()])
-  })
+  //   const user = await User.findOne({_id: serverSocket.id})
+  //   expect(user.conversations).toEqual([conversation._id.toString()])
+  // })
 })

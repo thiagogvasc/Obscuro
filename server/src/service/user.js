@@ -1,8 +1,10 @@
 const User = require('../models/user')
+const Conversation = require('../models/conversation')
 const mongoose = require('mongoose')
+const { uuid } = require('uuidv4')
 
 const createUser = async (username) => {
-  const newUser = new User({ username, conversations: []})
+  const newUser = new User({_id: uuid(), username, conversations: []})
   const savedUser = await newUser.save()
   return savedUser
 }
@@ -24,18 +26,35 @@ const getUserById = async id => {
 }
 
 const getAggregateUserById = async id => {
-  const aggregateUsers = await User.aggregate([
+  const aggregateUser = await User.aggregate([
     {
-      $lookup:
-        {
-          from: "conversation",
-          localField: "conversations",
-          foreignField: "_id",
-          as: "inventory_docs"
-        }
+      $match: {
+        _id: id
+      }
+    },
+    {
+      $lookup: {
+        from: 'conversations',
+        localField: 'conversations',
+        foreignField: '_id',
+        as: 'conversations'
+      }
     }
   ])
-  console.log(aggregateUsers)
+  return aggregateUser.at(0)
+}
+
+const getAllAggregateUsers = async () => {
+  return await User.aggregate([
+    {
+      $lookup: {
+        from: 'conversations',
+        localField: 'conversations',
+        foreignField: '_id',
+        as: 'conversations'
+      }
+    }
+  ])
 }
 
 module.exports = {
@@ -43,5 +62,6 @@ module.exports = {
   getAllUsers,
   addConversationToUserById,
   getUserById,
-  getAggregateUserById
+  getAggregateUserById,
+  getAllAggregateUsers
 }
