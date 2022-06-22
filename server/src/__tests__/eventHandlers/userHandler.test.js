@@ -72,6 +72,8 @@ describe("user event handler", () => {
     })
   })
 
+  // separate loginHandler file so i can reuse the login function here
+  // so that the tests can be independendt
   test('should join general chat', async () => {
     const conversation = await Conversation.findOne({name: 'General'})
     expect(conversation.participants).toEqual([serverSocket.id])

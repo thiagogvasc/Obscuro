@@ -2,9 +2,8 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const userSchema = new Schema({
-    _id: String,
     username: String,
-    conversations: [{ type: 'String'}]
+    conversations: [{ type: Schema.Types.ObjectId }]
 })
 
 module.exports = mongoose.model('user', userSchema)
