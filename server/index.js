@@ -46,9 +46,9 @@ app.get('*', (req, res) => {
 })
 
 // Initial store setup
-const conversationStore = require('./src/store/conversationStore')
+const conversationService = require('./src/service/conversationService')
 const registerConversationEvents = require('./src/eventHandlers/conversationHandler')
-conversationStore.createConversation('General', true, false)
+conversationService.createConversation('General', true, false, [])
 
 io.use(authMiddleware)
 io.on('connection', socket => {

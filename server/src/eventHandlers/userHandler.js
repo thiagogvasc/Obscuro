@@ -15,14 +15,6 @@ module.exports = (socket, io) => {
     const generalConversation = await conversationService.getConversationByName('General')
     await conversationService.addParticipantToConversationByName('General', user._id)
     const userUpdated = await userService.addConversationToUserById(user._id, generalConversation._id)
-    
-    // // change this
-    // const aggregateConversations = []
-    // for (let conversationID of userUpdated.conversations) {
-    //   const conversation = await conversationService.getConversationById(conversationID)
-    //   aggregateConversations.push(conversation)
-    // }
-    // userUpdated.conversations = aggregateConversations
 
     const aggregateUser = await userService.getAggregateUserById(user._id)
     

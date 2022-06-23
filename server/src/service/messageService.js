@@ -45,6 +45,7 @@ const getAggregateMessageById = async id => {
       $unwind: { path: '$conversation' }
     }
   ])
+  console.log(aggregateMessage)
   return aggregateMessage.at(0)
 }
 

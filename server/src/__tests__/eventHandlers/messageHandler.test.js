@@ -54,7 +54,7 @@ describe("message event handler", () => {
   });
 
   test("should receive message properly", async () => {
-    const user = await userService.createUser('username_test')
+    const user = await userService.createUser('username_test', serverSocket.id)
     const general = await conversationService.createConversation('General', true, false, [])
     await conversationService.addParticipantToConversationByName(general.name, user._id)
     await userService.addConversationToUserById(user._id, general._id)
@@ -63,11 +63,17 @@ describe("message event handler", () => {
 
     return new Promise((resolve, reject) => {
       clientSocket.on("message", message => {
-        expect(message).toMatchObject({
-          text: 'new_message',
-          sender: serverSocket.id,
-          conversation: general._id
-        })
+        expect(message).toEqual(
+          expect.objectContaining({
+            text: 'new_message',
+            sender: expect.objectContaining({
+              _id: serverSocket.id
+            }),
+            conversation: expect.objectContaining({
+              _id: general._id
+            })
+          })
+        )
         
         resolve()
       })

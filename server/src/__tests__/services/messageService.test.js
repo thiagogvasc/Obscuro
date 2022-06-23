@@ -33,7 +33,7 @@ describe("message service", () => {
     const message = await messageService.createMessage('new message', user._id, conversation._id)
     const aggregateMessage = await messageService.getAggregateMessageById(message._id)
     console.log(aggregateMessage)
-    expect(message).toMatchObject({
+    expect(message).toMatchObject({ // expecti aggregate message CHAGNEEE
       text: 'new message',
       sender: user._id,
       conversation: conversation._id  
