@@ -1,10 +1,12 @@
-const User = require('../models/user')
-const Conversation = require('../models/conversation')
+const User = require('../models/userModel')
+const Conversation = require('../models/conversationModel')
+const Message = require('../models/messageModel')
 const mongoose = require('mongoose')
 const { uuid } = require('uuidv4')
 
-const createUser = async (username) => {
-  const newUser = new User({_id: uuid(), username, conversations: []})
+const createUser = async (username, id = uuid()) => {
+  const newUser = new User({_id: id, username, conversations: []})
+  
   const savedUser = await newUser.save()
   return savedUser
 }
@@ -39,22 +41,30 @@ const getAggregateUserById = async id => {
         foreignField: '_id',
         as: 'conversations'
       }
-    }
-  ])
-  return aggregateUser.at(0)
-}
-
-const getAllAggregateUsers = async () => {
-  return await User.aggregate([
+    }, 
+    {
+      $unwind: {
+        path: '$conversations',
+        preserveNullAndEmptyArrays: true
+      }
+    },
     {
       $lookup: {
-        from: 'conversations',
-        localField: 'conversations',
-        foreignField: '_id',
-        as: 'conversations'
+        from: 'messages',
+        localField: 'conversations._id',
+        foreignField: 'conversation',
+        as: 'conversations.messages'
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        username: { $first: '$username' },
+        conversations: {$push: '$conversations'}
       }
     }
   ])
+  return aggregateUser.at(0)
 }
 
 module.exports = {
@@ -63,5 +73,4 @@ module.exports = {
   addConversationToUserById,
   getUserById,
   getAggregateUserById,
-  getAllAggregateUsers
 }

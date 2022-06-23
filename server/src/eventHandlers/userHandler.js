@@ -2,27 +2,31 @@ const {users} = require('../store/userStore')
 const {sessions} = require('../store/sessionStore')
 const participantStore = require('../store/participantsStore')
 //const conversationStore = require('../store/conversationStore')
-const conversationService = require('../service/conversation')
+const conversationService = require('../service/conversationService')
 
-const userService = require('../service/user')
+const userService = require('../service/userService')
 
 module.exports = (socket, io) => {
   socket.on('login', async userInfo => {
-    const user = await userService.createUser(socket.id, userInfo.username)
+    // create new user
+    const user = await userService.createUser(userInfo.username, socket.id)
 
     // Join general conversation
     const generalConversation = await conversationService.getConversationByName('General')
     await conversationService.addParticipantToConversationByName('General', user._id)
     const userUpdated = await userService.addConversationToUserById(user._id, generalConversation._id)
     
-    const aggregateConversations = []
-    for (let conversationID of userUpdated.conversations) {
-      const conversation = await conversationService.getConversationById(conversationID)
-      aggregateConversations.push(conversation)
-    }
-    userUpdated.conversations = aggregateConversations
+    // // change this
+    // const aggregateConversations = []
+    // for (let conversationID of userUpdated.conversations) {
+    //   const conversation = await conversationService.getConversationById(conversationID)
+    //   aggregateConversations.push(conversation)
+    // }
+    // userUpdated.conversations = aggregateConversations
+
+    const aggregateUser = await userService.getAggregateUserById(user._id)
     
-    socket.emit('login-success', userUpdated) // aggreagte conversations
+    socket.emit('login-success', aggregateUser) // aggreagte conversations
   })
 
   socket.on('logout', () => {

@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
 const { MongoMemoryServer } = require('mongodb-memory-server')
 
-const userService = require('../../service/user')
-const conversationService = require('../../service/conversation')
+const userService = require('../../service/userService')
+const conversationService = require('../../service/conversationService')
+const messageService = require('../../service/messageService')
 
 
 describe("user service", () => {
@@ -45,25 +46,41 @@ describe("user service", () => {
     const conversation = await conversationService.createConversation('conv1', true, false)
     const conversation2 = await conversationService.createConversation('conv2', true, false)
    
-    // Join conversations
-    const conversationUpdated = await userService.addConversationToUserById(user._id, conversation._id)
-    const conversationUpdated2 = await userService.addConversationToUserById(user._id, conversation2._id) 
+    // Add conversations to user
+    await userService.addConversationToUserById(user._id, conversation._id)
+    await userService.addConversationToUserById(user._id, conversation2._id) 
+
+    // Add user to conversations
+    await conversationService.addParticipantToConversationByName(conversation.name, user._id)
+    await conversationService.addParticipantToConversationByName(conversation2.name, user._id)
+    
+    // Create message to conv1
+    const message1 = await messageService.createMessage('message1', user._id, conversation._id)
 
     // Get users with conversation data
     const aggregateUser = await userService.getAggregateUserById(user._id)
 
     expect(aggregateUser).toEqual(
       expect.objectContaining({
-        username: 'usernametest'
-      }),
-      expect.arrayContaining([
-        expect.objectContaining({
-          name: 'conv1'
-        }),
-        expect.objectContaining({
-          name: 'conv2'
-        })
-      ])
+        username: 'usernametest',
+        conversations: expect.arrayContaining([
+          expect.objectContaining({
+            name: 'conv1'
+          }),
+          expect.objectContaining({
+            name: 'conv2'
+          }),
+          expect.objectContaining({
+            messages: expect.arrayContaining([
+              expect.objectContaining({
+                text: 'message1',
+                sender: user._id,
+                conversation: conversation._id
+              })
+            ])
+          })
+        ])
+      })
     )
   })
 })

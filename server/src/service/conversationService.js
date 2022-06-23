@@ -1,4 +1,4 @@
-const Conversation = require('../models/conversation')
+const Conversation = require('../models/conversationModel')
 const { uuid } = require('uuidv4')
 
 const createConversation = async (name, isPublic, isDM, participants) => {

@@ -6,10 +6,10 @@ const mongoose = require('mongoose')
 const { MongoMemoryServer } = require('mongodb-memory-server')
 
 const registerUserEvents = require('../../eventHandlers/userHandler')
-const conversationService = require('../../service/conversation')
-const userService = require('../../service/user');
-const Conversation = require('../../models/conversation')
-const User = require('../../models/user')
+const conversationService = require('../../service/conversationService')
+const userService = require('../../service/userService');
+const Conversation = require('../../models/conversationModel')
+const User = require('../../models/userModel')
 
 
 describe("user event handler", () => {
@@ -18,7 +18,6 @@ describe("user event handler", () => {
   let clientSocket
   let mongoServer
   let port
-  let db
 
   beforeAll(async () => {
     // setup server
@@ -56,29 +55,22 @@ describe("user event handler", () => {
     })
   })
 
-  // test("should login properly", (done) => {
-  //   clientSocket.on("login-success", user => {
-  //     expect(user).toMatchObject({
-  //       _id: serverSocket.id,
-  //       username: 'thiago'
-  //     })
+  test("should login properly", (done) => {
+    clientSocket.on("login-success", user => {
+      expect(user).toMatchObject({
+        _id: serverSocket.id,
+        username: 'thiago'
+      })
+      expect(user.conversations).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          name: 'General'
+        })
+      ]))
+      done()
+    })
 
-  //     console.log(user)
-  //     done()
-  //   })
-
-  //   clientSocket.emit('login', {
-  //     username: 'thiago'
-  //   })
-  // })
-
-  // separate loginHandler file so i can reuse the login function here
-  // so that the tests can be independendt
-  // test('should join general chat', async () => {
-  //   const conversation = await Conversation.findOne({name: 'General'})
-  //   expect(conversation.participants).toEqual([serverSocket.id])
-    
-  //   const user = await User.findOne({_id: serverSocket.id})
-  //   expect(user.conversations).toEqual([conversation._id.toString()])
-  // })
+    clientSocket.emit('login', {
+      username: 'thiago'
+    })
+  })
 })

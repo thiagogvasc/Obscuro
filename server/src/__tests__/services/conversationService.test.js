@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const { MongoMemoryServer } = require('mongodb-memory-server')
 
-const conversationService = require('../../service/conversation')
-const userService = require('../../service/user')
+const conversationService = require('../../service/conversationService')
+const userService = require('../../service/userService')
 
 describe("user service", () => {
   let mongoServer

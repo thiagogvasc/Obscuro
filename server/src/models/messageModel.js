@@ -2,9 +2,10 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const messageSchema = new Schema({
+    _id: String,
     text: String,
-    sender: Schema.Types.ObjectId,
-    conversation: Schema.Types.ObjectId
+    sender: String,
+    conversation: String
 })
 
 module.exports = mongoose.model('message', messageSchema)
