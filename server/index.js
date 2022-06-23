@@ -6,6 +6,9 @@ const { Server } = require('socket.io')
 const mongoose = require('mongoose')
 const { MongoMemoryServer } = require('mongodb-memory-server')
 
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+
 const dbConnect = async () => {
     const mongoServer = await MongoMemoryServer.create()
     console.log('connecting...')
@@ -50,6 +53,22 @@ const conversationService = require('./src/service/conversationService')
 const registerConversationEvents = require('./src/eventHandlers/conversationHandler')
 conversationService.createConversation('General', true, false, [])
 
+
+const sessionStore = new MongoStore({
+    mongooseConnection: mongoose.connection,
+    collection: 'sessions'
+})
+app.use(session({
+    secret: 'some secret',
+    resave: false,
+    saveUnitialized: true,
+    store: sessionStore,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 // 1 day
+    }
+}))
+
+
 io.use(authMiddleware)
 io.on('connection', socket => {
     registerUserHandler(socket, io)
@@ -57,14 +76,14 @@ io.on('connection', socket => {
     registerConversationEvents(socket, io)
 
     socket.on('disconnect', () => {
-        console.log('disconnect')
-        console.log(socket.id)
-        const index = users.findIndex(user => socket.id === user.id && !sessions[socket.sessionID])
-        if (index !== -1) {
-            console.log('not -1')
-            users.splice(index, 1)
-        }
-        console.log(users);
+        // console.log('disconnect')
+        // console.log(socket.id)
+        // const index = users.findIndex(user => socket.id === user.id && !sessions[socket.sessionID])
+        // if (index !== -1) {
+        //     console.log('not -1')
+        //     users.splice(index, 1)
+        // }
+        // console.log(users);
     })
 })
 

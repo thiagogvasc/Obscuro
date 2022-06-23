@@ -14,13 +14,13 @@ export function MessagesProvider({ children }) {
     console.log('test')
   }
 
-  useEffect(() => {
-    socket.emitFetchMessages()
-    socket.onMessages(messages1 => {
-      console.log(messages1)
-      setMessages(messages1)
-    })
-  }, [])
+  // useEffect(() => {
+  //   socket.emitFetchMessages()
+  //   socket.onMessages(messages1 => {
+  //     console.log(messages1)
+  //     setMessages(messages1)
+  //   })
+  // }, [])
 
   useEffect(() => {
     socket.onMessage(message => {

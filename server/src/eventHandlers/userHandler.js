@@ -22,9 +22,11 @@ module.exports = (socket, io) => {
   })
 
   socket.on('logout', () => {
-    delete sessions[socket.sessionID]
-    const index = users.findIndex(user => user.id === socket.id)
-    users.splice(index, 1)
+    // delete sessions[socket.sessionID]
+    // const index = users.findIndex(user => user.id === socket.id)
+    // users.splice(index, 1)
+
+    
     socket.disconnect()
   })
 }
