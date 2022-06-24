@@ -7,7 +7,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server')
 
 const registerUserEvents = require('../../eventHandlers/userHandler')
 const conversationService = require('../../service/conversationService')
-const userService = require('../../service/userService');
+const userService = require('../../service/userService')
 const Conversation = require('../../models/conversationModel')
 const User = require('../../models/userModel')
 
@@ -23,12 +23,12 @@ describe("user event handler", () => {
     // setup server
     const httpServer = createServer()
     io = new Server(httpServer)
+    io.on("connection", (socket) => {
+      serverSocket = socket;
+      registerUserEvents(socket, io)
+    })
     httpServer.listen(() => {
       port = httpServer.address().port
-      io.on("connection", (socket) => {
-        serverSocket = socket;
-        registerUserEvents(socket, io)
-      })
     })
 
     mongoServer = await MongoMemoryServer.create()

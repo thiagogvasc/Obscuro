@@ -1,9 +1,4 @@
-const {users} = require('../store/userStore')
-const {sessions} = require('../store/sessionStore')
-const participantStore = require('../store/participantsStore')
-//const conversationStore = require('../store/conversationStore')
 const conversationService = require('../service/conversationService')
-
 const userService = require('../service/userService')
 
 module.exports = (socket, io) => {
@@ -26,7 +21,7 @@ module.exports = (socket, io) => {
     // const index = users.findIndex(user => user.id === socket.id)
     // users.splice(index, 1)
 
-    
+
     socket.disconnect()
   })
 }

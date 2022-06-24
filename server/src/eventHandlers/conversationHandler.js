@@ -1,6 +1,4 @@
 const { uuid } = require('uuidv4')
-const conversationStore = require('../store/conversationStore')
-const participantStore = require('../store/participantsStore')
 
 module.exports = (socket, io) => {
   socket.on('create-conversation', ({name, isPublic, isDM}) => {

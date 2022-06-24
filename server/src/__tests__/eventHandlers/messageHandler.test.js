@@ -54,11 +54,19 @@ describe("message event handler", () => {
   });
 
   test("should receive message properly", async () => {
-    const user = await userService.createUser('username_test', serverSocket.id)
-    const general = await conversationService.createConversation('General', true, false, [])
-    await conversationService.addParticipantToConversationByName(general.name, user._id)
-    await userService.addConversationToUserById(user._id, general._id)
+    // Create user and conversation
+    const [user, general] = await Promise.all([
+      userService.createUser('username_test', serverSocket.id), 
+      conversationService.createConversation('General', true, false, [])
+    ])
 
+    // Add conversation to user and user to conversation
+    await Promise.all([
+      conversationService.addParticipantToConversationByName(general.name, user._id),
+      userService.addConversationToUserById(user._id, general._id)
+    ])
+
+    // Join socket to general room
     serverSocket.join(general._id)
 
     return new Promise((resolve, reject) => {
