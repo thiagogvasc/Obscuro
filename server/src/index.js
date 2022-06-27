@@ -2,12 +2,14 @@ const express = require('express')
 const http = require('http')
 const path = require('path')
 const { Server } = require('socket.io')
-
 const mongoose = require('mongoose')
 const { MongoMemoryServer } = require('mongodb-memory-server')
-
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
+
+const authMiddleware = require('./middleware/auth')
+const registerMessageHandler = require('./events/messageEvents')
+const registerUserHandler = require('./events/userEvents')
 
 const dbConnect = async () => {
     const mongoServer = await MongoMemoryServer.create()
@@ -23,11 +25,6 @@ const dbConnect = async () => {
 
 
 
-const authMiddleware = require('./src/middleware/auth')
-const registerMessageHandler = require('./src/eventHandlers/messageHandler')
-const registerUserHandler = require('./src/eventHandlers/userHandler')
-const {users} = require('./src/store/userStore')
-const {sessions} = require('./src/store/sessionStore')
 
 const app = express()
 const server = http.createServer(app)
@@ -41,16 +38,16 @@ const io = new Server(server, {
 })
 
 const PORT = process.env.PORT || 8080
-app.use(express.static(path.join(__dirname, '/client/build')));
+//app.use(express.static(path.join(__dirname, '/client/build')));
 
-app.get('*', (req, res) => {
-    console.log('page requested')
-    res.sendFile(__dirname + '/client/build/index.html')
-})
+// app.get('*', (req, res) => {
+//     console.log('page requested')
+//     res.sendFile(__dirname + '/client/build/index.html')
+// })
 
 // Initial store setup
-const conversationService = require('./src/service/conversationService')
-const registerConversationEvents = require('./src/eventHandlers/conversationHandler')
+const conversationService = require('./service/conversationService')
+const registerConversationEvents = require('./events/conversationEvents')
 conversationService.createConversation('General', true, false, [])
 
 
@@ -67,6 +64,9 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24 // 1 day
     }
 }))
+
+const authRouter = require('./routes/authRouter')
+app.use('/auth', authRouter)
 
 
 io.use(authMiddleware)
