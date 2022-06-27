@@ -1,31 +1,27 @@
-const { uuid } = require('uuidv4')
+const createConversation = async (socket, {name, isPublic, isDM}) => {
+  throw new Error('createConversation() not yet implemented')
+}
 
-module.exports = (socket, io) => {
-  socket.on('create-conversation', ({name, isPublic, isDM}) => {
-    const conversation = {
-      id: uuid(),
-      name,
-      isPublic,
-      isDM
-    }
-    conversationStore.createConversation(conversation)
-  })
+const deleteConversation = async (socket) => {
+  throw new Error('deleteConversation() not yet implemented')
+}
 
-  socket.on('delete-conversation', () => {
-    throw new Error('delete-conversation not yet implemented')
-  })
+const startConversation = async (socket, otherUserID) => {
+  throw new Error('startConversation() not yet implemented')
+}
 
-  socket.on('start-conversation', otherUserID => {
-    const conversation = conversationStore.createConversation(null, false, true)
-    participantStore.addConversationParticipant(conversation.id, socket.id)
-    participantStore.addConversationParticipant(conversation.id, otherUserID)
-  })
+const joinConversation = async (socket, conversationID) => {
+  throw new Error('joinConversation() not yet implemented')
+}
 
-  socket.on('join-conversation', conversationID => {
-    participantStore.addConversationParticipant(conversationID, socket.id)
-  })
+const leaveConversation = async (socket, conversationID) => {
+  throw new Error('leaveConversation() not yet implemented')
+}
 
-  socket.on('leave-conversation', () => {
-    throw new Error('leave-conversation not yet implemented')
-  })
+module.exports = {
+  createConversation,
+  deleteConversation,
+  startConversation,
+  joinConversation,
+  leaveConversation
 }
