@@ -2,95 +2,11 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const Client = require("socket.io-client");
 const mongoose = require('mongoose')
-
 const { MongoMemoryServer } = require('mongodb-memory-server')
 
-const registerMessageEvents = require('../../eventHandlers/messageHandler')
-const conversationService = require('../../service/conversationService')
-const userService = require('../../service/userService');
-const messageService = require('../../service/messageService')
 
 describe("message event handler", () => {
-  let io
-  let serverSocket
-  let clientSocket
-  let mongoServer
-  let port
-  let db
+  test("should send message properly", async () => {
 
-  //let generalConversation
-
-  beforeAll(async () => {
-    // setup server
-    const httpServer = createServer()
-    io = new Server(httpServer)
-    httpServer.listen(() => {
-      port = httpServer.address().port
-      io.on("connection", (socket) => {
-        serverSocket = socket;
-        registerMessageEvents(socket, io)
-      })
-    })
-
-    mongoServer = await MongoMemoryServer.create()
-    const uri = mongoServer.getUri()
-    await mongoose.connect(uri)
-    return new Promise((resolve, reject) => {
-      clientSocket = new Client(`http://localhost:${port}`)
-      clientSocket.on('connect', () => {
-        console.log('connected')
-        resolve()
-      })
-    })
-  });
-
-
-  afterAll(async () => {
-    await mongoose.connection.dropDatabase()
-    await mongoose.connection.close()
-    await mongoServer.stop()
-    io.close()
-    clientSocket.close()
-  });
-
-  test("should receive message properly", async () => {
-    // Create user and conversation
-    const [user, general] = await Promise.all([
-      userService.createUser('username_test', serverSocket.id), 
-      conversationService.createConversation('General', true, false, [])
-    ])
-
-    // Add conversation to user and user to conversation
-    await Promise.all([
-      conversationService.addParticipantToConversationByName(general.name, user._id),
-      userService.addConversationToUserById(user._id, general._id)
-    ])
-
-    // Join socket to general room
-    serverSocket.join(general._id)
-
-    return new Promise((resolve, reject) => {
-      clientSocket.on("message", message => {
-        expect(message).toEqual(
-          expect.objectContaining({
-            text: 'new_message',
-            sender: expect.objectContaining({
-              _id: serverSocket.id
-            }),
-            conversation: expect.objectContaining({
-              _id: general._id
-            })
-          })
-        )
-        
-        resolve()
-      })
-  
-      clientSocket.emit('message', {
-        text: 'new_message',
-        sender: serverSocket.id,
-        conversation: general._id
-      })
-    })
   })
 })
