@@ -1,22 +1,20 @@
 const User = require('../models/userModel')
-const Conversation = require('../models/conversationModel')
-const Message = require('../models/messageModel')
-const mongoose = require('mongoose')
 const { uuid } = require('uuidv4')
 
-const createUser = async (username, id = uuid()) => {
-  const newUser = new User({_id: id, username, conversations: []})
-  
-  const savedUser = await newUser.save()
-  return savedUser
+const createUser = async (username, password) => {
+  return new User({_id: uuid(), username, password, conversations: []}).save()
+}
+
+const createUserWithId = async (id, username, password) => {
+  return new User({_id: id, username, password, conversations: []}).save()
 }
 
 const getAllUsers = async () => {
-  return await User.find()
+  return User.find()
 }
 
 const addConversationToUserById = async (userID, conversationID) => {
-  return await User.findOneAndUpdate(
+  return User.findOneAndUpdate(
     { _id: userID }, 
     { $push: { conversations: conversationID } },
     { new: true }
@@ -24,7 +22,11 @@ const addConversationToUserById = async (userID, conversationID) => {
 }
 
 const getUserById = async id => {
-  return await User.findOne({_id: id})
+  return User.findOne({ _id: id })
+}
+
+const getUserByUsername = async username => {
+  return User.findOne({ username })
 }
 
 const getAggregateUserById = async id => {
@@ -69,8 +71,10 @@ const getAggregateUserById = async id => {
 
 module.exports = {
   createUser,
+  createUserWithId,
   getAllUsers,
   addConversationToUserById,
   getUserById,
-  getAggregateUserById,
+  getUserByUsername,
+  getAggregateUserById
 }

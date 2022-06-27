@@ -8,11 +8,11 @@ const createMessage = async (text, senderID, conversationID) => {
     sender: senderID,
     conversation: conversationID
   })
-  return await newMessage.save()
+  return newMessage.save()
 }
 
 const getMessageById = async id => {
-  return await Message.findOne({ _id: id })
+  return Message.findOne({ _id: id })
 }
 
 const getAggregateMessageById = async id => {
@@ -45,7 +45,7 @@ const getAggregateMessageById = async id => {
       $unwind: { path: '$conversation' }
     }
   ])
-  console.log(aggregateMessage)
+ // console.log(aggregateMessage)
   return aggregateMessage.at(0)
 }
 

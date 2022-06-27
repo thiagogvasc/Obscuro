@@ -6,15 +6,15 @@ const createConversation = async (name, isPublic, isDM, participants) => {
     _id: uuid(),
     name, isPublic, isDM, participants
   })
-  return await newConversation.save()
+  return newConversation.save()
 }
 
 const getConversationByName = async name => {
-  return await Conversation.findOne({ name })
+  return Conversation.findOne({ name })
 }
 
 const getConversationById = async id => {
-  return await Conversation.findOne({ _id: id })
+  return Conversation.findOne({ _id: id })
 }
 
 const getParticipantsByConversationId = async id => {
@@ -23,7 +23,7 @@ const getParticipantsByConversationId = async id => {
 }
 
 const addParticipantToConversationByName = async (name, participantID) => {
-  return await Conversation.findOneAndUpdate(
+  return Conversation.findOneAndUpdate(
     { name }, 
     { $push: { participants: participantID } },
     { new: true }
