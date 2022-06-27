@@ -4,20 +4,24 @@ const { MongoMemoryServer } = require('mongodb-memory-server')
 const conversationService = require('../../service/conversationService')
 const userService = require('../../service/userService')
 
+
 describe("user service", () => {
   let mongoServer
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create()
     const uri = mongoServer.getUri()
     await mongoose.connect(uri)
-  });
+  })
 
   afterEach(async () => {
     await mongoose.connection.dropDatabase()
+  })
+
+  afterAll(async () => {
     await mongoose.connection.close()
     await mongoServer.stop()
-  });
+  })
 
   test('should create conversation properly', async () => {
     const conversation = await conversationService.createConversation('conversation_name', true, false, [])
@@ -26,7 +30,7 @@ describe("user service", () => {
 
   test("should add participant to conversation", async () => {
     const conversation = await conversationService.createConversation('conversation_name', true, false, [])
-    const user = await userService.createUser('usernametest')
+    const user = await userService.createUser('usernametest', '12345')
     const conversationUpdated = await conversationService.addParticipantToConversationByName(conversation.name, user._id)
     expect(conversationUpdated.participants).toEqual([user._id])
   })

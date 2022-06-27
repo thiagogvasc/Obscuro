@@ -25,12 +25,12 @@ describe("user service", () => {
   });
 
   test('should create user properly', async () => {
-    const user = await userService.createUser('usernametest')
+    const user = await userService.createUser('usernametest', '12345')
     expect(user).toMatchObject({ username: 'usernametest' })
   })
 
   test("should add conversation to array", async () => {
-    const user = await userService.createUser('usernametest')
+    const user = await userService.createUser('usernametest', '12345')
     const conversation = await conversationService.createConversation('conversationtest', true, false)
     const userUpdated = await userService.addConversationToUserById(user._id, conversation._id)
     expect(userUpdated.conversations).toEqual([conversation._id])
@@ -38,9 +38,9 @@ describe("user service", () => {
 
   test("should aggregate user properly", async () => {
     // Create users
-    const user = await userService.createUser('usernametest')    
-    const user2 = await userService.createUser('usernametest2') 
-    const user3 = await userService.createUser('usernametest3') 
+    const user = await userService.createUser('usernametest', '12345')    
+    const user2 = await userService.createUser('usernametest2', '12345') 
+    const user3 = await userService.createUser('usernametest3', '12345') 
 
     // Create conversations
     const conversation = await conversationService.createConversation('conv1', true, false)
