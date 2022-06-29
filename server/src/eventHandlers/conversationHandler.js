@@ -1,20 +1,27 @@
-const createConversation = async (socket, {name, isPublic, isDM}) => {
+const conversationService = require('../service/conversationService')
+const userService = require('../service/userService')
+
+
+const createConversation = async (socket, io, {name, isPublic, isDM}) => {
   throw new Error('createConversation() not yet implemented')
 }
 
-const deleteConversation = async (socket) => {
+const deleteConversation = async (socket, io) => {
   throw new Error('deleteConversation() not yet implemented')
 }
 
-const startConversation = async (socket, otherUserID) => {
+const startConversation = async (socket, io, otherUserID) => {
   throw new Error('startConversation() not yet implemented')
 }
 
-const joinConversation = async (socket, conversationID) => {
-  throw new Error('joinConversation() not yet implemented')
+const joinConversation = async (socket, io, conversationID) => {
+  const userID = socket.request.session.userid 
+  const conversationUpdated = await conversationService.addParticipantToConversationById(conversationID, userID)
+  const userUpdated = await userService.addConversationToUserById(userID, conversationID)
+  socket.emit('conversation-joined')
 }
 
-const leaveConversation = async (socket, conversationID) => {
+const leaveConversation = async (socket, io, conversationID) => {
   throw new Error('leaveConversation() not yet implemented')
 }
 

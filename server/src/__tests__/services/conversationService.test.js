@@ -28,11 +28,18 @@ describe("user service", () => {
     expect(conversation).toMatchObject({name: 'conversation_name', isPublic: true, isDM: false})
   })
 
-  test("should add participant to conversation", async () => {
+  test("should add participant to conversation by name", async () => {
     const conversation = await conversationService.createConversation('conversation_name', true, false, [])
-    const user = await userService.createUser('usernametest', '12345')
-    const conversationUpdated = await conversationService.addParticipantToConversationByName(conversation.name, user._id)
-    expect(conversationUpdated.participants).toEqual([user._id])
+    const user_id = 'user_id'
+    const conversationUpdated = await conversationService.addParticipantToConversationByName(conversation.name, user_id)
+    expect(conversationUpdated.participants).toEqual([user_id])
+  })
+
+  test("should add participant to conversation by id", async () => {
+    const conversation = await conversationService.createConversation('conversation_name', true, false, [])
+    const user_id = 'user_id'
+    const conversationUpdated = await conversationService.addParticipantToConversationById(conversation._id, user_id)
+    expect(conversationUpdated.participants).toEqual([user_id])
   })
 
   test('should get the right conversation by id', async () => {

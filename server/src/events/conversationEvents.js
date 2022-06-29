@@ -1,23 +1,23 @@
 const conversationHandler = require('../eventHandlers/conversationHandler')
 
 module.exports = (socket, io) => {
-  socket.on('create-conversation', ({name, isPublic, isDM}) => {
-    conversationHandler.createConversation(socket, {name, isPublic, isDM})
+  socket.on('create-conversation', payload => {
+    conversationHandler.createConversation(socket, io, payload)
   })
 
   socket.on('delete-conversation', () => {
-    conversationHandler.deleteConversation(socket)
+    conversationHandler.deleteConversation(socket, io)
   })
 
-  socket.on('start-conversation', otherUserID => {
-    conversationHandler.startConversation(socket, otherUserID)
+  socket.on('start-conversation', payload => {
+    conversationHandler.startConversation(socket, io, payload)
   })
 
-  socket.on('join-conversation', conversationID => {
-    conversationHandler.joinConversation(socket, conversationID)
+  socket.on('join-conversation', payload => {
+    conversationHandler.joinConversation(socket, io, payload)
   })
 
-  socket.on('leave-conversation', (conversationID) => {
-    conversationHandler.leaveConversation(socket, conversationID)
+  socket.on('leave-conversation', payload => {
+    conversationHandler.leaveConversation(socket, io, payload)
   })
 }

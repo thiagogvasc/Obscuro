@@ -1,4 +1,4 @@
-const enterRoom = async (socket, roomInfo, userInfo) => {
+const enterRoom = async (socket, io, { roomInfo, userInfo }) => {
   throw new Error('User Handler Enter Room Not Implemented')
 }
 
