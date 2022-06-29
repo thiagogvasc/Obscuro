@@ -2,11 +2,11 @@
   "name": "obscuro",
   "version": "1.0.0",
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "jest",
     "clear_jest": "jest --clearCache",
-    "start": "node src/index",
+    "start": "node src/server",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
