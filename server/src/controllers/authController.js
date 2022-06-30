@@ -2,6 +2,7 @@ const userService = require('../service/userService')
 
 
 const login = async (req, res) => {
+  console.log(req.body)
   const { username, password } = req.body
   const user = await userService.getUserByUsername(username)
 

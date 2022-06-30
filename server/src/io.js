@@ -16,4 +16,4 @@ const init = (server, options) => {
   })
 }
 
-module.exports = { ioServer, init }
+module.exports = { io, init }
