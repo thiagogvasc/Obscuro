@@ -1,5 +1,6 @@
 const express = require('express')
 const session = require('express-session')
+const bodyParser = require('body-parser')
 const MongoStore = require('connect-mongo')
 
 const conversationService = require('./service/conversationService')
@@ -28,6 +29,8 @@ const init = async () => {
         }
     }))
             
+    app.use(bodyParser.urlencoded({ extended: false }))
+    app.use(bodyParser.json())
     app.use('/auth', authRouter)
 }
 
