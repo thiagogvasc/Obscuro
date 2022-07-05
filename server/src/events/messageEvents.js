@@ -2,7 +2,11 @@ const messageHandler = require('../eventHandlers/messageHandler')
 
 
 module.exports = (socket, io) => {
-  socket.on('message', async (message) => {
-      messageHandler.sendMessage(socket, io, message)
+  socket.on('message', payload => {
+    messageHandler.sendMessage(socket, io, payload)
+  })
+
+  socket.on('general-message', payload => {
+    messageHandler.sendGeneralMessage(socket, io, payload)
   })
 }
