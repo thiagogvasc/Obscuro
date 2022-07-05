@@ -14,11 +14,23 @@ const startConversation = async (socket, io, otherUserID) => {
   throw new Error('startConversation() not yet implemented')
 }
 
+const joinChat = async (socket, io) => {
+  console.log('io session')
+  const userID = socket.request.session.userid
+  console.log(userID)
+  const aggregateUser = await userService.getAggregateUserById(userID)
+  socket.join('General')
+  socket.emit('chat-joined', aggregateUser)
+}
+
+
+
 const joinConversation = async (socket, io, conversationID) => {
   const userID = socket.request.session.userid 
-  const conversationUpdated = await conversationService.addParticipantToConversationById(conversationID, userID)
-  const userUpdated = await userService.addConversationToUserById(userID, conversationID)
-  socket.emit('conversation-joined')
+  await conversationService.addParticipantToConversationById(conversationID, userID)
+  await userService.addConversationToUserById(userID, conversationID)
+  socket.emit('conversation-joined') // io.emit(new user joined)
+  // emit 10 last messages
 }
 
 const leaveConversation = async (socket, io, conversationID) => {
@@ -29,6 +41,7 @@ module.exports = {
   createConversation,
   deleteConversation,
   startConversation,
+  joinChat,
   joinConversation,
   leaveConversation
 }
