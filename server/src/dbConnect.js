@@ -3,8 +3,9 @@ const { MongoMemoryServer } = require('mongodb-memory-server')
 
 
 module.exports = async () => {
-  const mongoServer = await MongoMemoryServer.create()
+  //const mongoServer = await MongoMemoryServer.create()
   console.log('connecting...')
-  await mongoose.connect(mongoServer.getUri())
-  return mongoServer.getUri()
+  //await mongoose.connect(mongoServer.getUri())
+  await mongoose.connect(process.env.MONGODB_URI)
+  //return mongoServer.getUri()
 }
