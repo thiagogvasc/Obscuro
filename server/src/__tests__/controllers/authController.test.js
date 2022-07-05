@@ -79,17 +79,19 @@ describe('auth controller', () => {
       body: {
         username: 'username_test',
         password: '123456'
-      }
+      },
+      session: {}
     }
     const res = {
       send: jest.fn()
     }
 
-    // create user
-    await userService.createUser('username_test', '123456')
+    // create user 
+    await userService.createUserWithId('userid', 'username_test', '123456')
 
     // login
     await authController.login(req, res)
+    expect(req.session.userid).toEqual('userid')
     expect(res.send).toHaveBeenCalledWith('logged in')
   })
 

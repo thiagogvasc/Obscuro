@@ -38,9 +38,7 @@ describe("conversation event handler", () => {
     const socket = {
       emit: jest.fn(),
       request: {
-        session: {
-          userid: ''
-        }
+        session: {}
       }
     } 
     const io = {}
