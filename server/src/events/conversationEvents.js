@@ -13,6 +13,10 @@ module.exports = (socket, io) => {
     conversationHandler.startConversation(socket, io, payload)
   })
 
+  socket.on('join-chat', () => {
+    conversationHandler.joinChat(socket, io)
+  })
+
   socket.on('join-conversation', payload => {
     conversationHandler.joinConversation(socket, io, payload)
   })
