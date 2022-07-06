@@ -38,8 +38,12 @@ function Login() {
             password: ''
         })
 
-        axios.post('http://localhost:8080/auth/login', formData).then(result => {
+        axios.post('http://localhost:8080/auth/login', formData, { withCredentials: true }).then(result => {
             console.log(result.data)
+            if (result.statusText === 'OK') {
+                console.log('success logging in')
+                navigate('/chat')
+            }
         })
     }
 

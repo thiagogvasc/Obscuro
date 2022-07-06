@@ -15,7 +15,10 @@ const init = async () => {
     const existingConversation = await conversationService.getConversationByName('General')
     if (!existingConversation) await conversationService.createConversation('General', true, false, [])
     
-    app.use(cors())
+    app.use(cors({
+        origin: 'http://localhost:3000',
+        credentials: true
+    }))
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
     app.use(sessionMiddleware)

@@ -8,8 +8,8 @@ io.init(server, {
   cors: {
     // origin: "https://obscuro.herokuapp.com",
     origin: ["http://localhost:3000", "http://localhost:8080"],
-    methods: ["GET", "POST"],
-    credentials: true
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    credentials: true,
 }
 })
 

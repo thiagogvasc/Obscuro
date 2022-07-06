@@ -18,8 +18,10 @@ const joinChat = async (socket, io) => {
   console.log('io session')
   const userID = socket.request.session.userid
   console.log(userID)
+  const generalConv = await conversationService.getConversationByName('General')
+  await joinConversation(socket, io, generalConv._id)
+  socket.join(generalConv._id)
   const aggregateUser = await userService.getAggregateUserById(userID)
-  socket.join('General')
   socket.emit('chat-joined', aggregateUser)
 }
 

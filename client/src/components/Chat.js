@@ -17,36 +17,29 @@ import { useSocket } from '../contexts/socketContext'
 import Sidebar from './Sidebar'
 import Message from './Message'
 
-import { useMessages } from '../contexts/messagesContext'
-import { useUsers } from '../hooks/useUsers'
+import { useChat } from '../contexts/chatContext'
 import { blue, grey } from '@mui/material/colors'
 
 
 function Chat() {
-  const { messages } = useMessages()
-  const [currentRoomMessages, setCurrentRoomMessages] = useState([])
-  const [receiver, setReceiver] = useState({id: 'General', chatName: 'General', isRoom: true})
-  const { users } = useUsers()
+  const { 
+    chatData,
+    currentConversation,
+    setCurrentConversation
+  } = useChat()
   const { user } = useUser()
   const socket = useSocket()
   const chatBottom = useRef(null)
   const navigate = useNavigate()
   const [shouldOpenSideBar, setShouldOpenSideBar] = useState(false)
 
-  useEffect(() => {
-    if (socket.connectError?.message === 'invalid session') {
-      console.log('chat invalid redirect')
-      navigate('/')
-    }
-  })
+  // useEffect(() => {
+  //     setCurrentRoomMessages(messages[receiver.id] || [])
+  // }, [receiver, messages])
 
-  useEffect(() => {
-      setCurrentRoomMessages(messages[receiver.id] || [])
-  }, [receiver, messages])
-
-  useEffect(() => {
-    scrollToBottom()
-  }, [currentRoomMessages])
+  // useEffect(() => {
+  //   scrollToBottom()
+  // }, [currentRoomMessages])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -55,8 +48,8 @@ function Chat() {
     if (text !== '') {
       socket.emitMessage({
         text,
-        sender: user,
-        receiver
+        sender: chatData._id,
+        conversation: currentConversation._id
       })
     }
 
@@ -64,24 +57,8 @@ function Chat() {
     e.target.message.focus()
   }
 
-  const selectReceiver = (id, isRoom) => {
-    //socket.joinRoom(id) // test
-    setReceiver({id, isRoom})
-    setShouldOpenSideBar(false)
-  }
-
   const scrollToBottom = () => {
     chatBottom.current.scrollIntoView()
-  }
-
-  const getUsername = (id) => {
-    let username = ''
-    users.forEach(user => {
-      if (user.id === id) {
-        username = user.username
-      }
-    })
-    return username
   }
 
   return (
@@ -94,13 +71,7 @@ function Chat() {
         // overflow: 'hidden'
       }}
     >
-      <Sidebar 
-        currentReceiver={receiver} 
-        messages={messages} 
-        shouldOpenSideBar={shouldOpenSideBar} 
-        users={users} 
-        selectReceiver={selectReceiver} 
-      />
+      <Sidebar shouldOpenSideBar={shouldOpenSideBar} />
       <Box sx={{
         display: shouldOpenSideBar ? 'none' : 'flex', 
         flexGrow: 1, 
@@ -123,7 +94,8 @@ function Chat() {
           p: 1
         }}>
           <Typography variant="h5">
-            {receiver.isRoom ? receiver.id : getUsername(receiver.id)}
+            {/* {receiver.isRoom ? receiver.id : getUsername(receiver.id)} */}
+            conv name
           </Typography>
         </Box>
         <Stack 
@@ -138,7 +110,7 @@ function Chat() {
             scrollBehavior: 'smooth'
           }} 
         >
-            {currentRoomMessages.map(message => {
+            {currentConversation.messages.map(message => {
               return (<Message message={message} user={user}/>)
             })}
           <div ref={ chatBottom } />

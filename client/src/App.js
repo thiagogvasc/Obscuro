@@ -13,7 +13,7 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 import { useUser, UserProvider } from './contexts/userContext'
 import { SocketProvider } from './contexts/socketContext'
-import { MessagesProvider } from './contexts/messagesContext'
+import { ChatProvider } from './contexts/chatContext'
 
 import './App.css'
 import { Button } from '@mui/material'
@@ -39,7 +39,7 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={ <Login /> } />
-                <Route path="/chat" element={ <ProtectedRoute> <MessagesProvider> <Chat /> </MessagesProvider></ProtectedRoute> } />
+                <Route path="/chat" element={ <ProtectedRoute> <ChatProvider> <Chat /> </ChatProvider></ProtectedRoute> } />
               </Routes>
             </Box>
           </ThemeProvider>

@@ -18,9 +18,7 @@ export function SocketProvider({ children }) {
         // pass user as an argument
         const persistedUser = JSON.parse(sessionStorage.getItem('user'))
         const newSocket = io('http://localhost:8080', {
-            auth: {
-                sessionID: persistedUser?.sessionID
-            }
+            withCredentials: true
         })
 
         newSocket.on('connect', () => {
@@ -45,6 +43,14 @@ export function SocketProvider({ children }) {
 
     const emitFetchMessages = (room) => {
         socketRef.current.emit('fetch-messages', room)
+    }
+
+    const emitJoinChat = () => {
+        socketRef.current.emit('join-chat')
+    }
+
+    const onChatJoined = (callback) => {
+        socketRef.current.on('chat-joined', callback)
     }
 
     const joinRoom = (room) => {
@@ -82,6 +88,8 @@ export function SocketProvider({ children }) {
         emitMessage,
         emitLogin,
         emitFetchMessages,
+        emitJoinChat,
+        onChatJoined,
         joinRoom,
         emitLogout,
         onMessage,

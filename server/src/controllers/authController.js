@@ -37,7 +37,17 @@ const signup = async (req, res) => {
   res.send('user created')
 }
 
+const getSession = async (req, res) => {
+  // verify if session is valid exists
+  if (req.session.userid) {
+    // 
+  } else {
+    // res.redirect(/login)
+  }
+}
+
 module.exports = {
   login,
-  signup
+  signup,
+  getSession
 }

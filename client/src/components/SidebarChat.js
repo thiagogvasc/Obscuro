@@ -6,12 +6,15 @@ import { Avatar, Typography } from '@mui/material'
 import {useUser} from '../contexts/userContext'
 import { grey } from '@mui/material/colors'
 
-export default function SidebarChat({currentReceiver, lastMessage, chatName, receiver, selectReceiver, isRoom}) { 
+import { useChat } from '../contexts/chatContext'
+
+export default function SidebarChat({ conversation }) { 
+  const { setCurrentConversation } = useChat()
   const select = () => {
-    selectReceiver(receiver, isRoom)
+    setCurrentConversation(conversation)
   }
 
-  const shouldHighlight = (currentReceiver.id === receiver)
+  const shouldHighlight = false
   return (
     // mayve just pass the whole receiver
     <Box onClick={select} sx={{
@@ -25,8 +28,8 @@ export default function SidebarChat({currentReceiver, lastMessage, chatName, rec
     }}>
       <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
       <Box sx={{ alignSelf: 'center', fontWeight:'100' }}>
-        <Typography variant="body1" sx={{ color: '#FFFFFF'}}>{chatName}</Typography>
-        <Typography variant="body2" sx={{ color: 'darkgray'}}>{lastMessage?.text.length > 10 ? lastMessage?.text.substring(1, 10) + '...' : lastMessage?.text}</Typography>
+        <Typography variant="body1" sx={{ color: '#FFFFFF'}}>{conversation.name}</Typography>
+        {/* <Typography variant="body2" sx={{ color: 'darkgray'}}>{lastMessage?.text.length > 10 ? lastMessage?.text.substring(1, 10) + '...' : lastMessage?.text}</Typography> */}
       </Box>
     </Box>
   )

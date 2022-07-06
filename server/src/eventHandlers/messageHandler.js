@@ -3,6 +3,7 @@ const messageService = require('../service/messageService')
 
 const sendMessage = async (socket, io, message) => {
   const newMessage = await messageService.createMessage(message.text, message.sender, message.conversation)
+  console.log(newMessage)
   const aggregateMessage = await messageService.getAggregateMessageById(newMessage._id)
   io.to(message.conversation).emit('message', aggregateMessage)
 }

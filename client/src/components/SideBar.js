@@ -8,10 +8,10 @@ import { Typography } from '@mui/material'
 import { useUser } from '../contexts/userContext'
 import { grey } from '@mui/material/colors'
 
-export default function Sidebar({currentReceiver, messages, shouldOpenSideBar, users, selectReceiver}) {
-  const { user } = useUser()
-  const withoutSelfFilter = (userTemp) => userTemp.id !== user.id
-  const usersWithoutSelf = users.filter(withoutSelfFilter)
+import { useChat } from '../contexts/chatContext'
+
+export default function Sidebar({ shouldOpenSideBar }) {
+  const { chatData, setCurrentConversation } = useChat()
   return (
     <Paper elevation={12} sx={{ 
       display: {
@@ -23,9 +23,9 @@ export default function Sidebar({currentReceiver, messages, shouldOpenSideBar, u
       borderRadius: '25px',
     }}>
       <Typography fontWeight="light" ml={3} mt={1} color="white" variant="h5">Rooms</Typography>
-      <SidebarChat currentReceiver={currentReceiver} lastMessage={messages['General']?.slice(-1)[0]} selectReceiver={selectReceiver} chatName={'General'} isRoom={true} receiver={'General'}/> 
+      {/* <SidebarChat isRoom={true} receiver={'General'}/>  */}
       {/*pass something else other than receiver*/}
-      {usersWithoutSelf.map(user => <SidebarChat currentReceiver={currentReceiver} lastMessage={messages[user.id]?.slice(-1)[0]} selectReceiver={selectReceiver} chatName={user.username} isRoom={false} receiver={user.id}/>)}  
+      {chatData.conversations.map(conversation => <SidebarChat conversation={conversation} />)}  
     </Paper>
   )
 }

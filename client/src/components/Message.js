@@ -8,13 +8,14 @@ import { Button } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function Message({message, user}) {
-  const fromSelf = message.sender.id === user.id
+  //const fromSelf = message.sender.id === user.id
+  const fromSelf = true
   return (
     <Box sx={{
       alignSelf: fromSelf ? 'flex-end' : 'flex-start',
       textAlign: fromSelf ? 'right' : 'left',
     }}>
-      <Typography sx={{color: 'white'/*color: message.sender.color */}} variant="body1">{ message.sender.username }: </Typography>
+      {/* <Typography sx={{ color: 'white' }} variant="body1">{ message.sender.username }: </Typography> */}
       <Typography fontWeight="300" variant="body2" sx={{
         backgroundColor: '#1976d2',
         color: 'white',

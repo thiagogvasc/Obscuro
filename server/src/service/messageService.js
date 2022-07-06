@@ -16,7 +16,7 @@ const getMessageById = async id => {
 }
 
 const getAggregateMessageById = async id => {
-  const aggregateMessage = await Message.aggregate([
+  return Message.aggregate([
     {
       $match: {
         _id: id
@@ -44,9 +44,11 @@ const getAggregateMessageById = async id => {
     {
       $unwind: { path: '$conversation' }
     }
-  ])
- // console.log(aggregateMessage)
-  return aggregateMessage.at(0)
+  ]).then(result => {
+    return result.at(0)
+  })
+//  // console.log(aggregateMessage)
+//   return aggregateMessage.at(0)
 }
 
 module.exports = {
