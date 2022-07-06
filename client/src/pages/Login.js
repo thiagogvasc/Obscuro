@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
+import axios from 'axios'
+
 
 function Login() {
     const navigate = useNavigate()
@@ -34,6 +36,10 @@ function Login() {
         setFormData({
             username: '',
             password: ''
+        })
+
+        axios.post('http://localhost:8080/auth/login', formData).then(result => {
+            console.log(result.data)
         })
     }
 
