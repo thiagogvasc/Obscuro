@@ -6,7 +6,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Navbar from './components/Navbar'
 import Chat from './components/Chat'
-import Login from './components/Login'
+import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';

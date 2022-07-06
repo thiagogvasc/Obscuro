@@ -6,49 +6,35 @@ import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
-import { useUser } from '../contexts/userContext'
-import { useSocket } from '../contexts/socketContext'
-import { generateColor } from '../util/generateColor'
-
 
 function Login() {
-    console.log('rendered login')
-
-    const user = useUser()
-    const socket = useSocket()
     const navigate = useNavigate()
-    const [username, setUsername] = useState('')
+    const [formData, setFormData] = useState({
+        username: '',
+        password: ''
+    })
 
     useEffect(() => {
-        const persistedUser = JSON.parse(sessionStorage.getItem('user'))
-        console.log(persistedUser)
-    
-        if (persistedUser) {
-            socket.initConnection()
-            socket.onAuthorized(() => navigate('/chat'))
-        }
+        // fetch session data
     }, [])
 
     const handleChange = (e) => {
-        setUsername(e.target.value)
+        const { name, value } = e.target
+        setFormData({
+            ...formData,
+            [name]: value
+        })
+        console.log(formData)
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-
-        socket.initConnection()
-        const color = generateColor()
-        socket.emitLogin({ username, color })
-        socket.onLoginSuccess((newUser) => {
-            const newUser1 = {...newUser, isLoggedIn: true}
-            console.log(newUser1)
-            user.setUser(newUser1)
-            sessionStorage.setItem('user', JSON.stringify(newUser1))
-            navigate('/chat')
-        })
-
         e.target.username.focus()
-        e.target.reset()
+
+        setFormData({
+            username: '',
+            password: ''
+        })
     }
 
     return (
@@ -61,8 +47,6 @@ function Login() {
                 color: "white"
             }}
         >   
-        <Typography>{socket.connected ? 'connected' : 'not connected'}</Typography>
-        <Typography>{socket.connectError ? <div>{socket.connectError.message}</div> : <div>no error: {socket.connectError}</div>}</Typography>
             <form onSubmit={ handleSubmit }>
                 <Box 
                     sx={{
@@ -76,9 +60,23 @@ function Login() {
                     <Typography variant="body2">Username:</Typography>
                     <TextField 
                         onChange={handleChange} 
-                        value={username} 
+                        value={formData.username} 
                         autoComplete="off" 
                         name="username"
+                        InputProps={{
+                            sx: {
+                              color: 'black',
+                              backgroundColor: 'white',
+                              borderRadius: '25px'
+                            }
+                        }}
+                    />
+                    <Typography variant="body2">Password:</Typography>
+                    <TextField 
+                        onChange={handleChange} 
+                        value={formData.password} 
+                        autoComplete="off" 
+                        name="password"
                         InputProps={{
                             sx: {
                               color: 'black',
