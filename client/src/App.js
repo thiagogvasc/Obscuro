@@ -18,6 +18,7 @@ import { ChatProvider } from './contexts/chatContext'
 import './App.css'
 import { Button } from '@mui/material'
 import { grey } from '@mui/material/colors/'
+import CreateConversation from './pages/CreateConversation'
 
 function App() { 
   const theme = createTheme({
@@ -40,6 +41,7 @@ function App() {
               <Routes>
                 <Route path="/" element={ <Login /> } />
                 <Route path="/chat" element={ <ProtectedRoute> <ChatProvider> <Chat /> </ChatProvider></ProtectedRoute> } />
+                <Route path='/create-conversation' element={ <CreateConversation /> } />
               </Routes>
             </Box>
           </ThemeProvider>

@@ -15,7 +15,7 @@ import { useUser } from '../contexts/userContext'
 import { useSocket } from '../contexts/socketContext'
 
 import Sidebar from './Sidebar'
-import Message from './Message'
+import MessagesWindow from './MessagesWindow'
 
 import { useChat } from '../contexts/chatContext'
 import { blue, grey } from '@mui/material/colors'
@@ -27,19 +27,10 @@ function Chat() {
     currentConversation,
     setCurrentConversation
   } = useChat()
-  const { user } = useUser()
   const socket = useSocket()
-  const chatBottom = useRef(null)
   const navigate = useNavigate()
-  const [shouldOpenSideBar, setShouldOpenSideBar] = useState(false)
+  const [shouldOpenSidebar, setShouldOpenSidebar] = useState(false)
 
-  // useEffect(() => {
-  //     setCurrentRoomMessages(messages[receiver.id] || [])
-  // }, [receiver, messages])
-
-  // useEffect(() => {
-  //   scrollToBottom()
-  // }, [currentRoomMessages])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -52,13 +43,10 @@ function Chat() {
         conversation: currentConversation._id
       })
     }
+    console.log({text: text, sender: chatData._id, conversation: currentConversation._id})
 
     e.target.reset()
     e.target.message.focus()
-  }
-
-  const scrollToBottom = () => {
-    chatBottom.current.scrollIntoView()
   }
 
   return (
@@ -71,9 +59,9 @@ function Chat() {
         // overflow: 'hidden'
       }}
     >
-      <Sidebar shouldOpenSideBar={shouldOpenSideBar} />
+      <Sidebar shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar}/>
       <Box sx={{
-        display: shouldOpenSideBar ? 'none' : 'flex', 
+        display: shouldOpenSidebar ? 'none' : 'flex', 
         flexGrow: 1, 
         flexDirection: "column", 
         backgroundColor: grey[800],
@@ -83,7 +71,7 @@ function Chat() {
         <Button sx={{
           display: {xs: 'block', sm: 'none'}, 
           alignSelf: "flex-start"}} 
-          onClick={() => setShouldOpenSideBar(true)}
+          onClick={() => setShouldOpenSidebar(true)}
         >
           back
         </Button>
@@ -94,27 +82,10 @@ function Chat() {
           p: 1
         }}>
           <Typography variant="h5">
-            {/* {receiver.isRoom ? receiver.id : getUsername(receiver.id)} */}
-            conv name
+            { currentConversation.name }
           </Typography>
         </Box>
-        <Stack 
-          spacing={1} 
-          direction="column" 
-          alignItems="end"
-          height={0} // Allows overflow to scroll
-          sx={{ 
-            p: 5, 
-            flexGrow: 1, 
-            overflowY: "scroll",
-            scrollBehavior: 'smooth'
-          }} 
-        >
-            {currentConversation.messages.map(message => {
-              return (<Message message={message} user={user}/>)
-            })}
-          <div ref={ chatBottom } />
-        </Stack>
+        <MessagesWindow />
         <form onSubmit={ handleSubmit }>
           <Box 
             sx={{

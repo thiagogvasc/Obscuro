@@ -3,18 +3,21 @@ import React from 'react'
 import Box from '@mui/material/Box'
 import { Avatar, Typography } from '@mui/material'
 
-import {useUser} from '../contexts/userContext'
+import { useUser } from '../contexts/userContext'
 import { grey } from '@mui/material/colors'
 
 import { useChat } from '../contexts/chatContext'
 
-export default function SidebarChat({ conversation }) { 
-  const { setCurrentConversation } = useChat()
+export default function SidebarChat({ conversation, shouldOpenSidebar, setShouldOpenSidebar}) { 
+  const { currentConversation, setCurrentConversation } = useChat()
   const select = () => {
     setCurrentConversation(conversation)
+    // setShouldOpenSidebar(true)
+    console.log('select')
   }
 
-  const shouldHighlight = false
+  // rename to isActive?
+  const shouldHighlight = conversation._id === currentConversation._id
   return (
     // mayve just pass the whole receiver
     <Box onClick={select} sx={{

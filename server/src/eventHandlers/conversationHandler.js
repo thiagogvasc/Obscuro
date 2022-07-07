@@ -3,7 +3,11 @@ const userService = require('../service/userService')
 
 
 const createConversation = async (socket, io, {name, isPublic, isDM}) => {
-  throw new Error('createConversation() not yet implemented')
+  const newConversation = await conversationService.createConversation(name, isPublic, isDM, [])
+  const creator = await userService.getUserById(socket.request.session.userid)
+  
+  await conversationService.addParticipantToConversationById(newConversation._id, creator._id)
+  await userService.addConversationToUserById(creator._id, newConversation._id)
 }
 
 const deleteConversation = async (socket, io) => {

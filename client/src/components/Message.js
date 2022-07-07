@@ -7,7 +7,7 @@ import { Typography } from '@mui/material'
 import { Button } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';
 
-export default function Message({message, user}) {
+export default function Message({message}) {
   //const fromSelf = message.sender.id === user.id
   const fromSelf = true
   return (

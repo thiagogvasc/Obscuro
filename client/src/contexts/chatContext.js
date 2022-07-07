@@ -16,6 +16,7 @@ export function ChatProvider({ children }) {
     socket.onChatJoined(user => {
       console.log(user)
       setChatData(user)
+      // setConversations(user.conversations)
       setCurrentConversation(user.conversations[0])
     })
     socket.onMessage(message => {

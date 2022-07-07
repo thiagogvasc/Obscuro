@@ -49,6 +49,10 @@ export function SocketProvider({ children }) {
         socketRef.current.emit('join-chat')
     }
 
+    const emitCreateConversation = (conversation) => {
+        socketRef.current.emit('create-conversation', conversation)
+    }
+
     const onChatJoined = (callback) => {
         socketRef.current.on('chat-joined', callback)
     }
@@ -89,6 +93,7 @@ export function SocketProvider({ children }) {
         emitLogin,
         emitFetchMessages,
         emitJoinChat,
+        emitCreateConversation,
         onChatJoined,
         joinRoom,
         emitLogout,
