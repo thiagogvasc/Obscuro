@@ -86,6 +86,7 @@ export function SocketProvider({ children }) {
     }
     
     const value = { 
+        socketRef,
         connected,
         connectError,
         initConnection,

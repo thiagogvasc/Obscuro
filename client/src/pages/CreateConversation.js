@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
@@ -39,9 +39,11 @@ function CreateConversation() {
     // reevalutate public and private to true and false
     const dataToSubmit = {
       ...formData,
-      isDm: false,
+      isDM: false,
       ['isPublic']: formData.isPublic === 'public' ? true : false,
     }
+
+    console.log(dataToSubmit)
 
     socket.emitCreateConversation(dataToSubmit)
   }

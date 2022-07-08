@@ -1,24 +1,19 @@
 import React from 'react'
-import { useState, useEffect, useContext, useRef } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import Textfield from '@mui/material/TextField'
-import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
-import Chip from '@mui/material/Chip'
-import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
 import SendIcon from '@mui/icons-material/Send';
 
-import { useUser } from '../contexts/userContext'
 import { useSocket } from '../contexts/socketContext'
 
 import Sidebar from './Sidebar'
 import MessagesWindow from './MessagesWindow'
 
 import { useChat } from '../contexts/chatContext'
-import { blue, grey } from '@mui/material/colors'
+import { grey } from '@mui/material/colors'
 
 
 function Chat() {
@@ -31,6 +26,7 @@ function Chat() {
   const navigate = useNavigate()
   const [shouldOpenSidebar, setShouldOpenSidebar] = useState(false)
 
+  console.log('Chat')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -43,7 +39,7 @@ function Chat() {
         conversation: currentConversation._id
       })
     }
-    console.log({text: text, sender: chatData._id, conversation: currentConversation._id})
+    //console.log({text: text, sender: chatData._id, conversation: currentConversation._id})
 
     e.target.reset()
     e.target.message.focus()
