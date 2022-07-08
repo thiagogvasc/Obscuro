@@ -3,12 +3,12 @@ import React from 'react'
 import Box from '@mui/material/Box'
 import { Avatar, Typography } from '@mui/material'
 
-import { useUser } from '../contexts/userContext'
 import { grey } from '@mui/material/colors'
 
 import { useChat } from '../contexts/chatContext'
 
-export default function SidebarChat({ conversation, shouldOpenSidebar, setShouldOpenSidebar}) { 
+export default function SidebarChat({ conversation, shouldOpenSidebar, setShouldOpenSidebar}) {
+  console.log('Sidebar chat') 
   const { currentConversation, setCurrentConversation } = useChat()
   const select = () => {
     setCurrentConversation(conversation)

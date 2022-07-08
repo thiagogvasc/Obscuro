@@ -1,15 +1,14 @@
 import React, {useEffect, useRef} from 'react'
 
-import Box from '@mui/material/Box'
-import { Stack, Typography } from '@mui/material'
-import { Button } from '@mui/material'
-import LogoutIcon from '@mui/icons-material/Logout';
+import { Stack } from '@mui/material'
 import { useChat } from '../contexts/chatContext'
 import Message from '../components/Message'
 
 export default function MessagesWindow() {
+  console.log('MessagesWindow')
   const { currentConversation } = useChat()
   const chatBottom = useRef(null)
+  //console.log(currentConversation)
 
   useEffect(() => {
     chatBottom.current.scrollIntoView()

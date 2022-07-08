@@ -1,13 +1,10 @@
 import React from 'react'
-
 import Box from '@mui/material/Box'
-import { useUser } from '../contexts/userContext'
-
 import { Typography } from '@mui/material'
-import { Button } from '@mui/material'
-import LogoutIcon from '@mui/icons-material/Logout';
+
 
 export default function Message({message}) {
+  console.log('Message')
   //const fromSelf = message.sender.id === user.id
   const fromSelf = true
   return (
