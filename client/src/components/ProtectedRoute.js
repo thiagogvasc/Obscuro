@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useUser } from '../contexts/userContext'
 import { useSocket } from '../contexts/socketContext'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function ProtectedRoute({ children }) {
     // const user = useUser()
@@ -25,6 +25,16 @@ function ProtectedRoute({ children }) {
     // return ( <>connecting to chat</> )
 
     // >>remove<<
+    const socket = useSocket()
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (socket.connectError) {
+            console.log(socket.connectError)
+            if (socket.connectError.message === 'unauthorized') {
+                navigate('/')
+            }
+        }
+    }, [socket])
     return (<>{children}</>)
 }
 
