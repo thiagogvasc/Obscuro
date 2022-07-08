@@ -97,6 +97,7 @@ function Login() {
                         }}
                     />
                     <Button sx={{ display: "block" }} type="submit" variant="contained">Enter chat</Button>
+                    <Button variant="outlined" onClick={() => {navigate('/signup')}}>Sign up</Button>
                 </Box>
             </form>
         </Box>
