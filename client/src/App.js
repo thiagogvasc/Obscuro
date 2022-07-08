@@ -18,6 +18,7 @@ import './App.css'
 import { grey } from '@mui/material/colors/'
 import CreateConversation from './pages/CreateConversation'
 import SignUp from './pages/SignUp'
+import { UsersProvider } from './contexts/usersContext'
 
 function App() { 
   const theme = createTheme({
@@ -27,24 +28,26 @@ function App() {
     <BrowserRouter>
       <SocketProvider>
         <UserProvider>
-          <ThemeProvider theme={theme}>
-            <Box sx={{ 
-              display: "flex", 
-              flexDirection: "column", 
-              width: "100vw", 
-              height: "100vh", 
-              backgroundColor: grey[900],
-              padding: '2vh 5vw' 
-            }}>
-              <Navbar />
-              <Routes>
-                <Route path="/" element={ <Login /> } />
-                <Route path="/signup" element={ <SignUp /> } />
-                <Route path="/chat" element={ <ProtectedRoute> <ChatProvider> <Chat /> </ChatProvider></ProtectedRoute> } />
-                <Route path='/create-conversation' element={ <CreateConversation /> } />
-              </Routes>
-            </Box>
-          </ThemeProvider>
+          <UsersProvider>
+            <ThemeProvider theme={theme}>
+              <Box sx={{ 
+                display: "flex", 
+                flexDirection: "column", 
+                width: "100vw", 
+                height: "100vh", 
+                backgroundColor: grey[900],
+                padding: '2vh 5vw' 
+              }}>
+                <Navbar />
+                <Routes>
+                  <Route path="/" element={ <Login /> } />
+                  <Route path="/signup" element={ <SignUp /> } />
+                  <Route path="/chat" element={ <ProtectedRoute> <ChatProvider> <Chat /> </ChatProvider></ProtectedRoute> } />
+                  <Route path='/create-conversation' element={ <CreateConversation /> } />
+                </Routes>
+              </Box>
+            </ThemeProvider>
+          </UsersProvider>
         </UserProvider>
       </SocketProvider>
     </BrowserRouter>
