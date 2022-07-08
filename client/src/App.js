@@ -3,22 +3,21 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import Navbar from './components/Navbar'
 import Chat from './components/Chat'
 import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import { useUser, UserProvider } from './contexts/userContext'
+import { UserProvider } from './contexts/userContext'
 import { SocketProvider } from './contexts/socketContext'
 import { ChatProvider } from './contexts/chatContext'
 
 import './App.css'
-import { Button } from '@mui/material'
 import { grey } from '@mui/material/colors/'
 import CreateConversation from './pages/CreateConversation'
+import SignUp from './pages/SignUp'
 
 function App() { 
   const theme = createTheme({
@@ -40,6 +39,7 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={ <Login /> } />
+                <Route path="/signup" element={ <SignUp /> } />
                 <Route path="/chat" element={ <ProtectedRoute> <ChatProvider> <Chat /> </ChatProvider></ProtectedRoute> } />
                 <Route path='/create-conversation' element={ <CreateConversation /> } />
               </Routes>
