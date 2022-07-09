@@ -11,7 +11,7 @@ const login = async (req, res) => {
   if (user.password !== password) return res.send('incorrect password')
 
   req.session.userid = user._id
-  console.log('login new session: ', req.session)
+  //console.log('login new session: ', req.session)
   // Join general chat on login
   // General chat won't have logs on every new user
   // So it's best to handle without events
@@ -22,7 +22,7 @@ const login = async (req, res) => {
   // await userService.addConversationToUserById(user._id, general._id)
 
   //res.send(await userService.getAggregateUserById(user._id))
-  res.send('logged in')
+  res.send(user._id)
 }
 
 const signup = async (req, res) => {
@@ -38,12 +38,11 @@ const signup = async (req, res) => {
 }
 
 const getSession = async (req, res) => {
-  // verify if session is valid exists
-  if (req.session.userid) {
-    // 
-  } else {
-    // res.redirect(/login)
-  }
+  const userid = req.session.userid
+  if (userid) 
+    res.status(200).json(userid)
+  else 
+    res.status(403).json({message: 'not authenticated'})
 }
 
 module.exports = {

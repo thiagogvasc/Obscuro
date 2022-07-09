@@ -24,6 +24,14 @@ const init = async () => {
     app.use(bodyParser.json())
     app.use(sessionMiddleware)
     app.use('/auth', authRouter)
+    app.use((req, res, next) => {
+        const session = req.session;
+        if (session && session.userid) {
+          next()
+        } else {
+          next(new Error("unauthorized"))
+        }
+    })
     app.use('/user', userRouter)
 }
 

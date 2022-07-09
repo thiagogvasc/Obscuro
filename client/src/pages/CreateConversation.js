@@ -14,10 +14,12 @@ import FormLabel from '@mui/material/FormLabel';
 import axios from 'axios'
 import { grey } from '@mui/material/colors'
 import { useSocket } from '../contexts/socketContext'
+import { useUser } from '../contexts/userContext'
 
 
 function CreateConversation() {
   console.log('CreateConversation')
+  const { userID } = useUser()
   const [formData, setFormData] = useState({
     name: '',
     isPublic: 'public',
@@ -40,7 +42,8 @@ function CreateConversation() {
     const dataToSubmit = {
       ...formData,
       isDM: false,
-      ['isPublic']: formData.isPublic === 'public' ? true : false,
+      isPublic: formData.isPublic === 'public' ? true : false,
+      participants: [userID]
     }
 
     console.log(dataToSubmit)

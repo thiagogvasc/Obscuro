@@ -22,13 +22,11 @@ import { UsersProvider } from './contexts/usersContext'
 
 function App() { 
   const theme = createTheme({
-  
   })
   return (
     <BrowserRouter>
       <SocketProvider>
         <UserProvider>
-          <UsersProvider>
             <ThemeProvider theme={theme}>
               <Box sx={{ 
                 display: "flex", 
@@ -42,12 +40,11 @@ function App() {
                 <Routes>
                   <Route path="/" element={ <Login /> } />
                   <Route path="/signup" element={ <SignUp /> } />
-                  <Route path="/chat" element={ <ProtectedRoute> <ChatProvider> <Chat /> </ChatProvider></ProtectedRoute> } />
+                  <Route path="/chat" element={ (<ProtectedRoute> <UsersProvider> <ChatProvider> <Chat /> </ChatProvider> </UsersProvider> </ProtectedRoute>) } />
                   <Route path='/create-conversation' element={ <CreateConversation /> } />
                 </Routes>
               </Box>
             </ThemeProvider>
-          </UsersProvider>
         </UserProvider>
       </SocketProvider>
     </BrowserRouter>

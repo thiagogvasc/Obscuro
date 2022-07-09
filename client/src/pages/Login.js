@@ -6,12 +6,13 @@ import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import MyTextField from '../components/MyTextField'
 import Button from '@mui/material/Button'
-
+import { useUser } from '../contexts/userContext'
 import axios from 'axios'
 
 
 function Login() {
     const navigate = useNavigate()
+    const { setUserID } = useUser()
     const [formData, setFormData] = useState({
         username: '',
         password: ''
@@ -43,6 +44,7 @@ function Login() {
             console.log(result.data)
             if (result.statusText === 'OK') {
                 console.log('success logging in')
+                setUserID(result.data)
                 navigate('/chat')
             }
         })

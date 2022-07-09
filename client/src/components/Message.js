@@ -1,12 +1,15 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 import { Typography } from '@mui/material'
+import { useUser } from '../contexts/userContext'
 
 
 export default function Message({message}) {
-  console.log('Message')
   //const fromSelf = message.sender.id === user.id
-  const fromSelf = true
+  const { userID } = useUser()
+  console.log('sender: ' + message.sender)
+  console.log('me: ' + userID)
+  const fromSelf = message.sender._id === userID
   return (
     <Box sx={{
       alignSelf: fromSelf ? 'flex-end' : 'flex-start',

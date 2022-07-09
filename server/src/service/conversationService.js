@@ -38,11 +38,47 @@ const addParticipantToConversationById = async (conversationID, participantID) =
   )
 }
 
+const getAggregateConversationById = async id => {
+  const aggregateConversation = await Conversation.aggregate([
+    {
+      $match: {
+        _id: id
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'participants',
+        foreignField: '_id',
+        as: 'participants'
+      }
+    },
+    {
+      $lookup: {
+        from: 'messages',
+        localField: '_id',
+        foreignField: 'conversation',
+        as: 'messages'
+      }
+    },
+    // {
+    //   $group: {
+    //     _id: '$_id',
+    //     name: { $first: '$name' },
+    //     participants: {$push: '$participants'},
+    //     messages: {$push: '$messages'}
+    //   }
+    // }
+  ])
+  return aggregateConversation.at(0)
+}
+
 module.exports = {
   createConversation,
   getConversationByName,
   getConversationById,
   getParticipantsByConversationId,
   addParticipantToConversationByName,
-  addParticipantToConversationById
+  addParticipantToConversationById,
+  getAggregateConversationById
 }

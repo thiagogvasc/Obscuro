@@ -1,33 +1,24 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSocket } from '../contexts/socketContext'
+import Login from '../pages/Login'
 
+import axios from 'axios'
 
 const userContext = createContext({})
 
 export function UserProvider({ children }) {
-    const [user, setUser] = useState({ username: 'Anonymous', color: '#000000', isLoggedIn: false  })
-    const navigate = useNavigate()
-    const socket = useSocket()
-
-    const logout = () => {
-        console.log('logout called')
-        socket.emitLogout()
-        sessionStorage.clear()
-        setUser(null)
-        navigate('/')
-    }
-
+    const [userID, setUserID] = useState(undefined)
+    console.log(userID)
     const value = {
-        user,
-        setUser,
-        logout
+        userID,
+        setUserID
     }
 
     return (
         <userContext.Provider value={ value }>
-            { children }
+           { children }
         </userContext.Provider>
     )
 }

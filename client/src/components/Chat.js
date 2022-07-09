@@ -14,6 +14,7 @@ import MessagesWindow from './MessagesWindow'
 
 import { useChat } from '../contexts/chatContext'
 import { grey } from '@mui/material/colors'
+import { Fab } from '@mui/material'
 
 
 function Chat() {
@@ -106,7 +107,8 @@ function Chat() {
                   }
                 }}
               />
-              <Button sx={{minWidth: '50px', minHeight: '50px', borderRadius: '50%'}} type="submit" variant="contained"><SendIcon/></Button>
+              {/* <Button sx={{minWidth: '50px', minHeight: '50px', borderRadius: '50%'}} type="submit" variant="contained"><SendIcon/></Button> */}
+              <Box><Fab type="submit" color="primary" size="large"><SendIcon/></Fab></Box>
           </Box>
         </form>
       </Box>

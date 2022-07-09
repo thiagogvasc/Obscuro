@@ -52,6 +52,14 @@ const getAggregateUserById = async id => {
     },
     {
       $lookup: {
+        from: 'users',
+        localField: 'conversations.participants',
+        foreignField: '_id',
+        as: 'conversations.participants'
+      }
+    },
+    {
+      $lookup: {
         from: 'messages',
         localField: 'conversations._id',
         foreignField: 'conversation',
@@ -62,7 +70,7 @@ const getAggregateUserById = async id => {
       $group: {
         _id: '$_id',
         username: { $first: '$username' },
-        conversations: {$push: '$conversations'}
+        conversations: {$push: '$conversations'},
       }
     }
   ])

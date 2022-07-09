@@ -6,9 +6,7 @@ const chatContext = createContext()
 
 export function ChatProvider({ children }) {
   const [chatData, setChatData] = useState({conversations: []})
-  //console.log(chatData)
   const [currentConversation, setCurrentConversation] = useState({name: '', messages: []})
-  //console.log(currentConversation)
   const socket = useSocket()
 
   // Necessary to update the object reference
@@ -26,13 +24,11 @@ export function ChatProvider({ children }) {
     socket.initConnection()
     socket.emitJoinChat()
     socket.onChatJoined(user => {
-      //console.log(user)
+      console.log(user)
       setChatData(user)
-      // setConversations(user.conversations)
       setCurrentConversation(user.conversations[0])
     })
     socket.onMessage(message => {
-      console.log(message)
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const conversation = message.conversation
@@ -41,6 +37,16 @@ export function ChatProvider({ children }) {
             conv.messages.push(message)
           }
         })
+        return chatDataDraft
+      })
+    })
+
+    socket.socketRef.current.on('new-conversation', conversation => {
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        chatDataDraft.conversations.push(conversation)
+        const getLastElem = arr => arr[arr.length - 1]
+        setCurrentConversation(getLastElem(chatDataDraft.conversations))
         return chatDataDraft
       })
     })

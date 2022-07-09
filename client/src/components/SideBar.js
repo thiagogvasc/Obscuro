@@ -6,6 +6,8 @@ import Button from '@mui/material/Button'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Box from '@mui/material/Box'
+import AddIcon from '@mui/icons-material/Add'
+import Fab from '@mui/material/Fab'
 
 import SidebarChat from './SidebarChat'
 import SidebarUser from './SidebarUser'
@@ -16,18 +18,12 @@ import { useChat } from '../contexts/chatContext'
 import { useUsers } from '../contexts/usersContext'
 
 export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
-  console.log('Sidebar')
   const navigate = useNavigate()
-  const { chatData } = useChat()
+  const { chatData, currentConversation } = useChat()
   const { users } = useUsers()
-  console.log(users)
-
-  const [tab, setTab] = useState('users')
+  const [tab, setTab] = useState('conversations')
   const handleChange = (e, newValue) => {
-    console.log('tab change ')
-
     setTab(newValue)
-    //setTab(e.target.value)
   }
   return (
     <Paper elevation={12} sx={{ 
@@ -52,14 +48,17 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
       <>
         <Typography fontWeight="light" ml={3} mt={1} color="white" variant="h5">Conversations</Typography>
         {chatData.conversations.map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}  
-        <Button onClick={() => navigate('/create-conversation')}>Start conversation</Button>
+        <Box textAlign="center">
+          <Fab color="primary" variant="contained" onClick={() => navigate('/create-conversation')}>
+            <AddIcon />
+          </Fab>
+        </Box>
       </>
       
       :
       <>
-      {console.log(users)}
         <Typography fontWeight="light" ml={3} mt={1} color="white" variant="h5">Users</Typography>
-        {users.map(user => <SidebarUser key={user._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} user={user} />)}  
+        {users.map(user => <SidebarUser key={user._id} setTab={setTab} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} user={user} />)}  
       </>
       }
 

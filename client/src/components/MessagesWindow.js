@@ -8,7 +8,7 @@ export default function MessagesWindow() {
   console.log('MessagesWindow')
   const { currentConversation } = useChat()
   const chatBottom = useRef(null)
-  //console.log(currentConversation)
+  console.log(currentConversation)
 
   useEffect(() => {
     chatBottom.current.scrollIntoView()

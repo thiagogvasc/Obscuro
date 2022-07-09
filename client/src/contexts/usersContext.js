@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { createContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSocket } from '../contexts/socketContext'
+import { useUser } from '../contexts/userContext'
 
 import axios from 'axios'
 
@@ -10,12 +11,12 @@ const usersContext = createContext({})
 
 export function UsersProvider({ children }) {
   const [users, setUsers] = useState([])
+  const { userID } = useUser()
   
   useEffect(() => {
-    console.log('sending request')
-    axios.get('http://localhost:8080/user').then(res => {
-      console.log(res.data)
-      setUsers(res.data)
+    axios.get('http://localhost:8080/user', { withCredentials: true }).then(res => {
+      const filteredUsers = res.data.filter(u => u._id !== userID)
+      setUsers(filteredUsers)
     })
   }, [])
 

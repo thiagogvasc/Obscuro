@@ -2,10 +2,24 @@ const conversationService = require('../service/conversationService')
 const userService = require('../service/userService')
 
 
-const createConversation = async (socket, io, {name, isPublic, isDM}) => {
-  const newConversation = await conversationService.createConversation(name, isPublic, isDM, []) 
-  await joinConversation(socket, io, newConversation._id)
-  // emit conversation created event with aggregate info
+const createConversation = async (socket, io, {name, isPublic, isDM, participants}) => {
+  console.log('create conv')
+  const newConversation = await conversationService.createConversation(name, isPublic, isDM, participants)
+  console.log(newConversation)
+  console.log(participants)
+  for (const participant of participants) {
+    console.log('participant')
+    console.log(participant)
+    await userService.addConversationToUserById(participant, newConversation._id)
+    await io.in(participant).socketsJoin(newConversation._id)
+  }
+
+  console.log('sockets in room created')
+  const sockets = await io.in(newConversation._id).fetchSockets();
+  console.log(sockets)
+  console.log(socket.rooms)
+  const aggregateConversation = await conversationService.getAggregateConversationById(newConversation._id)
+  io.to(newConversation._id).emit('new-conversation', aggregateConversation)
 }
 
 const deleteConversation = async (socket, io) => {
@@ -26,7 +40,6 @@ const joinChat = async (socket, io) => {
   const aggregateUser = await userService.getAggregateUserById(userID)
   socket.emit('chat-joined', aggregateUser)
 }
-
 
 
 const joinConversation = async (socket, io, conversationID) => {
