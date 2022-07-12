@@ -38,6 +38,7 @@ const joinChat = async (socket, io) => {
   if (!generalConv.participants.includes(userID))
     await joinConversation(socket, io, generalConv._id)
   const aggregateUser = await userService.getAggregateUserById(userID)
+  console.log(aggregateUser.conversations[0].messages)
   socket.emit('chat-joined', aggregateUser)
 }
 

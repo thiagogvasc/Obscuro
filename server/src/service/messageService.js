@@ -22,14 +22,14 @@ const getAggregateMessageById = async id => {
         _id: id
       }
     },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'sender',
-        foreignField: '_id',
-        as: 'sender'
-      }
-    }, 
+    // {
+    //   $lookup: {
+    //     from: 'users',
+    //     localField: 'sender',
+    //     foreignField: '_id',
+    //     as: 'sender'
+    //   }
+    // }, 
     {
       $lookup: {
         from: 'conversations',
@@ -38,9 +38,9 @@ const getAggregateMessageById = async id => {
         as: 'conversation'
       }
     },
-    {
-      $unwind: { path: '$sender' }
-    },
+    // {
+    //   $unwind: { path: '$sender' }
+    // },
     {
       $unwind: { path: '$conversation' }
     }
