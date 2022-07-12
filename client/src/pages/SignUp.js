@@ -42,55 +42,52 @@ function SignUp() {
 		})
   }
   return (
-    <Box sx={{ color: 'white' }}>
-      <Button onClick={() => {navigate('/')}}>Back</Button>
+    <Box sx={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flexDirection: 'column',
+    }}>
+      <Typography sx={{mb: 5}} variant="h3" fontWeight="100">Sign Up</Typography>
       <form onSubmit={ handleSubmit }>
-        <Box>
-          <Typography variant="body2">Username:</Typography>
+        <Box 
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "2vh"
+          }}
+        >
           <TextField 
             onChange={handleChange} 
             value={formData.username} 
             autoComplete="off" 
             name="username"
-            InputProps={{
-              sx: {
-                color: 'white',
-                backgroundColor: grey[800],
-                borderRadius: '25px'
-              }
-            }}
+            label="Username"
+            InputProps={{ sx: { borderRadius: '25px' }}}
           />
-					<Typography variant="body2">Password:</Typography>
           <TextField 
             onChange={handleChange} 
             value={formData.password} 
             autoComplete="off" 
             name="password"
-            InputProps={{
-              sx: {
-                color: 'white',
-                backgroundColor: grey[800],
-                borderRadius: '25px'
-              }
-            }}
+            type="password"
+            label="Password"
+            InputProps={{ sx: { borderRadius: '25px' }}}
           />
-					<Typography variant="body2">Repeat password:</Typography>
           <TextField 
             onChange={handleChange} 
             value={formData.repeatPassword} 
             autoComplete="off" 
+            type="password"
             name="repeatPassword"
-            InputProps={{
-              sx: {
-                color: 'white',
-                backgroundColor: grey[800],
-                borderRadius: '25px'
-              }
-            }}
+            label="Repeat password"
+            InputProps={{ sx: { borderRadius: '25px' }}}
           />
+          <Button sx={{mt: 2, width: '100%', borderRadius: '25px'}} type="submit" variant="contained">Submit</Button>
+          <Button sx={{width: '100%', borderRadius: '25px'}} variant="outlined" onClick={() => navigate('/')}>Cancel</Button>
         </Box>
-          <Button variant="outlined">Cancel</Button>
-          <Button type="submit" variant="contained">Create</Button>
       </form>
     </Box>
   )
