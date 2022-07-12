@@ -26,12 +26,12 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
     setTab(newValue)
   }
   return (
-    <Paper elevation={12} sx={{ 
+    <Paper elevation={2} sx={{ 
       display: {
         xs: shouldOpenSidebar ? "block":"none", 
         sm: "block"
       }, 
-      backgroundColor: grey[800],
+      // backgroundColor: grey[800],
       width: shouldOpenSidebar ? '100%' : '25%', 
       borderRadius: '25px',
     }}>
@@ -46,9 +46,10 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
       
       { tab === 'conversations' ? 
       <>
-        <Typography fontWeight="light" ml={3} mt={1} color="white" variant="h5">Conversations</Typography>
+        <Typography sx={{color: 'getContrastText()'}} fontWeight="light" ml={3} mt={1} /*color="white"*/ variant="h5">Conversations</Typography>
         {chatData.conversations.map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}  
         <Box textAlign="center">
+          <Typography mt={1} variant="body1" fontWeight="light">Create</Typography>
           <Fab color="primary" variant="contained" onClick={() => navigate('/create-conversation')}>
             <AddIcon />
           </Fab>

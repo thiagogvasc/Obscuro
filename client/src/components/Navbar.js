@@ -11,7 +11,7 @@ export default function Navbar() {
   const user = useUser()
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between"}}>
-      <Typography fontWeight="100" mb={2} sx={{color: 'white'}} variant="h3">Obscuro</Typography>
+      <Typography fontWeight="100" mb={2} variant="h2">Obscuro</Typography>
       {user && <Button onClick={user.logout}><LogoutIcon mr={5}/>Leave</Button>}
     </Box>
   )

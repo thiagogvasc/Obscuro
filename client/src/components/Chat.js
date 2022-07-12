@@ -14,15 +14,17 @@ import MessagesWindow from './MessagesWindow'
 
 import { useChat } from '../contexts/chatContext'
 import { grey } from '@mui/material/colors'
-import { Fab } from '@mui/material'
+import { Fab, Paper } from '@mui/material'
 
 
 function Chat() {
+  
   const { 
     chatData,
     currentConversation,
     setCurrentConversation
   } = useChat()
+
   const socket = useSocket()
   const navigate = useNavigate()
   const [shouldOpenSidebar, setShouldOpenSidebar] = useState(false)
@@ -47,7 +49,7 @@ function Chat() {
   }
 
   return (
-    <Box 
+    <Box
       sx={{ 
         flexGrow: 1,
         display: "flex",
@@ -57,11 +59,10 @@ function Chat() {
       }}
     >
       <Sidebar shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar}/>
-      <Box sx={{
+      <Paper elevation={2} sx={{
         display: shouldOpenSidebar ? 'none' : 'flex', 
         flexGrow: 1, 
         flexDirection: "column", 
-        backgroundColor: grey[800],
         borderRadius: '25px',
         overflow: 'hidden'
       }}>
@@ -72,16 +73,15 @@ function Chat() {
         >
           back
         </Button>
-        <Box sx={{ 
-          backgroundColor: grey[700], 
+        <Paper elevation={3} sx={{ 
           textAlign: 'center', 
-          color: 'white',
+          // color: 'white',
           p: 1
         }}>
-          <Typography variant="h5">
+          <Typography sx={{color: 'getContrastText()'}} variant="h5">
             { currentConversation.name }
           </Typography>
-        </Box>
+        </Paper>
         <MessagesWindow />
         <form onSubmit={ handleSubmit }>
           <Box 
@@ -96,22 +96,17 @@ function Chat() {
             >
               <Textfield 
                 autoComplete="off" 
+                color="primary"
                 name="message" 
-                variant="outlined" 
+                label="Message"
                 fullWidth 
-                InputProps={{
-                  sx: {
-                    color: 'black',
-                    backgroundColor: 'white',
-                    borderRadius: '25px'
-                  }
-                }}
+                InputProps={{ sx: { borderRadius: '25px' }} }
               />
               {/* <Button sx={{minWidth: '50px', minHeight: '50px', borderRadius: '50%'}} type="submit" variant="contained"><SendIcon/></Button> */}
               <Box><Fab type="submit" color="primary" size="large"><SendIcon/></Fab></Box>
           </Box>
         </form>
-      </Box>
+      </Paper>
     </Box>
   );
 }

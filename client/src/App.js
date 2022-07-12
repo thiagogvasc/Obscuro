@@ -15,25 +15,31 @@ import { SocketProvider } from './contexts/socketContext'
 import { ChatProvider } from './contexts/chatContext'
 
 import './App.css'
-import { grey } from '@mui/material/colors/'
+import { grey, purple, blue, red } from '@mui/material/colors/'
 import CreateConversation from './pages/CreateConversation'
 import SignUp from './pages/SignUp'
 import { UsersProvider } from './contexts/usersContext'
+import { Paper } from '@mui/material'
 
 function App() { 
   const theme = createTheme({
+    palette: {
+      mode: 'dark',
+      primary: {
+        main: purple[700]
+      },
+    }
   })
   return (
     <BrowserRouter>
       <SocketProvider>
         <UserProvider>
             <ThemeProvider theme={theme}>
-              <Box sx={{ 
+              <Paper sx={{ 
                 display: "flex", 
                 flexDirection: "column", 
                 width: "100vw", 
                 height: "100vh", 
-                backgroundColor: grey[900],
                 padding: '2vh 5vw' 
               }}>
                 <Navbar />
@@ -43,7 +49,7 @@ function App() {
                   <Route path="/chat" element={ (<ProtectedRoute> <UsersProvider> <ChatProvider> <Chat /> </ChatProvider> </UsersProvider> </ProtectedRoute>) } />
                   <Route path='/create-conversation' element={ <CreateConversation /> } />
                 </Routes>
-              </Box>
+              </Paper>
             </ThemeProvider>
         </UserProvider>
       </SocketProvider>

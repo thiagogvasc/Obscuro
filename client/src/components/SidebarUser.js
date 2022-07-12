@@ -21,6 +21,10 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
         if ((participant1._id === chatData._id && participant2._id === user._id)
             || (participant1._id === user._id && participant2._id === chatData._id)) {
           setTab('conversations')
+          setCurrentConversation({
+            ...conversation,
+            name: participant1._id === chatData._id ? participant2.username : participant1.username
+          })
           return
         }
       }
