@@ -20,6 +20,7 @@ import CreateConversation from './pages/CreateConversation'
 import SignUp from './pages/SignUp'
 import { UsersProvider } from './contexts/usersContext'
 import { Paper } from '@mui/material'
+import ChatRoutes from './components/ChatRoutes'
 
 function App() { 
   const theme = createTheme({
@@ -35,7 +36,7 @@ function App() {
       <SocketProvider>
         <UserProvider>
             <ThemeProvider theme={theme}>
-              <Paper sx={{ 
+              <Paper square sx={{ 
                 display: "flex", 
                 flexDirection: "column", 
                 width: "100vw", 
@@ -46,8 +47,10 @@ function App() {
                 <Routes>
                   <Route path="/" element={ <Login /> } />
                   <Route path="/signup" element={ <SignUp /> } />
-                  <Route path="/chat" element={ (<ProtectedRoute> <UsersProvider> <ChatProvider> <Chat /> </ChatProvider> </UsersProvider> </ProtectedRoute>) } />
-                  <Route path='/create-conversation' element={ <CreateConversation /> } />
+                  <Route path="/chat" element={ <ChatRoutes /> }>
+                    <Route index element={ <Chat /> } />
+                    <Route path='create-conversation' element={ <CreateConversation /> } />
+                  </Route>
                 </Routes>
               </Paper>
             </ThemeProvider>
