@@ -15,14 +15,22 @@ import axios from 'axios'
 import { grey } from '@mui/material/colors'
 import { useSocket } from '../contexts/socketContext'
 import { useUser } from '../contexts/userContext'
+import { useUsers } from '../contexts/usersContext'
+import SidebarUser from '../components/SidebarUser'
+import { Chip, Paper, Fab } from '@mui/material'
+
+import AddIcon from '@mui/icons-material/Add'
+
 
 
 function CreateConversation() {
   console.log('CreateConversation')
   const { userID } = useUser()
+  const { users } = useUsers()
   const [formData, setFormData] = useState({
     name: '',
     isPublic: 'public',
+    participants: []
   })
   const navigate = useNavigate()
   const socket = useSocket()
@@ -43,47 +51,78 @@ function CreateConversation() {
       ...formData,
       isDM: false,
       isPublic: formData.isPublic === 'public' ? true : false,
-      participants: [userID]
+      participants: [userID, ...formData.participants.map(participant => participant._id)]
     }
 
     console.log(dataToSubmit)
 
     socket.emitCreateConversation(dataToSubmit)
   }
+
+  const addParticipant = user => {
+    // exits if already added
+    if (formData.participants.find(participant => participant._id === user._id))
+      return
+
+    // if not already added
+    setFormData({
+      ...formData,
+      participants: [...formData.participants, user]
+    })
+  }
+
   return (
-    <Box sx={{ color: 'white' }}>
-      <Button onClick={() => {navigate('/chat')}}>Back</Button>
+    <Box sx={{ 
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+     }}>
+      <Typography fontWeight="100" sx={{mb: 5}} variant="h3">Create Conversation</Typography>
       <form onSubmit={ handleSubmit }>
-        <Box>
-          <Typography variant="body2">Name:</Typography>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '2vh'
+        }}>
           <TextField 
             onChange={handleChange} 
             value={formData.name} 
             autoComplete="off" 
             name="name"
-            InputProps={{
-              sx: {
-                color: 'white',
-                backgroundColor: grey[800],
-                borderRadius: '25px'
-              }
-            }}
+            label="Name"
+            InputProps={{ sx: { borderRadius: '25px' }}}
           />
           <FormControl sx={{display: 'block'}}>
-            <FormLabel sx={{ color: 'white'}} id="demo-radio-buttons-group-label">Type</FormLabel>
+            <FormLabel sx={{ color: 'white'}}>Type</FormLabel>
             <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
               defaultValue="public"
               name="isPublic"
               onChange={handleChange}
+              row
             >
               <FormControlLabel value="public" control={<Radio />} label="Public" />
               <FormControlLabel value="private" control={<Radio />} label="Private" />
             </RadioGroup>
           </FormControl>
+          <Typography variant="body1">Participants</Typography>
+          {formData.participants.map(participant => (
+            <Chip label={participant.username} />
+          ))}
+          <Paper sx={{ p:2, borderRadius: '25px', width: '100%'}} elevation={2}>
+            <Typography variant="h5">Participants</Typography>
+            {users.map(user => (
+              <Box>
+                {user.username}
+                <Fab sx={{ml: 2}} color="primary" size="small" onClick={() => addParticipant(user)}variant="outlined"><AddIcon /></Fab>
+              </Box>
+            ))}  
+          </Paper>
+          <Button sx={{ width: '100%', borderRadius: '25px', mt: 2, display: "block" }} type="submit" variant="contained">Create</Button>
+					<Button sx={{ width: '100%', borderRadius: '25px'}} variant="outlined" onClick={() => {navigate('/chat')}}>Cancel</Button>
         </Box>
-          <Button variant="outlined">Cancel</Button>
-          <Button type="submit" variant="contained">Create</Button>
       </form>
     </Box>
   )
