@@ -50,7 +50,7 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
         {chatData.conversations.map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}  
         <Box textAlign="center">
           <Typography mt={1} variant="body1" fontWeight="light">Create</Typography>
-          <Fab color="primary" variant="contained" onClick={() => navigate('/create-conversation')}>
+          <Fab color="primary" variant="contained" onClick={() => navigate('/chat/create-conversation')}>
             <AddIcon />
           </Fab>
         </Box>
