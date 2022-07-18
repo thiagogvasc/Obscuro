@@ -26,7 +26,7 @@ export default function Message({message}) {
       alignSelf: fromSelf ? 'flex-end' : 'flex-start',
       textAlign: fromSelf ? 'right' : 'left',
     }}>
-      <Typography sx={{ /*color: 'white'*/ }} variant="body1">{ sender.username }: </Typography>
+      <Typography sx={{ /*color: 'white'*/ }} variant="body1">{ sender.username }</Typography>
       <Typography fontWeight="300" variant="body2" sx={{
         backgroundColor: 'primary.main',
         color: 'primary.contrastText',
