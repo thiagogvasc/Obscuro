@@ -34,6 +34,7 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
       // backgroundColor: grey[800],
       width: shouldOpenSidebar ? '100%' : '25%', 
       borderRadius: '25px',
+      minWidth: '250px'
     }}>
       
 
