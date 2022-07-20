@@ -1,5 +1,6 @@
 const conversationService = require('../service/conversationService')
 const userService = require('../service/userService')
+const messageService = require('../service/messageService')
 
 
 const createConversation = async (socket, io, {name, isPublic, isDM, participants}) => {
@@ -56,11 +57,19 @@ const leaveConversation = async (socket, io, conversationID) => {
   throw new Error('leaveConversation() not yet implemented')
 }
 
+const conversationOpened = async (socket, io, { conversationID, openedBy }) => {
+  console.log('opened')
+  await messageService.markAllAsReadFromConversation(conversationID, openedBy)
+  io.to(conversationID).emit('conversation-opened', { conversationID, openedBy })
+  console.log("emitted")
+}
+
 module.exports = {
   createConversation,
   deleteConversation,
   startConversation,
   joinChat,
   joinConversation,
-  leaveConversation
+  leaveConversation,
+  conversationOpened
 }

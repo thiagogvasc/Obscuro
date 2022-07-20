@@ -33,4 +33,19 @@ describe("message service", () => {
       conversation: conversationID  
     })
   })
+
+  test('should mark as read properly', async () => {    
+    const userID = 'userID'
+    const conversationID = 'conversationID'
+
+    const message = await messageService.createMessage('new message', userID, conversationID)
+    await messageService.markAllAsReadFromConversation(conversationID, userID)
+    await messageService.markAllAsReadFromConversation(conversationID, userID)
+
+    const updatedMessage = await messageService.getMessageById(message._id)
+    const readByArray = updatedMessage.readBy
+
+    expect(readByArray).toHaveLength(1)
+    expect(readByArray).toContain(userID)
+  })
 })

@@ -24,4 +24,8 @@ module.exports = (socket, io) => {
   socket.on('leave-conversation', payload => {
     conversationHandler.leaveConversation(socket, io, payload)
   })
+
+  socket.on('conversation-opened', payload => {
+    conversationHandler.conversationOpened(socket, io, payload)
+  })
 }

@@ -6,9 +6,19 @@ const createMessage = async (text, senderID, conversationID) => {
     _id: uuid(),
     text,
     sender: senderID,
-    conversation: conversationID
+    conversation: conversationID,
+    readBy: []
   })
   return newMessage.save()
+}
+
+const markAllAsReadFromConversation = async (conversationID, readBy) => {
+  return Message.updateMany({
+    readBy: { $nin: [readBy] },
+    conversation: conversationID
+  }, {
+    $push: { readBy }
+  }, { new: true })
 }
 
 const getMessageById = async id => {
@@ -54,5 +64,6 @@ const getAggregateMessageById = async id => {
 module.exports = {
   createMessage,
   getMessageById,
-  getAggregateMessageById
+  getAggregateMessageById,
+  markAllAsReadFromConversation
 }
