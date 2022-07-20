@@ -24,7 +24,7 @@ export function ChatProvider({ children }) {
     socket.initConnection()
     socket.emitJoinChat()
     socket.onChatJoined(user => {
-      console.log(user)
+      // console.log(user)
       setChatData(user)
       setCurrentConversation(user.conversations[0])
     })
@@ -47,6 +47,20 @@ export function ChatProvider({ children }) {
         chatDataDraft.conversations.push(conversation)
         const getLastElem = arr => arr[arr.length - 1]
         setCurrentConversation(getLastElem(chatDataDraft.conversations))
+        return chatDataDraft
+      })
+    })
+
+    socket.socketRef.current.on('conversation-opened', ({ conversationID, openedBy }) => {
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        const conversation = chatDataDraft.conversations.find(conversation => conversation._id === conversationID)
+        if (conversation) {
+          conversation.messages.forEach(message => {
+            if (message.readBy.includes(openedBy)) return
+            message.readBy.push(openedBy)
+          })
+        }
         return chatDataDraft
       })
     })
