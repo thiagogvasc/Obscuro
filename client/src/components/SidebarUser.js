@@ -37,6 +37,7 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
       participants: [chatData._id, user._id]
     }
     socket.emitCreateConversation(newConversation)
+    // setCurrentConversation here
     setTab('conversations')
   }
 
