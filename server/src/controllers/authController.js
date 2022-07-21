@@ -7,22 +7,14 @@ const login = async (req, res) => {
   const user = await userService.getUserByUsername(username)
 
   // Error handling
-  if (!user) return res.send('username not found')
-  if (user.password !== password) return res.send('incorrect password')
+  if (!user) return res.status(401).json('Username not found')
+  if (user.password !== password) return res.status(401).json('incorrect password')
 
   req.session.userid = user._id
-  //console.log('login new session: ', req.session)
-  // Join general chat on login
-  // General chat won't have logs on every new user
-  // So it's best to handle without events
-
-  // // move all of this somewhere else
-  // const general = await conversationService.getConversationByName('General')
-  // await conversationService.addParticipantToConversationById(general._id, user._id)
-  // await userService.addConversationToUserById(user._id, general._id)
-
-  //res.send(await userService.getAggregateUserById(user._id))
-  res.send(user._id)
+  res.status(200).json({
+    message: 'Logged in successfully!',
+    userid: user._id
+  }) 
 }
 
 const signup = async (req, res) => {
@@ -30,11 +22,14 @@ const signup = async (req, res) => {
   const existingUser = await userService.getUserByUsername(username)
 
   // Username already exists
-  if (existingUser) return res.send('user already exists')
+  if (existingUser) return res.status(400).json('Username already exists')
 
   // Create new user
   const newUser = await userService.createUser(username, password)
-  res.send('user created')
+  res.status(201).json({
+    newUser: newUser,
+    message: 'Signed up successfully!'
+  })
 }
 
 const getSession = async (req, res) => {
@@ -42,7 +37,7 @@ const getSession = async (req, res) => {
   if (userid) 
     res.status(200).json(userid)
   else 
-    res.status(403).json({message: 'not authenticated'})
+    res.status(403).json({message: 'Not authenticated'})
 }
 
 module.exports = {

@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useUser } from '../contexts/userContext'
 import axios from 'axios'
-import { Paper } from '@mui/material'
+import { Alert, Paper } from '@mui/material'
 
 
 function Login() {
@@ -17,6 +17,8 @@ function Login() {
 		username: '',
 		password: ''
 	})
+
+	const [message, setMessage] = useState(null)
 
 	const handleChange = (e) => {
 		const { name, value } = e.target
@@ -37,15 +39,22 @@ function Login() {
 		})
 
 		axios.post('http://localhost:8080/auth/login', formData, { withCredentials: true }).then(result => {
-			console.log(result.data)
-			if (result.statusText === 'OK') {
-				console.log('success logging in')
-				setUserID(result.data)
+				console.log(result.data.message)
+				setMessage({
+					type: 'success',
+					text: result.data.message
+				})
+				setUserID(result.data.userid)
 				navigate('/chat')
-			}
+		}).catch(err => {
+			setMessage({
+				type: 'error',
+				text: err.response.data
+			})
+			console.log(err.response.data)
 		})
 	}
-
+	console.log(message)
 	return (
 		<Box 
 			sx={{
@@ -66,7 +75,7 @@ function Login() {
 					}}
 				>
 					<Typography fontWeight="100" sx={{mb: 5}} variant="h3">Login</Typography>
-					{/* <Typography variant="body2">Username:</Typography> */}
+					{ message && <Alert sx={{m: 2}} variant="filled" severity={message.type}> { message.text } </Alert> }
 					<TextField 
 						onChange={handleChange} 
 						value={formData.username} 

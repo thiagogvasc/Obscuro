@@ -5,18 +5,21 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
+import Alert from '@mui/material/Alert'
 
 import axios from 'axios'
 import { grey } from '@mui/material/colors'
+import Grow from '@mui/material/Grow';
+import { TransitionGroup } from 'react-transition-group';
 
 
 function SignUp() {
-  console.log('SignUp')
   const [formData, setFormData] = useState({
     username: '',
     password: '',
 		repeatPassword: ''
   })
+  const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -30,16 +33,32 @@ function SignUp() {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    // reevalutate public and private to true and false
     const dataToSubmit = {
       username: formData.username,
 			password: formData.password
     }
 
+    if (dataToSubmit.password !== formData.repeatPassword) {
+      setMessage({
+        type: 'error',
+        text: 'Passwords do not match'
+      })
+      return
+    }
+
     console.log(dataToSubmit)
 		axios.post('http://localhost:8080/auth/signup', dataToSubmit, { withCredentials: true }).then(result => {
 			console.log(result.data)
-		})
+      setMessage({
+        type: 'success',
+        text: result.data.message
+      })
+		}).catch(err => {
+      setMessage({
+        type: 'error',
+        text: err.response.data
+      })
+    })
   }
   return (
     <Box sx={{
@@ -49,6 +68,7 @@ function SignUp() {
       flexDirection: 'column',
     }}>
       <Typography sx={{mb: 5}} variant="h3" fontWeight="100">Sign Up</Typography>
+      { message && <Grow in><Alert sx={{m: 2}} variant="filled" severity={message.type}> { message.text } </Alert></Grow>}
       <form onSubmit={ handleSubmit }>
         <Box 
           sx={{
