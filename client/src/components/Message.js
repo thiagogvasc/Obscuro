@@ -50,7 +50,7 @@ export default function Message({message}) {
         { message.text }
       </Typography>
       <Box sx={{ clear: 'both'}}>
-        {fromSelf ? isRead ? <DoneAllIcon color="success" /> : ' not read yet' : null}
+        {fromSelf ? isRead ? <DoneAllIcon color="success" /> : null : null}
       </Box>
     </Box>
   )
