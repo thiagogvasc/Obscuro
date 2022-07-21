@@ -29,8 +29,6 @@ function Chat() {
   const navigate = useNavigate()
   const [shouldOpenSidebar, setShouldOpenSidebar] = useState(false)
 
-  console.log('Chat')
-
   const handleSubmit = (e) => {
     e.preventDefault()
     const text = e.target.message.value

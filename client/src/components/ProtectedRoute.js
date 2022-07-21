@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useUser } from '../contexts/userContext'
 import { useSocket } from '../contexts/socketContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
+import Login from '../pages/Login'
 
 import axios from 'axios'
 
@@ -31,7 +32,7 @@ function ProtectedRoute({ children }) {
             }
         })
     }, [])
-    return (<>{ userID ? children : 'not authenticatedddd'}</>)
+    return (<>{ userID ? children : 'not authenticated' }</>)
 }
 
 export default ProtectedRoute

@@ -1,6 +1,6 @@
 import React from 'react'
 import Box from '@mui/material/Box'
-import { Typography } from '@mui/material'
+import { Typography, Grow } from '@mui/material'
 import { useUser } from '../contexts/userContext'
 import { useChat } from '../contexts/chatContext'
 
@@ -26,8 +26,8 @@ export default function Message({message}) {
 
   // fix
   //
-  const exceptSelfFilter = user => user !== userID
   let isRead = false
+  const exceptSelfFilter = user => user !== userID
   if (fromSelf && currentConversation.isDM && message.readBy.filter(exceptSelfFilter).length > 0) {
     isRead = true
   }
@@ -50,7 +50,7 @@ export default function Message({message}) {
         { message.text }
       </Typography>
       <Box sx={{ clear: 'both'}}>
-        {fromSelf ? isRead ? <DoneAllIcon color="primary" /> : ' not read yet' : null}
+        {fromSelf ? isRead ? <DoneAllIcon color="success" /> : ' not read yet' : null}
       </Box>
     </Box>
   )
