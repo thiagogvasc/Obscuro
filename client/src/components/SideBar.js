@@ -12,7 +12,6 @@ import Fab from '@mui/material/Fab'
 import SidebarChat from './SidebarChat'
 import SidebarUser from './SidebarUser'
 import { Typography } from '@mui/material'
-import { grey } from '@mui/material/colors'
 
 import { useChat } from '../contexts/chatContext'
 import { useUsers } from '../contexts/usersContext'
@@ -27,9 +26,11 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
   }
   return (
     <Paper elevation={2} sx={{ 
+      display: 'flex',
+      flexDirection: 'column',
       display: {
-        xs: shouldOpenSidebar ? "block":"none", 
-        sm: "block"
+        xs: shouldOpenSidebar ? "flex":"none", 
+        sm: "flex"
       }, 
       // backgroundColor: grey[800],
       width: shouldOpenSidebar ? '100%' : '25%', 
@@ -46,21 +47,32 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
       </Box>
       
       { tab === 'conversations' ? 
-      <>
-        <Typography fontWeight="light" ml={3} mt={1} /*color="white"*/ variant="h5">Public</Typography>
-        {chatData.conversations.filter(conversation => conversation.isPublic).map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}  
+      <Box sx={{
+        flexGrow: 1,
+        display:'flex',
+        flexDirection:'column'
+      }}>
+        <Box sx={{
+          overflowY: 'scroll',
+          flexGrow: 1,
+          height: 0
+        }}>
+          
+          <Typography fontWeight="light" ml={3} mt={1} /*color="white"*/ variant="h5">Public</Typography>
+          {chatData.conversations.filter(conversation => conversation.isPublic).map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}  
+          
+          <Typography fontWeight="light" ml={3} mt={1} /*color="white"*/ variant="h5">Private</Typography>
+          {chatData.conversations.filter(conversation => !conversation.isPublic).map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}
+       
+        </Box>
         
-        <Typography fontWeight="light" ml={3} mt={1} /*color="white"*/ variant="h5">Private</Typography>
-        {chatData.conversations.filter(conversation => !conversation.isPublic).map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}
-        
-        
-        <Box textAlign="center">
+        <Box sx={{ p: 1, textAlign: 'center' }}>
           <Typography mt={1} variant="body1" fontWeight="light">Create</Typography>
           <Fab color="primary" variant="contained" onClick={() => navigate('/chat/create-conversation')}>
             <AddIcon />
           </Fab>
         </Box>
-      </>
+      </Box>
       
       :
       <>
