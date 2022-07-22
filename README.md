@@ -1,7 +1,9 @@
 # Obscuro
-Real time messaging application
+Obscuro is a real time messaging application.
 
-Features:
-- Login / Sign up / Session
+# Features
+- Login / Sign Up / Logout / Session
+- View messages
 - Send message
 - Create conversation
+- Read receipts
