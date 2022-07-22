@@ -1,0 +1,2 @@
+# Obscuro
+Anonymous chat app
