@@ -5,6 +5,7 @@ import { useSocket } from './socketContext'
 const chatContext = createContext()
 
 export function ChatProvider({ children }) {
+  const [isLoading, setIsLoading] = useState(true)
   const [chatData, setChatData] = useState({conversations: []})
   const [currentConversation, setCurrentConversation] = useState({name: '', messages: []})
   const socket = useSocket()
@@ -27,6 +28,7 @@ export function ChatProvider({ children }) {
       // console.log(user)
       setChatData(user)
       setCurrentConversation(user.conversations[0])
+      setIsLoading(false)
     })
     socket.onMessage(message => {
       setChatData(prevChatData => {
@@ -70,7 +72,8 @@ export function ChatProvider({ children }) {
     chatData,
     setChatData,
     currentConversation,
-    setCurrentConversation
+    setCurrentConversation,
+    isLoading
   }
 
   return (

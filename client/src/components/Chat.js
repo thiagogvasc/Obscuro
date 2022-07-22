@@ -14,7 +14,7 @@ import MessagesWindow from './MessagesWindow'
 
 import { useChat } from '../contexts/chatContext'
 import { grey } from '@mui/material/colors'
-import { Fab, Paper } from '@mui/material'
+import { Fab, Paper, CircularProgress } from '@mui/material'
 
 
 function Chat() {
@@ -22,7 +22,8 @@ function Chat() {
   const { 
     chatData,
     currentConversation,
-    setCurrentConversation
+    setCurrentConversation,
+    isLoading
   } = useChat()
 
   const socket = useSocket()
@@ -44,6 +45,21 @@ function Chat() {
 
     e.target.reset()
     e.target.message.focus()
+  }
+
+  if (isLoading) {
+    return (
+      <Box sx={{
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <CircularProgress/>
+        <Typography variant="body1">Loading...</Typography>
+      </Box>
+    )
   }
 
   return (
