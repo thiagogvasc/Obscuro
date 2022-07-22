@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useLayoutEffect, useRef} from 'react'
 
 import { Stack } from '@mui/material'
 import { useChat } from '../contexts/chatContext'
@@ -10,8 +10,17 @@ import { useUser } from '../contexts/userContext'
 export default function MessagesWindow() {
   const { currentConversation } = useChat()
   const chatBottom = useRef(null)
+  const stackRef = useRef(null)
   const socket = useSocket()
   const { userID } = useUser()
+
+  // scroll before render when conversation changes
+  useLayoutEffect(() => {
+    stackRef.current.scrollTo({
+      top: stackRef.current.scrollHeight,
+      behavior: 'instant'
+    })
+  }, [currentConversation._id])
 
   // useReadReceits
   useEffect(() => {
@@ -38,6 +47,7 @@ export default function MessagesWindow() {
   
   return (
     <Stack 
+      ref={stackRef}
       spacing={1} 
       direction="column" 
       alignItems="end"
