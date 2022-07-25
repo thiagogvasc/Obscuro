@@ -1,6 +1,6 @@
 import React from 'react'
 import Box from '@mui/material/Box'
-import { Typography, Grow } from '@mui/material'
+import { Typography, Grow, Fade } from '@mui/material'
 import { useUser } from '../contexts/userContext'
 import { useChat } from '../contexts/chatContext'
 
@@ -33,6 +33,7 @@ export default function Message({message}) {
   }
 
   return (
+    <Fade in>
     <Box sx={{
       alignSelf: fromSelf ? 'flex-end' : 'flex-start',
       textAlign: fromSelf ? 'right' : 'left',
@@ -53,5 +54,6 @@ export default function Message({message}) {
         {fromSelf ? isRead ? <DoneAllIcon color="success" /> : null : null}
       </Box>
     </Box>
+    </Fade>
   )
 }
