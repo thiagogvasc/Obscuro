@@ -28,4 +28,8 @@ module.exports = (socket, io) => {
   socket.on('conversation-opened', payload => {
     conversationHandler.conversationOpened(socket, io, payload)
   })
+
+  socket.on('add-participants', payload => {
+    conversationHandler.addParticipants(socket, io, payload)
+  })
 }
