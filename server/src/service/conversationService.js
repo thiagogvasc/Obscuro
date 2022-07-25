@@ -33,7 +33,15 @@ const addParticipantToConversationByName = async (name, participantID) => {
 const addParticipantToConversationById = async (conversationID, participantID) => {
   return Conversation.findOneAndUpdate(
     { _id: conversationID }, 
-    { $push: { participants: participantID } },
+    { $push: { participants: participantID }},
+    { new: true }
+  )
+}
+
+const addParticipantsToConversationById = async (conversationID, participantsIDs) => {
+  return Conversation.findOneAndUpdate(
+    { _id: conversationID }, 
+    { $push: { participants: { $each: participantsIDs }}},
     { new: true }
   )
 }
@@ -80,5 +88,6 @@ module.exports = {
   getParticipantsByConversationId,
   addParticipantToConversationByName,
   addParticipantToConversationById,
+  addParticipantsToConversationById,
   getAggregateConversationById
 }
