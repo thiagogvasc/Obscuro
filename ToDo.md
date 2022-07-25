@@ -4,3 +4,4 @@
 - add error handling messages
 - refactor getConvName()
  - set conv name when data is fetched and not when component is rendered
+ - test
