@@ -4,21 +4,12 @@ const messageService = require('../service/messageService')
 
 
 const createConversation = async (socket, io, {name, isPublic, isDM, participants}) => {
-  console.log('create conv')
   const newConversation = await conversationService.createConversation(name, isPublic, isDM, participants)
-  console.log(newConversation)
-  console.log(participants)
   for (const participant of participants) {
-    console.log('participant')
-    console.log(participant)
     await userService.addConversationToUserById(participant, newConversation._id)
     await io.in(participant).socketsJoin(newConversation._id)
   }
 
-  console.log('sockets in room created')
-  const sockets = await io.in(newConversation._id).fetchSockets();
-  console.log(sockets)
-  console.log(socket.rooms)
   const aggregateConversation = await conversationService.getAggregateConversationById(newConversation._id)
   io.to(newConversation._id).emit('new-conversation', aggregateConversation)
 }
@@ -58,10 +49,19 @@ const leaveConversation = async (socket, io, conversationID) => {
 }
 
 const conversationOpened = async (socket, io, { conversationID, openedBy }) => {
-  console.log('opened')
   await messageService.markAllAsReadFromConversation(conversationID, openedBy)
   io.to(conversationID).emit('conversation-opened', { conversationID, openedBy })
-  console.log("emitted")
+}
+
+const addParticipants = async (socket, io, { conversationID, participantsIDs }) => {
+  await conversationService.addParticipantsToConversationById(conversationID, participantsIDs)
+  for (const participantID of participantsIDs) {
+    await userService.addConversationToUserById(participantID, conversationID)
+  }
+  const aggregateConversation = await conversationService.getAggregateConversationById(conversationID)
+  for (const participantID of participantsIDs) {
+    io.to(participantID).emit('new-conversation', aggregateConversation)
+  }
 }
 
 module.exports = {
@@ -71,5 +71,6 @@ module.exports = {
   joinChat,
   joinConversation,
   leaveConversation,
-  conversationOpened
+  conversationOpened,
+  addParticipants
 }
