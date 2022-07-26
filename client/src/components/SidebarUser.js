@@ -36,9 +36,18 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
       isDM: true, 
       participants: [chatData._id, user._id]
     }
-    socket.emitCreateConversation(newConversation)
-    // setCurrentConversation here
-    setTab('conversations')
+    socket.emitCreateConversation(newConversation, conversation => {
+
+      // setCurrentConversation here
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        chatDataDraft.conversations.push(conversation)
+        const getLastElem = arr => arr[arr.length - 1]
+        setCurrentConversation(getLastElem(chatDataDraft.conversations))
+        return chatDataDraft
+      })
+      setTab('conversations')
+    })
   }
 
   // rename to isActive?
