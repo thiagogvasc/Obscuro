@@ -16,6 +16,7 @@ import { grey } from '@mui/material/colors'
 import { useSocket } from '../contexts/socketContext'
 import { useUser } from '../contexts/userContext'
 import { useUsers } from '../contexts/usersContext'
+import { useChat } from '../contexts/chatContext'
 import SidebarUser from '../components/SidebarUser'
 import { Chip, Paper, Fab } from '@mui/material'
 
@@ -34,6 +35,7 @@ function CreateConversation() {
   })
   const navigate = useNavigate()
   const socket = useSocket()
+  const { chatData, setChatData, currentConversation, setCurrentConversation} = useChat()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -56,7 +58,17 @@ function CreateConversation() {
 
     console.log(dataToSubmit)
 
-    socket.emitCreateConversation(dataToSubmit)
+    socket.emitCreateConversation(dataToSubmit, conversation => {
+      console.log(conversation)
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        chatDataDraft.conversations.push(conversation)
+        const getLastElem = arr => arr[arr.length - 1]
+        setCurrentConversation(getLastElem(chatDataDraft.conversations))
+        return chatDataDraft
+      })
+      navigate('/chat')
+    })
   }
 
   const addParticipant = user => {

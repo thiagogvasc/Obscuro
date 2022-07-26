@@ -1,6 +1,8 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import { useSocket } from './socketContext'
 
+import addNotification from 'react-push-notification'
+
 
 const chatContext = createContext()
 
@@ -9,6 +11,7 @@ export function ChatProvider({ children }) {
   const [chatData, setChatData] = useState({conversations: []})
   const [currentConversation, setCurrentConversation] = useState({name: '', messages: []})
   const socket = useSocket()
+  console.log(currentConversation)
 
   // Necessary to update the object reference
   // currentConversation references the chatData.conversations[?] object
@@ -41,14 +44,19 @@ export function ChatProvider({ children }) {
         })
         return chatDataDraft
       })
+      // addNotification({
+      //   title: message.conversation.name,
+      //   message: message.text,
+      //   native: true // when using native, your OS will handle theming.
+      // });
     })
 
     socket.socketRef.current.on('new-conversation', conversation => {
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         chatDataDraft.conversations.push(conversation)
-        const getLastElem = arr => arr[arr.length - 1]
-        setCurrentConversation(getLastElem(chatDataDraft.conversations))
+        //const getLastElem = arr => arr[arr.length - 1]
+        //setCurrentConversation(getLastElem(chatDataDraft.conversations))
         return chatDataDraft
       })
     })

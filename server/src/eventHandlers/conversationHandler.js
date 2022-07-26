@@ -3,7 +3,7 @@ const userService = require('../service/userService')
 const messageService = require('../service/messageService')
 
 
-const createConversation = async (socket, io, {name, isPublic, isDM, participants}) => {
+const createConversation = async (socket, io, {name, isPublic, isDM, participants}, ack) => {
   const newConversation = await conversationService.createConversation(name, isPublic, isDM, participants)
   for (const participant of participants) {
     await userService.addConversationToUserById(participant, newConversation._id)
@@ -11,7 +11,10 @@ const createConversation = async (socket, io, {name, isPublic, isDM, participant
   }
 
   const aggregateConversation = await conversationService.getAggregateConversationById(newConversation._id)
-  io.to(newConversation._id).emit('new-conversation', aggregateConversation)
+  socket.to(newConversation._id).emit('new-conversation', aggregateConversation)
+  
+  // Acknowledge response
+  ack(aggregateConversation)
 }
 
 const deleteConversation = async (socket, io) => {

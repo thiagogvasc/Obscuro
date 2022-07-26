@@ -49,8 +49,8 @@ export function SocketProvider({ children }) {
         socketRef.current.emit('join-chat')
     }
 
-    const emitCreateConversation = (conversation) => {
-        socketRef.current.emit('create-conversation', conversation)
+    const emitCreateConversation = (conversation, ack) => {
+        socketRef.current.emit('create-conversation', conversation, ack)
     }
 
     const onChatJoined = (callback) => {

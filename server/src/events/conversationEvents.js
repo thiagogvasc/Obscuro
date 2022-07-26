@@ -1,8 +1,8 @@
 const conversationHandler = require('../eventHandlers/conversationHandler')
 
 module.exports = (socket, io) => {
-  socket.on('create-conversation', payload => {
-    conversationHandler.createConversation(socket, io, payload)
+  socket.on('create-conversation', (payload, ack) => {
+    conversationHandler.createConversation(socket, io, payload, ack)
   })
 
   socket.on('delete-conversation', () => {
