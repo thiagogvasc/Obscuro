@@ -15,7 +15,6 @@ export default function Message({message}) {
   const getAggregateSender = () => {
     for (const participant of currentConversation.participants) {
       if (participant._id === message.sender) {
-        //console.log(participant)
         return participant
       }
     }
