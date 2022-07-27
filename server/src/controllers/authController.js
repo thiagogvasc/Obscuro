@@ -17,6 +17,21 @@ const login = async (req, res) => {
   }) 
 }
 
+const logout = async (req, res) => {
+  if (req.session && req.session.userid) {
+    console.log(req.session)
+    req.session.destroy(err => {
+      if (err) {
+        res.status(400).json('Unable to log out')
+      } else {
+        res.json('Logged out successfully')
+      }
+    })
+  } else {
+    res.end('Not logged in')
+  }
+}
+
 const signup = async (req, res) => {
   const { username, password } = req.body
   const existingUser = await userService.getUserByUsername(username)
@@ -43,5 +58,6 @@ const getSession = async (req, res) => {
 module.exports = {
   login,
   signup,
-  getSession
+  getSession,
+  logout
 }
