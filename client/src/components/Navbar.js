@@ -22,10 +22,14 @@ export default function Navbar() {
       console.log(err)
     })
   }
+  const login = () => {
+    navigate('/')
+  }
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between"}}>
       <Typography fontWeight="100" mb={2} variant="h2">Obscuro</Typography>
-      {user && <Button onClick={logout}><LogoutIcon mr={5}/>Leave</Button>}
+      {user.userID && <Button onClick={logout}><LogoutIcon mr={5}/>Leave</Button>}
+      {!user.userID && <Button onClick={login}><LogoutIcon mr={5}/>Login</Button>}
     </Box>
   )
 }
