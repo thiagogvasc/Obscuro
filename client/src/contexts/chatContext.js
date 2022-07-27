@@ -22,10 +22,24 @@ export function ChatProvider({ children }) {
     })
   }, [chatData])
 
+  const getConvName = (conversation) => {
+    if (conversation.isDM) {
+      const [participant1, participant2] = conversation.participants
+      if (participant1._id === chatData._id) { // is self
+        return participant2.username
+      }
+      return participant1.username
+    }
+    return conversation.name
+  }
+
   useEffect(() => {
     socket.initConnection()
     socket.emitJoinChat()
     socket.onChatJoined(user => {
+      user.conversations.forEach(conversation => {
+        conversation.name = getConvName(conversation)
+      })
       setChatData(user)
       setCurrentConversation(user.conversations[0])
       setIsLoading(false)
@@ -46,7 +60,7 @@ export function ChatProvider({ children }) {
     socket.socketRef.current.on('new-conversation', conversation => {
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
-        chatDataDraft.conversations.push(conversation)
+        chatDataDraft.conversations.push({...conversation, name: getConvName(conversation)})
         return chatDataDraft
       })
     })
