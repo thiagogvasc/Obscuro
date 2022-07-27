@@ -26,15 +26,23 @@ const startConversation = async (socket, io, otherUserID) => {
 }
 
 const joinChat = async (socket, io) => {
-  console.log('io session')
   const userID = socket.request.session.userid
-  console.log(userID)
   const generalConv = await conversationService.getConversationByName('General')
   if (!generalConv.participants.includes(userID))
     await joinConversation(socket, io, generalConv._id)
   const aggregateUser = await userService.getAggregateUserById(userID)
-  console.log(aggregateUser.conversations[0].messages)
   socket.emit('chat-joined', aggregateUser)
+
+  // Refactor ugly code
+  // Improve performance by creating new service that handles this
+  const aggregateConv = await conversationService.getAggregateConversationById(generalConv._id)
+  const participantsWithoutSelf = aggregateConv.participants.filter(p => p._id !== userID)
+  participantsWithoutSelf.forEach(p => {
+    io.to(p._id).emit('new-participants', {
+      conversationID: generalConv._id,
+      participants: [aggregateConv.participants.find(p => p._id === userID)]
+    })
+  })
 }
 
 
@@ -62,9 +70,23 @@ const addParticipants = async (socket, io, { conversationID, participantsIDs }) 
     await userService.addConversationToUserById(participantID, conversationID)
   }
   const aggregateConversation = await conversationService.getAggregateConversationById(conversationID)
+  // Emit event to all new participants
   for (const participantID of participantsIDs) {
     io.to(participantID).emit('new-conversation', aggregateConversation)
   }
+
+  const originalParticipants = aggregateConversation.participants.filter(participant => {
+    return !participantsIDs.includes(participant._id)
+  })
+
+  // Emit event to the old participants
+  // New participants already have updated data
+  originalParticipants.forEach(participant => {
+    io.to(participant._id).emit('new-participants', {
+      conversationID,
+      participants: aggregateConversation.participants
+    })
+  })
 }
 
 module.exports = {

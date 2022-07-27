@@ -1,8 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import { useSocket } from './socketContext'
 
-import addNotification from 'react-push-notification'
-
 
 const chatContext = createContext()
 
@@ -28,7 +26,6 @@ export function ChatProvider({ children }) {
     socket.initConnection()
     socket.emitJoinChat()
     socket.onChatJoined(user => {
-      // console.log(user)
       setChatData(user)
       setCurrentConversation(user.conversations[0])
       setIsLoading(false)
@@ -44,19 +41,21 @@ export function ChatProvider({ children }) {
         })
         return chatDataDraft
       })
-      // addNotification({
-      //   title: message.conversation.name,
-      //   message: message.text,
-      //   native: true // when using native, your OS will handle theming.
-      // });
     })
 
     socket.socketRef.current.on('new-conversation', conversation => {
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         chatDataDraft.conversations.push(conversation)
-        //const getLastElem = arr => arr[arr.length - 1]
-        //setCurrentConversation(getLastElem(chatDataDraft.conversations))
+        return chatDataDraft
+      })
+    })
+
+    socket.socketRef.current.on('new-participants', ({conversationID, participants}) => {
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        const conversation = chatDataDraft.conversations.find(conv => conv._id === conversationID)
+        conversation.participants.push(...participants)
         return chatDataDraft
       })
     })
