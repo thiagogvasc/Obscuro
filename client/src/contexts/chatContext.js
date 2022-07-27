@@ -41,7 +41,7 @@ export function ChatProvider({ children }) {
         conversation.name = getConvName(conversation)
       })
       setChatData(user)
-      setCurrentConversation(user.conversations[0])
+      setCurrentConversation(user.conversations.find(conv => conv.name === 'General'))
       setIsLoading(false)
     })
     socket.onMessage(message => {
