@@ -24,22 +24,8 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
 
   const numberOfUnreadMessages = getNumberOfUnreadMessages()
 
-  const getConvName = () => {
-    if (conversation.isDM) {
-      const [participant1, participant2] = conversation.participants
-      if (participant1._id === chatData._id) { // is self
-        return participant2.username
-      }
-      return participant1.username
-    }
-    return conversation.name
-  }
-
   const select = () => {
-    setCurrentConversation({
-      ...conversation,
-      name: getConvName()
-    })
+    setCurrentConversation(conversation)
     // setshouldopensdebar(true)
   }
 
@@ -64,7 +50,7 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
     }}>
       <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
       <Box sx={{ alignSelf: 'center', fontWeight:'100' }}>
-        <Typography variant="body1" sx={{ }}>{getConvName()}</Typography>
+        <Typography variant="body1" sx={{ }}>{conversation.name}</Typography>
         <Typography variant="body2" sx={{ color: 'darkgray'}}>{getLastMessage()?.text.length > 10 ? getLastMessage()?.text.substring(1, 10) + '...' : getLastMessage()?.text}</Typography>
       </Box>
       <Box sx={{ pr: 3, flexGrow: 1, display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
