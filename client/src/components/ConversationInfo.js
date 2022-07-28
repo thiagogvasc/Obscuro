@@ -17,7 +17,7 @@ export default function ConversationInfo() {
   }
 
   return (
-    <Box sx={{ width: '300px'}}>
+    <Box sx={{ width: '50%'}}>
       <AddParticipantModal open={open} setOpen={setOpen} />
       
       <Paper square elevation={3} sx={{ 

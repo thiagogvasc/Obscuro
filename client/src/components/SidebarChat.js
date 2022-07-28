@@ -26,7 +26,7 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
 
   const select = () => {
     setCurrentConversation(conversation)
-    // setshouldopensdebar(true)
+    setShouldOpenSidebar(false)
   }
 
   const getLastMessage = () => {
