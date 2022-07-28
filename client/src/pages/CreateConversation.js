@@ -25,7 +25,6 @@ import AddIcon from '@mui/icons-material/Add'
 
 
 function CreateConversation() {
-  console.log('CreateConversation')
   const { userID } = useUser()
   const { users } = useUsers()
   const [formData, setFormData] = useState({
@@ -85,19 +84,21 @@ function CreateConversation() {
 
   return (
     <Box sx={{ 
+      flexGrow: 1,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'stretch',
      }}>
       <Typography fontWeight="100" sx={{mb: 5}} variant="h3">Create Conversation</Typography>
-      <form onSubmit={ handleSubmit }>
+      <form style={{ display: 'flex', flexGrow: 1}} onSubmit={ handleSubmit }>
         <Box sx={{
+          flexGrow: 1,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: '2vh'
+          gap: '2vh',
         }}>
           <TextField 
             onChange={handleChange} 
@@ -119,21 +120,29 @@ function CreateConversation() {
               <FormControlLabel value="private" control={<Radio />} label="Private" />
             </RadioGroup>
           </FormControl>
-          <Typography variant="body1">Participants</Typography>
-          {formData.participants.map(participant => (
-            <Chip label={participant.username} />
-          ))}
-          <Paper sx={{ p:2, borderRadius: '25px', width: '100%'}} elevation={2}>
-            <Typography variant="h5">Participants</Typography>
-            {users.map(user => (
-              <Box>
-                {user.username}
-                <Fab sx={{ml: 2}} color="primary" size="small" onClick={() => addParticipant(user)}variant="outlined"><AddIcon /></Fab>
+          <Box sx={{ flexGrow: 1, height: 0, display: 'flex', width: '75%', gap: 2}}>
+            <Paper sx={{ flexWrap: 'wrap', width: '50%', height: '100%', overflowY: 'auto', p:2, borderRadius: '25px', flexGrow: 1}} elevation={2}>
+              <Typography variant="h5">Selected participants</Typography>
+              <Box sx={{ }}>
+                {formData.participants.map(participant => (
+                  <Chip label={participant.username} />
+                ))}
               </Box>
-            ))}  
-          </Paper>
-          <Button sx={{ width: '100%', borderRadius: '25px', mt: 2, display: "block" }} type="submit" variant="contained">Create</Button>
-					<Button sx={{ width: '100%', borderRadius: '25px'}} variant="outlined" onClick={() => {navigate('/chat')}}>Cancel</Button>
+            </Paper>
+            <Paper sx={{ overflowY: 'auto', width: '50%', height: '100%', p:2, borderRadius: '25px', flexGrow: 1}} elevation={2}>
+              <Typography variant="h5">Add participants</Typography>
+              {users.map(user => (
+                <Box>
+                  {user.username}
+                  <Fab sx={{ml: 2}} color="primary" size="small" onClick={() => addParticipant(user)}variant="outlined"><AddIcon /></Fab>
+                </Box>
+              ))}  
+            </Paper>
+          </Box>
+          <Box sx={{ width: '25%'}}>
+            <Button sx={{ width: '100%', borderRadius: '25px', mt: 2, display: "block" }} type="submit" variant="contained">Create</Button>
+            <Button sx={{ width: '100%', borderRadius: '25px', mt: 2}} variant="outlined" onClick={() => {navigate('/chat')}}>Cancel</Button>
+          </Box>
         </Box>
       </form>
     </Box>
