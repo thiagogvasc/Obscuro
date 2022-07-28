@@ -35,7 +35,7 @@ export default function ConversationInfo() {
           : 
         <Box>
             <Typography variant="h6">(No content yet)</Typography>
-            <Box textAlign="center">
+            <Box sx={{ mt: 1}}>
               <Typography display="inline-block" variant="h6">Participants</Typography>
               <Fab onClick={addParticipant} sx={{}} color="primary" size="small"><AddIcon /></Fab>
             </Box>
