@@ -29,12 +29,12 @@ export default function ConversationInfo() {
       </Paper>
       { currentConversation.isDM ? 
         <Box> 
-          <Typography variant="h6">DM info</Typography>
+          {/* <Typography variant="h6">DM info</Typography> */}
           <Typography variant="body1">(No content yet)</Typography>
         </Box>
           : 
         <Box>
-            <Typography variant="h6">(Group description)</Typography>
+            <Typography variant="h6">(No content yet)</Typography>
             <Box textAlign="center">
               <Typography display="inline-block" variant="h6">Participants</Typography>
               <Fab onClick={addParticipant} sx={{}} color="primary" size="small"><AddIcon /></Fab>
@@ -42,10 +42,7 @@ export default function ConversationInfo() {
             {currentConversation.participants.map(participant => {
               return (
                 <Box key={participant._id}>
-                  <Typography>
-
-                   {participant.username}
-                  </Typography>
+                  <Typography variant="body1">{ participant.username }</Typography>
                 </Box>
               )
             })}

@@ -90,7 +90,7 @@ function CreateConversation() {
       justifyContent: 'center',
       alignItems: 'stretch',
      }}>
-      <Typography fontWeight="100" sx={{mb: 5}} variant="h3">Create Conversation</Typography>
+      <Typography textAlign="center" fontWeight="100" sx={{mb: 5}} variant="h3">Create Conversation</Typography>
       <form style={{ display: 'flex', flexGrow: 1}} onSubmit={ handleSubmit }>
         <Box sx={{
           flexGrow: 1,
