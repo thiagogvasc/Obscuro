@@ -5,17 +5,19 @@ Obscuro is a real time messaging application, built with React, Socket.io, Expre
 This project is currently in development.
 
 ### Current Features
-- Login / Sign Up / Logout / Session
-- View messages
-- Send message
-- Read receipts
-- Create conversation
+* Login / Sign Up
+* Session / Logout
+* View messages / users / conversations
+* Send message (public and private)
+* Read receipts
+* Create conversation (public and private)
+* Add participant
 
-## Future features
+### Future features
 - Like messages
-- Profile page
+- Number of likes
 - Add friend
 - Avatar pictures
 - Avatar / Message border
-- Number of Likes
+- Profile page
 - Guest User
