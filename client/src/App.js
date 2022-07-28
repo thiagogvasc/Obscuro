@@ -21,7 +21,8 @@ import SignUp from './pages/SignUp'
 import { UsersProvider } from './contexts/usersContext'
 import { Paper } from '@mui/material'
 import ChatRoutes from './components/ChatRoutes'
-
+import axios from 'axios'
+axios.defaults.baseURL = 'https://api.example.com';
 function App() { 
   const theme = createTheme({
     palette: {

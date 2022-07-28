@@ -6,15 +6,15 @@ import { useUser } from '../contexts/userContext'
 import { Typography } from '@mui/material'
 import { Button } from '@mui/material'
 import LogoutIcon from '@mui/icons-material/Logout';
-
 import axios from 'axios'
+import { baseUrl } from '../axiosConfig'
 import { useNavigate } from 'react-router-dom'
 
 export default function Navbar() {
   const user = useUser()
   const navigate = useNavigate()
   const logout = () => {
-    axios.delete('http://localhost:8080/auth/logout', { withCredentials: true }).then(res => {
+    axios.delete(`${baseUrl}/auth/logout`, { withCredentials: true }).then(res => {
       console.log(res.data)
       user.setUserID(undefined)
       navigate('/') // login

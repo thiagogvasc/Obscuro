@@ -3,7 +3,6 @@ import React, {useEffect, useLayoutEffect, useRef} from 'react'
 import { Stack } from '@mui/material'
 import { useChat } from '../contexts/chatContext'
 import Message from '../components/Message'
-import axios from 'axios'
 import { useSocket } from '../contexts/socketContext'
 import { useUser } from '../contexts/userContext'
 

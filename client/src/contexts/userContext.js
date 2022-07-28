@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { useSocket } from '../contexts/socketContext'
 import Login from '../pages/Login'
 
-import axios from 'axios'
 
 const userContext = createContext({})
 
