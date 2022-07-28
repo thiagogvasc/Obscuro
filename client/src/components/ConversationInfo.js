@@ -30,6 +30,7 @@ export default function ConversationInfo() {
       { currentConversation.isDM ? 
         <Box> 
           <Typography variant="h6">DM info</Typography>
+          <Typography variant="body1">(No content yet)</Typography>
         </Box>
           : 
         <Box>
