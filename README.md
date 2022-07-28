@@ -1,7 +1,7 @@
-# Obscuro
+# Obscuro (Alpha)
 Obscuro is a real time messaging application, built with React, Socket.io, Expressjs, and MongoDB.
 
-## Project Status (Alpha)
+## Project Status
 This project is currently in development.
 
 ### Current Features
