@@ -81,9 +81,8 @@ function Chat() {
     >
       <Sidebar shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar}/>
       <Paper elevation={2} sx={{
-        display: shouldOpenSidebar ? 'none' : 'flex', 
         flexGrow: 1, 
-        // flexDirection: "column", 
+        display: shouldOpenSidebar ? 'none' : 'flex', 
         borderRadius: '25px',
       }}>
         <Box sx={{
@@ -131,8 +130,9 @@ function Chat() {
           </form>
         </Box>
 
-        <Collapse mountOnEnter unmountOnExit in={openInfo} orientation='horizontal'><Box><ConversationInfo /></Box></Collapse>
-      </Paper>
+        {/* <Collapse mountOnEnter unmountOnExit in={openInfo} orientation='horizontal'><ConversationInfo /></Collapse> */}
+        {openInfo && <ConversationInfo />}
+      </Paper> 
     </Box>
   );
 }
