@@ -1,3 +1,3 @@
-const baseUrl = 'obscuro.herokuapp.com'
+const baseUrl = ''
 
 export { baseUrl }
