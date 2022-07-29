@@ -4,7 +4,7 @@
   "description": "Obscuro is a real time messaging application, built with React, Socket.io, Expressjs, and MongoDB.",
   "main": "index.js",
   "scripts": {
-    "start": "node server/src/index",
+    "start": "node server/src/server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "cd client && npm install && npm run build && cd .. && cd server && npm install"
   },
