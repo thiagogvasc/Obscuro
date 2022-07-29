@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const path = require('path')
 
 const conversationService = require('./service/conversationService')
 const dbConnect = require('./dbConnect')
@@ -33,6 +34,10 @@ const init = async () => {
         }
     })
     app.use('/user', userRouter)
+
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, '../client/build/index.html'))
+    })
 }
 
 init()
