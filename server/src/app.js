@@ -23,6 +23,10 @@ const init = async () => {
     }))
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
+    //app.use(express.static(''))
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, '../client/build/index.html'))
+    })
     app.use(sessionMiddleware)
     app.use('/auth', authRouter)
     app.use((req, res, next) => {
@@ -34,10 +38,6 @@ const init = async () => {
         }
     })
     app.use('/user', userRouter)
-
-    app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, '../client/build/index.html'))
-    })
 }
 
 init()
