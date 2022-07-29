@@ -11,7 +11,7 @@ import { useSocket } from '../contexts/socketContext'
 
 import MessagesWindow from './MessagesWindow'
 import ConversationInfo from './ConversationInfo'
-import Sidebar from './Sidebar'
+import Sidebar from '../components/Sidebar'
 
 import { useChat } from '../contexts/chatContext'
 import { grey } from '@mui/material/colors'
