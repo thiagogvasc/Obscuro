@@ -1,0 +1,20 @@
+{
+  "name": "obscuro",
+  "version": "1.0.0",
+  "description": "Obscuro is a real time messaging application, built with React, Socket.io, Expressjs, and MongoDB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "cd client && npm install && npm run build && cd .. && cd server && npm install && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thiagogvasc/Obscuro.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thiagogvasc/Obscuro/issues"
+  },
+  "homepage": "https://github.com/thiagogvasc/Obscuro#readme"
+}
