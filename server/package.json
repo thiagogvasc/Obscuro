@@ -7,7 +7,7 @@
     "test": "jest",
     "clear_jest": "jest --clearCache",
     "start": "node src/server",
-    "heroku-postbuild": "dir && cd src/client && npm install && npm run build"
+    "heroku-postbuild": "cd src && dir && cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
