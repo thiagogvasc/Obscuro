@@ -45,7 +45,7 @@ export default function Message({message}) {
         p: 1,
         maxWidth: '200px',
         wordWrap: 'break-word',
-        float: fromSelf ? 'right' : 'left',
+        textAlign: 'left'
       }}>
         { message.text }
       </Typography>

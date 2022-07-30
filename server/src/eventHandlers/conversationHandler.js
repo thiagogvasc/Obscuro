@@ -33,16 +33,16 @@ const joinChat = async (socket, io) => {
   const aggregateUser = await userService.getAggregateUserById(userID)
   socket.emit('chat-joined', aggregateUser)
 
-  // Refactor ugly code
-  // Improve performance by creating new service that handles this
-  const aggregateConv = await conversationService.getAggregateConversationById(generalConv._id)
-  const participantsWithoutSelf = aggregateConv.participants.filter(p => p._id !== userID)
-  participantsWithoutSelf.forEach(p => {
-    io.to(p._id).emit('new-participants', {
-      conversationID: generalConv._id,
-      participants: [aggregateConv.participants.find(p => p._id === userID)]
-    })
-  })
+  // // Refactor ugly code
+  // // Improve performance by creating new service that handles this
+  // const aggregateConv = await conversationService.getAggregateConversationById(generalConv._id)
+  // const participantsWithoutSelf = aggregateConv.participants.filter(p => p._id !== userID)
+  // participantsWithoutSelf.forEach(p => {
+  //   io.to(p._id).emit('new-participants', {
+  //     conversationID: generalConv._id,
+  //     participants: [aggregateConv.participants.find(p => p._id === userID)]
+  //   })
+  // })
 }
 
 
@@ -53,6 +53,17 @@ const joinConversation = async (socket, io, conversationID) => {
   await socket.join(conversationID)
   socket.emit('conversation-joined') // io.emit(new user joined)
   // emit 10 last messages
+
+  // Refactor ugly code
+  // Improve performance by creating new service that handles this
+  const aggregateConv = await conversationService.getAggregateConversationById(conversationID)
+  const participantsWithoutSelf = aggregateConv.participants.filter(p => p._id !== userID)
+  participantsWithoutSelf.forEach(p => {
+    io.to(p._id).emit('new-participants', {
+      conversationID: conversationID,
+      participants: [aggregateConv.participants.find(p => p._id === userID)]
+    })
+  })
 }
 
 const leaveConversation = async (socket, io, conversationID) => {

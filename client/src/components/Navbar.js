@@ -9,6 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import axios from 'axios'
 import { baseUrl } from '../axiosConfig'
 import { useNavigate } from 'react-router-dom'
+import { grey } from '@mui/material/colors'
 
 export default function Navbar() {
   const user = useUser()
@@ -27,7 +28,7 @@ export default function Navbar() {
   }
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between"}}>
-      <Typography fontWeight="100" mb={2} variant="h2">Obscuro</Typography>
+      <Typography display="inline" fontWeight="100" mb={2} variant="h2">Obscuro<Typography fontWeight="300" display="inline" variant="body2" sx={{ p: 1, color: grey[400]}}>(Alpha)</Typography></Typography>
       {user.userID && <Button onClick={logout}><LogoutIcon mr={5}/>Leave</Button>}
       {!user.userID && <Button onClick={login}><LogoutIcon mr={5}/>Login</Button>}
     </Box>

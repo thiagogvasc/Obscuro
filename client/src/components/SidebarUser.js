@@ -21,10 +21,7 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
         if ((participant1._id === chatData._id && participant2._id === user._id)
             || (participant1._id === user._id && participant2._id === chatData._id)) {
           setTab('conversations')
-          setCurrentConversation({
-            ...conversation,
-            name: participant1._id === chatData._id ? participant2.username : participant1.username
-          })
+          setCurrentConversation(conversation)
           return
         }
       }
@@ -41,6 +38,7 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
       // setCurrentConversation here
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        conversation.name = user.username // other user
         chatDataDraft.conversations.push(conversation)
         const getLastElem = arr => arr[arr.length - 1]
         setCurrentConversation(getLastElem(chatDataDraft.conversations))

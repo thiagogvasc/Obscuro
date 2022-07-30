@@ -25,7 +25,16 @@ const init = async () => {
     app.use(bodyParser.json())
     app.use(express.static(path.join(__dirname, '../../client/build')))
     app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, 'index.html'))
+      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+    })
+    app.get('/chat', (req, res) => {
+      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+    })
+    app.get('/create-conversation', (req, res) => {
+      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+    })
+    app.get('/signup', (req, res) => {
+      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
     })
     app.use(sessionMiddleware)
     app.use('/auth', authRouter)

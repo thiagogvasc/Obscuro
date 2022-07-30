@@ -3,11 +3,14 @@ const http = require('http')
 const app = require('./app')
 const io = require('./io')
 
+if (process.env.NODE_ENV === 'development') {
+  console.log('Starting development environment...')
+}
+
 const server = http.createServer(app)
 io.init(server, {
   cors: {
-    origin: "https://obscuro.herokuapp.com",
-    // origin: ["http://localhost:3000", "http://localhost:8080"],
+    origin: (process.env.NODE_ENV === 'production' ? "https://obscuro.herokuapp.com" : ["http://localhost:3000", "http://localhost:8080"]),
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
     credentials: true,
 }
