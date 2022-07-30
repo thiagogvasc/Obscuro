@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import { useSocket } from './socketContext'
+import { UserProvider, useUser } from './userContext'
 
 
 const chatContext = createContext()
@@ -9,7 +10,8 @@ export function ChatProvider({ children }) {
   const [chatData, setChatData] = useState({conversations: []})
   const [currentConversation, setCurrentConversation] = useState({name: '', messages: []})
   const socket = useSocket()
-  console.log(currentConversation)
+  const { userID } = useUser()
+  //console.log(currentConversation)
 
   // Necessary to update the object reference
   // currentConversation references the chatData.conversations[?] object
@@ -23,9 +25,11 @@ export function ChatProvider({ children }) {
   }, [chatData])
 
   const getConvName = (conversation) => {
+    console.log(conversation)
+    console.log(chatData._id)
     if (conversation.isDM) {
       const [participant1, participant2] = conversation.participants
-      if (participant1._id === chatData._id) { // is self
+      if (participant1._id === userID) { // is self
         return participant2.username
       }
       return participant1.username
@@ -39,6 +43,7 @@ export function ChatProvider({ children }) {
     socket.onChatJoined(user => {
       user.conversations.forEach(conversation => {
         conversation.name = getConvName(conversation)
+        console.log(conversation.name)
       })
       setChatData(user)
       setCurrentConversation(user.conversations.find(conv => conv.name === 'General'))
@@ -58,6 +63,7 @@ export function ChatProvider({ children }) {
     })
 
     socket.socketRef.current.on('new-conversation', conversation => {
+      console.log(conversation)
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         chatDataDraft.conversations.push({...conversation, name: getConvName(conversation)})
