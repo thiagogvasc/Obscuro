@@ -23,9 +23,10 @@ const init = async () => {
     }))
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
-    app.use(express.static(path.join(__dirname, '../../client/build')))
-    app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, 'index.html'))
+    app.use('/', express.static(path.join(__dirname, '../../client/build')))
+    app.get('*', (req, res) => {
+      console.log('send fileee')
+      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
     })
     app.use(sessionMiddleware)
     app.use('/auth', authRouter)
