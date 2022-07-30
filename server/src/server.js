@@ -6,8 +6,8 @@ const io = require('./io')
 const server = http.createServer(app)
 io.init(server, {
   cors: {
-    // origin: "https://obscuro.herokuapp.com",
-    origin: ["http://localhost:3000", "http://localhost:8080"],
+    origin: "https://obscuro.herokuapp.com",
+    // origin: ["http://localhost:3000", "http://localhost:8080"],
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
     credentials: true,
 }

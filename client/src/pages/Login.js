@@ -6,9 +6,10 @@ import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useUser } from '../contexts/userContext'
-import axios from 'axios'
 import { Alert, Paper } from '@mui/material'
-
+import axios from 'axios'
+import { baseUrl } from '../axiosConfig'
+import ProtectedRoute from '../components/ProtectedRoute'
 
 function Login() {
 	const navigate = useNavigate()
@@ -38,7 +39,7 @@ function Login() {
 			password: ''
 		})
 
-		axios.post('http://localhost:8080/auth/login', formData, { withCredentials: true }).then(result => {
+		axios.post(`${baseUrl}/auth/login`, formData, { withCredentials: true }).then(result => {
 				console.log(result.data.message)
 				setMessage({
 					type: 'success',

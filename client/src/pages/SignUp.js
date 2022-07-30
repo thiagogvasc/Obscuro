@@ -8,6 +8,7 @@ import Button from '@mui/material/Button'
 import Alert from '@mui/material/Alert'
 
 import axios from 'axios'
+import { baseUrl } from '../axiosConfig'
 import { grey } from '@mui/material/colors'
 import Grow from '@mui/material/Grow';
 import { TransitionGroup } from 'react-transition-group';
@@ -47,7 +48,7 @@ function SignUp() {
     }
 
     console.log(dataToSubmit)
-		axios.post('http://localhost:8080/auth/signup', dataToSubmit, { withCredentials: true }).then(result => {
+		axios.post(`${baseUrl}/auth/signup`, dataToSubmit, { withCredentials: true }).then(result => {
 			console.log(result.data)
       setMessage({
         type: 'success',

@@ -5,6 +5,7 @@ import { useSocket } from '../contexts/socketContext'
 import { useUser } from '../contexts/userContext'
 
 import axios from 'axios'
+import { baseUrl } from '../axiosConfig'
 
 
 const usersContext = createContext({})
@@ -14,7 +15,7 @@ export function UsersProvider({ children }) {
   const { userID } = useUser()
   
   useEffect(() => {
-    axios.get('http://localhost:8080/user', { withCredentials: true }).then(res => {
+    axios.get(`${baseUrl}/user`, { withCredentials: true }).then(res => {
       const filteredUsers = res.data.filter(u => u._id !== userID)
       setUsers(filteredUsers)
     })

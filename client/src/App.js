@@ -21,6 +21,7 @@ import SignUp from './pages/SignUp'
 import { UsersProvider } from './contexts/usersContext'
 import { Paper } from '@mui/material'
 import ChatRoutes from './components/ChatRoutes'
+import axios from 'axios'
 
 function App() { 
   const theme = createTheme({

@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const path = require('path')
 
 const conversationService = require('./service/conversationService')
 const dbConnect = require('./dbConnect')
@@ -22,6 +23,10 @@ const init = async () => {
     }))
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
+    app.use(express.static(path.join(__dirname, '../../client/build')))
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, 'index.html'))
+    })
     app.use(sessionMiddleware)
     app.use('/auth', authRouter)
     app.use((req, res, next) => {

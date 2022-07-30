@@ -5,6 +5,8 @@ import { useNavigate, Navigate } from 'react-router-dom'
 import Login from '../pages/Login'
 
 import axios from 'axios'
+import { baseUrl } from '../axiosConfig'
+
 
 function ProtectedRoute({ children }) {
     const socket = useSocket()
@@ -21,7 +23,7 @@ function ProtectedRoute({ children }) {
     }, [socket])
 
     useEffect(() => {
-        axios.get('http://localhost:8080/auth', { withCredentials: true }).then(res=> {
+        axios.get(`${baseUrl}/auth`, { withCredentials: true }).then(res=> {
             console.log(res)
             setUserID(res.data)
         }).catch(err => {
