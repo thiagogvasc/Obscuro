@@ -23,9 +23,17 @@ const init = async () => {
     }))
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json())
-    app.use('/', express.static(path.join(__dirname, '../../client/build')))
-    app.get('*', (req, res) => {
-      console.log('send fileee')
+    app.use(express.static(path.join(__dirname, '../../client/build')))
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+    })
+    app.get('/chat', (req, res) => {
+      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+    })
+    app.get('/create-conversation', (req, res) => {
+      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+    })
+    app.get('/signup', (req, res) => {
       res.sendFile(path.join(__dirname, '../../client/build/index.html'))
     })
     app.use(sessionMiddleware)

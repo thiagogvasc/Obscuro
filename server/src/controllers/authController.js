@@ -10,6 +10,7 @@ const login = async (req, res) => {
   if (!user) return res.status(401).json('Username not found')
   if (user.password !== password) return res.status(401).json('incorrect password')
 
+  console.log('logged in: ' + user._id)
   req.session.userid = user._id
   res.status(200).json({
     message: 'Logged in successfully!',

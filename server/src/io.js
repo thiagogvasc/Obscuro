@@ -14,7 +14,7 @@ const init = (server, options) => {
   const wrap = middleware => (socket, next) => middleware(socket.request, {}, next)
   io.use(wrap(sessionMiddleware))
   io.of("/").adapter.on("join-room", (room, id) => {
-    console.log(`socket ${id} has joined room ${room}`)
+   // console.log(`socket ${id} has joined room ${room}`)
   })
   
   io.use((socket, next) => {
