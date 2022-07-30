@@ -17,7 +17,8 @@ export function SocketProvider({ children }) {
         // yes actually
         // pass user as an argument
         const persistedUser = JSON.parse(sessionStorage.getItem('user'))
-        const newSocket = io('https://obscuro.herokuapp.com', {
+        const url = process.env.NODE_ENV === 'production' ? 'https://obscuro.herokuapp.com' : 'http://localhost:8080'
+        const newSocket = io(url, {
             withCredentials: true
         })
 
