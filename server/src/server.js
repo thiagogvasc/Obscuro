@@ -3,7 +3,6 @@ const http = require('http')
 const app = require('./app')
 const io = require('./io')
 
-console.log(process.env)
 if (process.env.NODE_ENV === 'development') {
   console.log('Starting development environment...')
 }
