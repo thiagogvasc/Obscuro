@@ -49,9 +49,9 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
       }
     }}>
       <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
-      <Box sx={{ alignSelf: 'center', fontWeight:'100' }}>
-        <Typography variant="body1" sx={{ }}>{conversation.name}</Typography>
-        <Typography variant="body2" sx={{ color: 'darkgray'}}>{getLastMessage()?.text.length > 10 ? getLastMessage()?.text.substring(1, 10) + '...' : getLastMessage()?.text}</Typography>
+      <Box sx={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', overflow: 'hidden', alignSelf: 'center', fontWeight:'100' }}>
+        <Typography noWrap variant="body1" sx={{ }}>{conversation.name}</Typography>
+        <Typography noWrap variant="body2" sx={{ color: 'darkgray'}}>{getLastMessage()?.text}</Typography>
       </Box>
       <Box sx={{ pr: 3, flexGrow: 1, display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
       {numberOfUnreadMessages ? 
