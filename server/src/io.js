@@ -29,6 +29,9 @@ const init = (server, options) => {
   io.on('connection', socket => {
     //console.log('connectin: ', socket.request.session)
     const userID = socket.request.session.userid
+
+    // !!!!! crashes on start when user connects to fast !!!!!
+
     // handle session if (!session) res.redirect()
     // join all rooms on reconnect
     // prevents lost rooms on server restart
