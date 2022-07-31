@@ -38,7 +38,7 @@ export default function Message({message}) {
       textAlign: fromSelf ? 'right' : 'left',
     }}>
       <Typography variant="body1">{ sender.username }</Typography>
-      <Typography fontWeight="300" variant="body2" sx={{
+      <Typography display="inline-block" fontWeight="300" variant="body2" sx={{
         backgroundColor: 'primary.main',
         color: 'primary.contrastText',
         borderRadius: '10px',
