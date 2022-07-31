@@ -6,6 +6,7 @@ const createConversation = async (name, isPublic, isDM, participants) => {
     _id: uuid(),
     name, isPublic, isDM, participants
   })
+  console.log(newConversation)
   return newConversation.save()
 }
 
@@ -54,11 +55,16 @@ const getAggregateConversationById = async id => {
       }
     },
     {
+      $unwind: {
+        path: '$participants'
+      }
+    },
+    {
       $lookup: {
         from: 'users',
-        localField: 'participants',
+        localField: 'participants._id',
         foreignField: '_id',
-        as: 'participants'
+        as: 'participants.temp' // participant: {isAdmin: false, user: { aggregate participant info}}
       }
     },
     {
@@ -69,14 +75,19 @@ const getAggregateConversationById = async id => {
         as: 'messages'
       }
     },
-    // {
-    //   $group: {
-    //     _id: '$_id',
-    //     name: { $first: '$name' },
-    //     participants: {$push: '$participants'},
-    //     messages: {$push: '$messages'}
-    //   }
-    // }
+    {
+      $unwind: { path: '$participants.temp'}
+    },
+    {
+      $group: {
+        _id: '$_id',
+        name: { $first: '$name' },
+        participants: {$push: '$participants'},
+        messages: {$first: '$messages'},
+        isDM: {$first: '$isDM'},
+        isPublic: {$first: '$isPublic'}
+      }
+    }
   ])
   return aggregateConversation.at(0)
 }
