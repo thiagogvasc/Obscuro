@@ -6,7 +6,10 @@ const conversationSchema = new Schema({
   name: String,
   isPublic: Boolean,
   isDM: Boolean,
-  participants: [{ type: String }]
+  participants: [{
+    _id: String,
+    isAdmin: Boolean
+  }]
 })
 
 module.exports = mongoose.model('conversation', conversationSchema)

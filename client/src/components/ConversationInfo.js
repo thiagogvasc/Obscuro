@@ -7,14 +7,28 @@ import { grey } from '@mui/material/colors'
 import AddParticipantModal from './AddParticipantModal'
 
 import { useChat } from '../contexts/chatContext'
+import { useUser } from '../contexts/userContext'
 import { useUsers } from '../contexts/usersContext'
 
 export default function ConversationInfo() {
   const { currentConversation } = useChat()
+  const { userID } = useUser()
   const [open, setOpen] = useState(false)
 
   const addParticipant = e => {
     setOpen(true)
+  }
+
+  const isCurrentUserAdmin = () => {
+    let isAdmin = false
+    const userFound = currentConversation.participants.find(p => p._id === userID)
+    if (userFound) {
+      console.log(userFound)
+      if (userFound.isAdmin) {
+        isAdmin = true
+      }
+    }
+    return isAdmin
   }
 
   return (
@@ -37,12 +51,14 @@ export default function ConversationInfo() {
             <Typography variant="h6">(No content yet)</Typography>
             <Box sx={{ mt: 1}}>
               <Typography display="inline-block" variant="h6">Participants</Typography>
-              <Fab onClick={addParticipant} sx={{}} color="primary" size="small"><AddIcon /></Fab>
+              {isCurrentUserAdmin() && <Fab onClick={addParticipant} sx={{}} color="primary" size="small"><AddIcon /></Fab>}
             </Box>
             {currentConversation.participants.map(participant => {
               return (
                 <Box key={participant._id}>
-                  <Typography variant="body1">{ participant.username }</Typography>
+                  <Typography variant="body1">{ participant.username }
+                  {participant.isAdmin ? '(Admin)' : ''}
+                  </Typography>
                 </Box>
               )
             })}

@@ -52,7 +52,7 @@ function CreateConversation() {
       ...formData,
       isDM: false,
       isPublic: formData.isPublic === 'public' ? true : false,
-      participants: [userID, ...formData.participants.map(participant => participant._id)]
+      participants: [{_id: userID, isAdmin: true}, ...formData.participants.map(participant => ({_id: participant._id, isAdmin: false}))]
     }
 
     console.log(dataToSubmit)
