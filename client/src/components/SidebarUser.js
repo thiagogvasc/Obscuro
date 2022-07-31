@@ -55,8 +55,8 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
       display: 'flex'
     }}>
       <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
-      <Box sx={{ alignSelf: 'center', fontWeight:'100' }}>
-        <Typography variant="body1" sx={{ color: '#FFFFFF'}}>{user.username}</Typography>
+      <Box sx={{ alignSelf: 'center', fontWeight:'100', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+        <Typography noWrap variant="body1" sx={{ color: '#FFFFFF'}}>{user.username}</Typography>
         <Fab color="primary" size="small" variant="extended"><SendIcon/>Send message</Fab>
       </Box>
     </Box>
