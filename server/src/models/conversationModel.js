@@ -8,7 +8,8 @@ const conversationSchema = new Schema({
   isDM: Boolean,
   participants: [{
     _id: String,
-    isAdmin: Boolean
+    isAdmin: Boolean,
+    addedAt: Date
   }]
 })
 

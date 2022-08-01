@@ -23,6 +23,14 @@ const addConversationToUserById = async (userID, conversationID) => {
   )
 }
 
+const removeConversationFromUserById = async (userID, conversationID) => {
+  return User.findOneAndUpdate(
+    { _id: userID }, 
+    { $pull: { conversations: conversationID } },
+    { new: true }
+  )
+}
+
 const getUserById = async id => {
   return User.findOne({ _id: id }).exec()
 }
@@ -103,6 +111,7 @@ module.exports = {
   createUserWithId,
   getAllUsers,
   addConversationToUserById,
+  removeConversationFromUserById,
   getUserById,
   getUserByUsername,
   // getAggregateUserById

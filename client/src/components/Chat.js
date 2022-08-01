@@ -74,6 +74,8 @@ function Chat() {
       </Box>
     )
   }
+  console.log(user._id) // fix user issue
+  const notInConversation = (!currentConversation.participants.find(p => p._id === user._id))
 
   return (
     <Box
@@ -124,6 +126,7 @@ function Chat() {
               }}
               >
                 <Textfield 
+                  disabled={notInConversation}
                   autoComplete="off" 
                   color="primary"
                   name="message" 
@@ -131,7 +134,7 @@ function Chat() {
                   fullWidth 
                   InputProps={{ sx: { borderRadius: '25px' }} }
                 />
-                <Box><Fab type="submit" color="primary" size="large"><SendIcon/></Fab></Box> 
+                <Box><Fab disabled={notInConversation} type="submit" color="primary" size="large"><SendIcon/></Fab></Box> 
             </Box>
           </form>
         </Box>
