@@ -8,7 +8,8 @@ const createMessage = async (text, sender, conversationID) => {
     sender,
     conversation: conversationID,
     isInfo: false,
-    readBy: []
+    readBy: [],
+    sentAt: new Date()
   })
   return newMessage.save()
 }
@@ -20,7 +21,8 @@ const createInfoMessage = async (text, sender, conversationID) => {
     sender,
     conversation: conversationID,
     isInfo: true,
-    readBy: []
+    readBy: [],
+    sentAt: new Date()
   })
   return newMessage.save()
 }

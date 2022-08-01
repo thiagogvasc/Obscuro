@@ -10,6 +10,7 @@ const messageSchema = new Schema({
     },
     conversation: String,
     isInfo: Boolean,
+    sentAt: Date,
     readBy: [{ type: String }]
 })
 

@@ -52,6 +52,7 @@ export function ChatProvider({ children }) {
     })
     socket.onMessage(message => {
       console.log(message)
+      console.log(new Date(message.sentAt))
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const conversation = message.conversation
