@@ -108,6 +108,19 @@ const addParticipants = async (socket, io, { conversationID, participantsIDs }) 
   
   // Emit event to all new participants
   for (const participantID of participantsIDs) {
+
+    const newConv = aggregateConversation
+    // filter messages
+    const userParticipant = newConv.participants.find(p => p._id === participantID)
+    console.log({userParticipant})
+    newConv.messages = newConv.messages.filter(m => {
+      const messageDate = new Date(m.sentAt)
+      console.log('message date: ' + messageDate)
+      const participantAddedDate = new Date(userParticipant.addedAt)
+      console.log('participant added: ' + participantAddedDate)
+      return messageDate > participantAddedDate
+    })
+
     io.to(participantID).emit('new-conversation', aggregateConversation)
 
     // Emit info message
@@ -151,21 +164,21 @@ const removeParticipant = async (socket, io, {conversationID, participant}) => {
   io.in(participant._id).socketsLeave(conversationID)
 }
 
-const leaveConversation = async (socket, io, conversationID) => {
-  // const userID = socket.request.session.userid 
-  // const participant = {
-  //   _id: userID
-  // }
-  // await conversationService.removeParticipantFromConversationById(conversationID, participant)
-  // await userService.removeConversationFromUserById(participant._id, conversationID)
+const leaveConversation = async (socket, io, {conversationID}) => {
+  const userID = socket.request.session.userid 
+  const participant = {
+    _id: userID
+  }
+  await conversationService.removeParticipantFromConversationById(conversationID, participant)
+  await userService.removeConversationFromUserById(participant._id, conversationID)
 
-  // const userRemoved = await userService.getUserById(participant._id)
-  // const newInfoMessage = await messageService.createInfoMessage(`${userRemoved.username} left the conversation`, null, conversationID)
-  // const aggregateMsg = await messageService.getAggregateMessageById(newInfoMessage._id)
-  // io.to(conversationID).emit('message', aggregateMsg)
+  const userRemoved = await userService.getUserById(participant._id)
+  const newInfoMessage = await messageService.createInfoMessage(`${userRemoved.username} left the conversation`, null, conversationID)
+  const aggregateMsg = await messageService.getAggregateMessageById(newInfoMessage._id)
+  io.to(conversationID).emit('message', aggregateMsg)
 
-  // io.to(conversationID).emit('participant-removed', {conversationID, participant})
-  // io.in(participant._id).socketsLeave(conversationID)
+  io.to(conversationID).emit('participant-removed', {conversationID, participant})
+  io.in(participant._id).socketsLeave(conversationID)
 }
 
 module.exports = {

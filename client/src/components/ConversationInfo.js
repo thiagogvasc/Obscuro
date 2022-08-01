@@ -13,7 +13,7 @@ import { useSocket } from '../contexts/socketContext'
 
 export default function ConversationInfo() {
   const { currentConversation } = useChat()
-  const { userID } = useUser()
+  const { userID, user } = useUser()
   const [open, setOpen] = useState(false)
   const socket = useSocket()
 
@@ -42,6 +42,14 @@ export default function ConversationInfo() {
     })
   }
 
+  const leaveConversation = () => {
+    socket.socketRef.current.emit('leave-conversation', {
+      conversationID: currentConversation._id
+    })
+  }
+
+  const inConversation = (currentConversation.participants.find(p => p._id === user._id))
+
   return (
     <Box sx={{ flexGrow: 2}}>
       <AddParticipantModal open={open} setOpen={setOpen} />
@@ -60,6 +68,7 @@ export default function ConversationInfo() {
           : 
         <Box>
             <Typography variant="h6">(No content yet)</Typography>
+            { inConversation && <Button onClick={leaveConversation}>Leave</Button>}
             <Box sx={{ mt: 1}}>
               <Typography display="inline-block" variant="h6">Participants</Typography>
               {isCurrentUserAdmin() && <Fab onClick={addParticipant} sx={{}} color="primary" size="small"><AddIcon /></Fab>}
