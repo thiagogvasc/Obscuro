@@ -69,7 +69,10 @@ export function ChatProvider({ children }) {
       console.log(conversation)
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
-        chatDataDraft.conversations.push({...conversation, name: getConvName(conversation)})
+        const alreadyExists = chatDataDraft.conversations.find(c => c._id === conversation._id)
+        if (!alreadyExists) {
+          chatDataDraft.conversations.push({...conversation, name: getConvName(conversation)})
+        }
         return chatDataDraft
       })
     })

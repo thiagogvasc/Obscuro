@@ -4,7 +4,7 @@ const { uuid } = require('uuidv4')
 const createConversation = async (name, isPublic, isDM, participants) => {
   const newConversation = new Conversation({
     _id: uuid(),
-    name, isPublic, isDM, participants
+    name, isPublic, isDM, participants: participants.map(p => ({...p, addedAt: new Date()}))
   })
   console.log(newConversation)
   return newConversation.save()
@@ -42,7 +42,7 @@ const addParticipantToConversationById = async (conversationID, participantID) =
 const addParticipantsToConversationById = async (conversationID, participantsIDs) => {
   return Conversation.findOneAndUpdate(
     { _id: conversationID }, 
-    { $push: { participants: { $each: participantsIDs }}},
+    { $push: { participants: { $each: participantsIDs.map(p => ({...p, addedAt: new Date()})) }}},
     { new: true }
   )
 }
