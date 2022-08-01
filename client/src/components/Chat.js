@@ -14,6 +14,7 @@ import ConversationInfo from './ConversationInfo'
 import Sidebar from './Sidebar'
 
 import { useChat } from '../contexts/chatContext'
+import { useUser } from '../contexts/userContext'
 import { grey } from '@mui/material/colors'
 import { Fab, Paper, CircularProgress, Slide, Collapse } from '@mui/material'
 
@@ -32,6 +33,8 @@ function Chat() {
   const [shouldOpenSidebar, setShouldOpenSidebar] = useState(false)
   const [openInfo, setOpenInfo] = useState(false)
 
+  const { user } = useUser()
+
   const handleOpenInfo = () => {
     setOpenInfo(openInfo => !openInfo)
   }
@@ -43,7 +46,10 @@ function Chat() {
     if (text !== '') {
       socket.emitMessage({
         text,
-        sender: chatData._id,
+        sender: {
+          _id: user._id,
+          username: user.username
+        },
         conversation: currentConversation._id
       })
     }

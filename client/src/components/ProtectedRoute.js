@@ -11,7 +11,7 @@ import { baseUrl } from '../axiosConfig'
 function ProtectedRoute({ children }) {
     const socket = useSocket()
     const navigate = useNavigate()
-    const {userID, setUserID} = useUser()
+    const {userID, setUserID, user, setUser} = useUser()
 
     useEffect(() => {
         if (socket.connectError) {
@@ -25,7 +25,8 @@ function ProtectedRoute({ children }) {
     useEffect(() => {
         axios.get(`${baseUrl}/auth`, { withCredentials: true }).then(res=> {
             console.log(res)
-            setUserID(res.data)
+            setUserID(res.data.userid)
+            setUser(res.data.user)
         }).catch(err => {
             console.log(err)
             const response = err.response

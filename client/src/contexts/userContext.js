@@ -9,9 +9,12 @@ const userContext = createContext({})
 
 export function UserProvider({ children }) {
     const [userID, setUserID] = useState(undefined)
+    const [user, setUser] = useState(null)
     console.log(userID)
     const value = {
         userID,
+        user,
+        setUser,
         setUserID
     }
 

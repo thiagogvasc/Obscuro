@@ -1,12 +1,25 @@
 const Message = require('../models/messageModel')
 const { uuid } = require('uuidv4')
 
-const createMessage = async (text, senderID, conversationID) => {
+const createMessage = async (text, sender, conversationID) => {
   const newMessage = new Message({
     _id: uuid(),
     text,
-    sender: senderID,
+    sender,
     conversation: conversationID,
+    isInfo: false,
+    readBy: []
+  })
+  return newMessage.save()
+}
+
+const createInfoMessage = async (text, sender, conversationID) => {
+  const newMessage = new Message({
+    _id: uuid(),
+    text,
+    sender,
+    conversation: conversationID,
+    isInfo: true,
     readBy: []
   })
   return newMessage.save()
@@ -63,6 +76,7 @@ const getAggregateMessageById = async id => {
 
 module.exports = {
   createMessage,
+  createInfoMessage,
   getMessageById,
   getAggregateMessageById,
   markAllAsReadFromConversation

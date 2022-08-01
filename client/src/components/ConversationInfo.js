@@ -9,15 +9,19 @@ import AddParticipantModal from './AddParticipantModal'
 import { useChat } from '../contexts/chatContext'
 import { useUser } from '../contexts/userContext'
 import { useUsers } from '../contexts/usersContext'
+import { useSocket } from '../contexts/socketContext'
 
 export default function ConversationInfo() {
   const { currentConversation } = useChat()
   const { userID } = useUser()
   const [open, setOpen] = useState(false)
+  const socket = useSocket()
 
   const addParticipant = e => {
     setOpen(true)
   }
+
+  const isNotSelf = (participant) => participant._id !== userID
 
   const isCurrentUserAdmin = () => {
     let isAdmin = false
@@ -29,6 +33,13 @@ export default function ConversationInfo() {
       }
     }
     return isAdmin
+  }
+
+  const removeParticipant = participant => {
+    socket.socketRef.current.emit('remove-participant', {
+      conversationID: currentConversation._id,
+      participant
+    })
   }
 
   return (
@@ -59,6 +70,7 @@ export default function ConversationInfo() {
                   <Typography variant="body1">{ participant.username }
                   {participant.isAdmin ? '(Admin)' : ''}
                   </Typography>
+                  {isCurrentUserAdmin() && isNotSelf(participant) && <Button onClick={() => removeParticipant(participant)}>Remove</Button>}
                 </Box>
               )
             })}

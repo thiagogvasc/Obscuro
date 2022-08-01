@@ -47,6 +47,14 @@ const addParticipantsToConversationById = async (conversationID, participantsIDs
   )
 }
 
+const removeParticipantFromConversationById = async (conversationID, participant) => {
+  return Conversation.findOneAndUpdate(
+    { _id: conversationID },
+    { $pull: {participants: { _id: participant._id }}},
+    { new: true }
+  )
+}
+
 const getAggregateConversationById = async id => {
   const aggregateConversation = await Conversation.aggregate([
     {
@@ -100,5 +108,6 @@ module.exports = {
   addParticipantToConversationByName,
   addParticipantToConversationById,
   addParticipantsToConversationById,
+  removeParticipantFromConversationById,
   getAggregateConversationById
 }

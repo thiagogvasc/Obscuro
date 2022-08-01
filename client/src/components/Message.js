@@ -12,15 +12,16 @@ export default function Message({message}) {
   const { userID } = useUser()
 
 
-  const getAggregateSender = () => {
-    for (const participant of currentConversation.participants) {
-      if (participant._id === message.sender) {
-        return participant
-      }
-    }
-  }
+  // const getAggregateSender = () => {
+  //   for (const participant of currentConversation.participants) {
+  //     if (participant._id === message.sender) {
+  //       return participant
+  //     }
+  //   }
+  // }
 
-  let sender = getAggregateSender()
+  //let sender = getAggregateSender()
+  let sender = message.sender
   const fromSelf = sender._id === userID
 
   // fix

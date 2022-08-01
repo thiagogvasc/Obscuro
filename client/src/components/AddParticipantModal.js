@@ -30,9 +30,12 @@ export default function AddParticipantModal({open, setOpen}) {
   }
 
   const add = () => {
+    const participantsIDs = selectedUsers.map(u => u._id)
+    console.log('adding participant')
+    console.log(participantsIDs)
     socketRef.current.emit('add-participants', {
       conversationID: currentConversation._id,
-      participantsIDs: selectedUsers.map(u => u._id)
+      participantsIDs
     })
   }
 
