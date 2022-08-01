@@ -3,6 +3,7 @@ import React, {useEffect, useLayoutEffect, useRef} from 'react'
 import { Stack } from '@mui/material'
 import { useChat } from '../contexts/chatContext'
 import Message from '../components/Message'
+import InfoMessage from '../components/InfoMessage'
 import { useSocket } from '../contexts/socketContext'
 import { useUser } from '../contexts/userContext'
 
@@ -59,7 +60,7 @@ export default function MessagesWindow() {
       }} 
     >
         {currentConversation.messages.map(message => {
-          return (<Message key={message._id} message={message}/>)
+          return (message.isInfo ? <InfoMessage key={message._id} message={message} /> : <Message key={message._id} message={message}/>)
         })}
         <div ref={ chatBottom } />
     </Stack>

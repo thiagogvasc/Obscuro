@@ -19,7 +19,7 @@ const createConversation = async (socket, io, {name, isPublic, isDM, participant
 
   console.log(aggregateConversation)
   // Acknowledge response
-  ack(aggregateConversation)
+  ack(aggregateConversation) 
 }
 
 const deleteConversation = async (socket, io) => {
@@ -80,14 +80,32 @@ const conversationOpened = async (socket, io, { conversationID, openedBy }) => {
 }
 
 const addParticipants = async (socket, io, { conversationID, participantsIDs }) => {
-  await conversationService.addParticipantsToConversationById(conversationID, participantsIDs.map(p => ({_id: p._id, isAdmin: false})))
+  const updated = await conversationService.addParticipantsToConversationById(conversationID, participantsIDs.map(p => ({_id: p, isAdmin: false})))
+ 
+ console.log('updateee.. conv')
+ console.log(participantsIDs.map(p => ({_id: p, isAdmin: false})))
+ console.log(updated)
+  // !!!CAREFULL WITH THIS WHEN CHANGIN PARTICIPANT MODEL !!!!
+  io.in(participantsIDs).socketsJoin(conversationID)
   for (const participantID of participantsIDs) {
     await userService.addConversationToUserById(participantID, conversationID)
   }
   const aggregateConversation = await conversationService.getAggregateConversationById(conversationID)
+  console.log(aggregateConversation)
+  // fix temp thing
+  aggregateConversation.participants = aggregateConversation.participants.map(participant => {
+    return {...participant.temp, isAdmin: participant.isAdmin}
+  })
+  
   // Emit event to all new participants
   for (const participantID of participantsIDs) {
     io.to(participantID).emit('new-conversation', aggregateConversation)
+
+    // Emit info message
+    const userAdded = await userService.getUserById(participantID)
+    const newInfoMessage = await messageService.createInfoMessage(`${userAdded.username} was added to the conversation`, null, conversationID)
+    const aggregateMsg = await messageService.getAggregateMessageById(newInfoMessage._id)
+    io.to(conversationID).emit('message', aggregateMsg)
   }
 
   const originalParticipants = aggregateConversation.participants.filter(participant => {
@@ -96,12 +114,30 @@ const addParticipants = async (socket, io, { conversationID, participantsIDs }) 
 
   // Emit event to the old participants
   // New participants already have updated data
+  const newParticipants = aggregateConversation.participants.filter(p => !originalParticipants.includes(p))
+  console.log('new')
+  console.log(newParticipants)
   originalParticipants.forEach(participant => {
     io.to(participant._id).emit('new-participants', {
       conversationID,
-      participants: aggregateConversation.participants
+      participants: newParticipants
     })
+    console.log('aggre participants')
+    console.log(aggregateConversation.participants)
   })
+
+  
+}
+
+const removeParticipant = async (socket, io, {conversationID, participant}) => {
+  await conversationService.removeParticipantFromConversationById(conversationID, participant)
+  io.to(conversationID).emit('participant-removed', {conversationID, participant})
+  io.in(participant._id).socketsLeave(conversationID)
+  
+  const userRemoved = await userService.getUserById(participant._id)
+  const newInfoMessage = await messageService.createInfoMessage(`${userRemoved.username} was removed from the conversation`, null, conversationID)
+  const aggregateMsg = await messageService.getAggregateMessageById(newInfoMessage._id)
+  io.to(conversationID).emit('message', aggregateMsg)
 }
 
 module.exports = {
@@ -112,5 +148,6 @@ module.exports = {
   joinConversation,
   leaveConversation,
   conversationOpened,
-  addParticipants
+  addParticipants,
+  removeParticipant
 }

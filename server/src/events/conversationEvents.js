@@ -32,4 +32,8 @@ module.exports = (socket, io) => {
   socket.on('add-participants', payload => {
     conversationHandler.addParticipants(socket, io, payload)
   })
+
+  socket.on('remove-participant', payload => {
+    conversationHandler.removeParticipant(socket, io, payload)
+  }) 
 }

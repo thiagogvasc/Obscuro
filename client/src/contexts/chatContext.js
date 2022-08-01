@@ -20,6 +20,7 @@ export function ChatProvider({ children }) {
     chatData.conversations.forEach(conv => {
       if (conv._id === currentConversation._id) {
         setCurrentConversation(conv)
+        console.log('changed reference')
       }
     })
   }, [chatData])
@@ -50,6 +51,7 @@ export function ChatProvider({ children }) {
       setIsLoading(false)
     })
     socket.onMessage(message => {
+      console.log(message)
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const conversation = message.conversation
@@ -76,6 +78,16 @@ export function ChatProvider({ children }) {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const conversation = chatDataDraft.conversations.find(conv => conv._id === conversationID)
         conversation.participants.push(...participants)
+        return chatDataDraft
+      })
+    })
+
+    socket.socketRef.current.on('participant-removed', ({conversationID, participant}) => {
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        const conversation = chatDataDraft.conversations.find(conv => conv._id === conversationID)
+        conversation.participants = conversation.participants.filter(p => p._id !== participant._id)
+        console.log(chatDataDraft)
         return chatDataDraft
       })
     })
