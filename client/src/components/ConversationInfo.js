@@ -35,6 +35,13 @@ export default function ConversationInfo() {
     return isAdmin
   }
 
+  const promoteToAdmin = participant => {
+    socket.socketRef.current.emit('promote-participant', {
+      conversationID: currentConversation._id,
+      participantID: participant._id
+    })
+  }
+
   const removeParticipant = participant => {
     socket.socketRef.current.emit('remove-participant', {
       conversationID: currentConversation._id,
@@ -80,6 +87,7 @@ export default function ConversationInfo() {
                   {participant.isAdmin ? '(Admin)' : ''}
                   </Typography>
                   {isCurrentUserAdmin() && isNotSelf(participant) && <Button onClick={() => removeParticipant(participant)}>Remove</Button>}
+                  {isCurrentUserAdmin() && isNotSelf(participant) && !participant.isAdmin && <Button onClick={() => promoteToAdmin(participant)}>Promote</Button>}
                 </Box>
               )
             })}

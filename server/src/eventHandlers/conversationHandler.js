@@ -147,7 +147,16 @@ const addParticipants = async (socket, io, { conversationID, participantsIDs }) 
     console.log('aggre participants')
     console.log(aggregateConversation.participants)
   })
+}
 
+const promoteParticipant = async (socket, io, {conversationID, participantID}) => {
+  await conversationService.promoteParticipantFromConversationById(conversationID, participantID)
+  io.to(conversationID).emit('participant-promoted', {conversationID, participantID})
+
+  const participantPromoted = await userService.getUserById(participantID)
+  const newInfoMessage = await messageService.createInfoMessage(`${participantPromoted.username} was promoted to admin`, null, conversationID)
+  const aggregateMsg = await messageService.getAggregateMessageById(newInfoMessage._id)
+  io.to(conversationID).emit('message', aggregateMsg)
   
 }
 
@@ -184,6 +193,7 @@ const leaveConversation = async (socket, io, {conversationID}) => {
 module.exports = {
   createConversation,
   deleteConversation,
+  promoteParticipant,
   startConversation,
   joinChat,
   joinConversation,
