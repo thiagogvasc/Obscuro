@@ -4,8 +4,13 @@ const { Schema } = mongoose
 const messageSchema = new Schema({
     _id: String,
     text: String,
-    sender: String,
+    sender: {
+        _id: String,
+        username: String
+    },
     conversation: String,
+    isInfo: Boolean,
+    sentAt: Date,
     readBy: [{ type: String }]
 })
 

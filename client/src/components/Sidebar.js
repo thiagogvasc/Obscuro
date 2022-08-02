@@ -79,14 +79,12 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
           </Box>
         </Slide>
       : 
-        <>
-          <Slide in={tab==='users'} direction="left" container={containerRef.current}>
-            <Box sx={{ }}>
-              <Typography fontWeight="light" ml={3} mt={1} color="white" variant="h5">Users</Typography>
-              {users.map(user => <SidebarUser key={user._id} setTab={setTab} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} user={user} />)}  
-            </Box>
-          </Slide>
-        </>
+        <Slide in={tab==='users'} direction="left" container={containerRef.current}>
+          <Box sx={{ flexGrow: 1, overflowY: 'scroll', height: 0 }}>
+            <Typography fontWeight="light" ml={3} mt={1} color="white" variant="h5">Users</Typography>
+            {users.map(user => <SidebarUser key={user._id} setTab={setTab} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} user={user} />)}  
+          </Box>
+        </Slide>
       }
 
     </Paper>

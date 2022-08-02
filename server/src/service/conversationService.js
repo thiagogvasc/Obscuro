@@ -4,8 +4,9 @@ const { uuid } = require('uuidv4')
 const createConversation = async (name, isPublic, isDM, participants) => {
   const newConversation = new Conversation({
     _id: uuid(),
-    name, isPublic, isDM, participants
+    name, isPublic, isDM, participants: participants.map(p => ({...p, addedAt: new Date()}))
   })
+  console.log(newConversation)
   return newConversation.save()
 }
 
@@ -41,7 +42,23 @@ const addParticipantToConversationById = async (conversationID, participantID) =
 const addParticipantsToConversationById = async (conversationID, participantsIDs) => {
   return Conversation.findOneAndUpdate(
     { _id: conversationID }, 
-    { $push: { participants: { $each: participantsIDs }}},
+    { $push: { participants: { $each: participantsIDs.map(p => ({...p, addedAt: new Date()})) }}},
+    { new: true }
+  )
+}
+
+const removeParticipantFromConversationById = async (conversationID, participant) => {
+  return Conversation.findOneAndUpdate(
+    { _id: conversationID },
+    { $pull: {participants: { _id: participant._id }}},
+    { new: true }
+  )
+}
+
+const promoteParticipantFromConversationById = async (conversationID, participantID) => {
+  return Conversation.findOneAndUpdate(
+    { _id: conversationID, "participants._id": participantID },
+    { $set: {"participants.$.isAdmin": true }},
     { new: true }
   )
 }
@@ -54,11 +71,16 @@ const getAggregateConversationById = async id => {
       }
     },
     {
+      $unwind: {
+        path: '$participants'
+      }
+    },
+    {
       $lookup: {
         from: 'users',
-        localField: 'participants',
+        localField: 'participants._id',
         foreignField: '_id',
-        as: 'participants'
+        as: 'participants.temp' // participant: {isAdmin: false, user: { aggregate participant info}}
       }
     },
     {
@@ -69,14 +91,19 @@ const getAggregateConversationById = async id => {
         as: 'messages'
       }
     },
-    // {
-    //   $group: {
-    //     _id: '$_id',
-    //     name: { $first: '$name' },
-    //     participants: {$push: '$participants'},
-    //     messages: {$push: '$messages'}
-    //   }
-    // }
+    {
+      $unwind: { path: '$participants.temp'}
+    },
+    {
+      $group: {
+        _id: '$_id',
+        name: { $first: '$name' },
+        participants: {$push: '$participants'},
+        messages: {$first: '$messages'},
+        isDM: {$first: '$isDM'},
+        isPublic: {$first: '$isPublic'}
+      }
+    }
   ])
   return aggregateConversation.at(0)
 }
@@ -86,8 +113,10 @@ module.exports = {
   getConversationByName,
   getConversationById,
   getParticipantsByConversationId,
+  promoteParticipantFromConversationById,
   addParticipantToConversationByName,
   addParticipantToConversationById,
   addParticipantsToConversationById,
+  removeParticipantFromConversationById,
   getAggregateConversationById
 }

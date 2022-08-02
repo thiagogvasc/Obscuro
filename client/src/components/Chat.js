@@ -14,6 +14,7 @@ import ConversationInfo from './ConversationInfo'
 import Sidebar from './Sidebar'
 
 import { useChat } from '../contexts/chatContext'
+import { useUser } from '../contexts/userContext'
 import { grey } from '@mui/material/colors'
 import { Fab, Paper, CircularProgress, Slide, Collapse } from '@mui/material'
 
@@ -32,6 +33,8 @@ function Chat() {
   const [shouldOpenSidebar, setShouldOpenSidebar] = useState(false)
   const [openInfo, setOpenInfo] = useState(false)
 
+  const { user } = useUser()
+
   const handleOpenInfo = () => {
     setOpenInfo(openInfo => !openInfo)
   }
@@ -43,7 +46,10 @@ function Chat() {
     if (text !== '') {
       socket.emitMessage({
         text,
-        sender: chatData._id,
+        sender: {
+          _id: user._id,
+          username: user.username
+        },
         conversation: currentConversation._id
       })
     }
@@ -68,6 +74,8 @@ function Chat() {
       </Box>
     )
   }
+  console.log(user._id) // fix user issue
+  const notInConversation = (!currentConversation.participants.find(p => p._id === user._id))
 
   return (
     <Box
@@ -97,11 +105,17 @@ function Chat() {
           >
             back
           </Button>
-          <Paper square elevation={3} sx={{ 
+          <Paper onClick={handleOpenInfo} square elevation={3} sx={{ 
             textAlign: 'center', 
-            p: 1
+            p: 1,
+            borderTopLeftRadius: '25px',
+            borderTopRightRadius: openInfo ? '' : '25px',
+            '&:hover': {
+              backgroundColor: 'action.hover',
+              cursor: 'pointer'
+            }
           }}>
-            <Typography component="span" onClick={handleOpenInfo}>
+            <Typography component="span">
               { currentConversation.name }
             </Typography>
           </Paper>
@@ -118,6 +132,7 @@ function Chat() {
               }}
               >
                 <Textfield 
+                  disabled={notInConversation}
                   autoComplete="off" 
                   color="primary"
                   name="message" 
@@ -125,7 +140,7 @@ function Chat() {
                   fullWidth 
                   InputProps={{ sx: { borderRadius: '25px' }} }
                 />
-                <Box><Fab type="submit" color="primary" size="large"><SendIcon/></Fab></Box> 
+                <Box><Fab disabled={notInConversation} type="submit" color="primary" size="large"><SendIcon/></Fab></Box> 
             </Box>
           </form>
         </Box>

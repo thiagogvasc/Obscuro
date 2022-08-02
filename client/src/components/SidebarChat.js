@@ -36,7 +36,8 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
     const lastMessage = messages[messages.length - 1]
     return lastMessage
   }
-  
+  const message = getLastMessage()
+
   return (
     // mayve just pass the whole receiver
     <Paper square elevation={3} onClick={select} sx={{
@@ -51,7 +52,9 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
       <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
       <Box sx={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', overflow: 'hidden', alignSelf: 'center', fontWeight:'100' }}>
         <Typography noWrap variant="body1" sx={{ }}>{conversation.name}</Typography>
-        <Typography noWrap variant="body2" sx={{ color: 'darkgray'}}>{getLastMessage()?.text}</Typography>
+        <Typography noWrap variant="body2" sx={{ color: 'darkgray'}}>
+          { message && (message.isInfo ? message.text : message.sender.username + ': ' + message.text)}
+        </Typography>
       </Box>
       <Box sx={{ pr: 3, flexGrow: 1, display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
       {numberOfUnreadMessages ? 

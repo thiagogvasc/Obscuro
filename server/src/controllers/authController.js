@@ -50,8 +50,9 @@ const signup = async (req, res) => {
 
 const getSession = async (req, res) => {
   const userid = req.session.userid
+  const user = await userService.getUserById(userid)
   if (userid) 
-    res.status(200).json(userid)
+    res.status(200).json({userid: userid, user: user})
   else 
     res.status(403).json({message: 'Not authenticated'})
 }

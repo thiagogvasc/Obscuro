@@ -9,17 +9,21 @@ import { grey } from '@mui/material/colors'
 
 import { useSocket } from '../contexts/socketContext'
 import { useChat } from '../contexts/chatContext'
+import { useUser } from '../contexts/userContext'
 
 export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShouldOpenSidebar}) {
   const { chatData, setChatData, setCurrentConversation } = useChat()
   const socket = useSocket()
+  const { userID } = useUser()
+  
 
   const select = () => {
     for (const conversation of chatData.conversations) {
       if (conversation.isDM) {
+        // userID => client
         const [participant1, participant2] = conversation.participants
-        if ((participant1._id === chatData._id && participant2._id === user._id)
-            || (participant1._id === user._id && participant2._id === chatData._id)) {
+        if ((participant1._id === userID && participant2._id === user._id)
+            || (participant1._id === user._id && participant2._id === userID)) {
           setTab('conversations')
           setCurrentConversation(conversation)
           return
@@ -31,7 +35,7 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
       name: '',
       isPublic: false,
       isDM: true, 
-      participants: [chatData._id, user._id]
+      participants: [{_id: userID, isAdmin: false}, {_id: user._id, isAdmin: false}]
     }
     socket.emitCreateConversation(newConversation, conversation => {
 
@@ -51,13 +55,13 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
   // rename to isActive?
   return (
     // mayve just pass the whole receiver
-    <Box onClick={select} sx={{
+    <Box sx={{
       display: 'flex'
     }}>
       <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
-      <Box sx={{ alignSelf: 'center', fontWeight:'100' }}>
-        <Typography variant="body1" sx={{ color: '#FFFFFF'}}>{user.username}</Typography>
-        <Fab color="primary" size="small" variant="extended"><SendIcon/>Send message</Fab>
+      <Box sx={{ alignSelf: 'center', fontWeight:'100', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+        <Typography noWrap variant="body1" sx={{ color: '#FFFFFF'}}>{user.username}</Typography>
+        <Fab onClick={select} color="primary" size="small" variant="extended"><SendIcon/>Send message</Fab>
       </Box>
     </Box>
   )

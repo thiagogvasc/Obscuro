@@ -20,6 +20,7 @@ export function ChatProvider({ children }) {
     chatData.conversations.forEach(conv => {
       if (conv._id === currentConversation._id) {
         setCurrentConversation(conv)
+        console.log('changed reference')
       }
     })
   }, [chatData])
@@ -50,6 +51,8 @@ export function ChatProvider({ children }) {
       setIsLoading(false)
     })
     socket.onMessage(message => {
+      console.log(message)
+      console.log(new Date(message.sentAt))
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const conversation = message.conversation
@@ -66,7 +69,10 @@ export function ChatProvider({ children }) {
       console.log(conversation)
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
-        chatDataDraft.conversations.push({...conversation, name: getConvName(conversation)})
+        const alreadyExists = chatDataDraft.conversations.find(c => c._id === conversation._id)
+        if (!alreadyExists) {
+          chatDataDraft.conversations.push({...conversation, name: getConvName(conversation)})
+        }
         return chatDataDraft
       })
     })
@@ -76,6 +82,27 @@ export function ChatProvider({ children }) {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const conversation = chatDataDraft.conversations.find(conv => conv._id === conversationID)
         conversation.participants.push(...participants)
+        return chatDataDraft
+      })
+    })
+
+    socket.socketRef.current.on('participant-removed', ({conversationID, participant}) => {
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        const conversation = chatDataDraft.conversations.find(conv => conv._id === conversationID)
+        conversation.participants = conversation.participants.filter(p => p._id !== participant._id)
+        console.log(chatDataDraft)
+        return chatDataDraft
+      })
+    })
+
+    socket.socketRef.current.on('participant-promoted', ({conversationID, participantID}) => {
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        const conversation = chatDataDraft.conversations.find(conv => conv._id === conversationID)
+        const promotedParticipant = conversation.participants.find(p => p._id === participantID)
+        promotedParticipant.isAdmin = true
+        console.log(chatDataDraft)
         return chatDataDraft
       })
     })
