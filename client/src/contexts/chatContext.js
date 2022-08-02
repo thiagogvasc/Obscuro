@@ -96,6 +96,17 @@ export function ChatProvider({ children }) {
       })
     })
 
+    socket.socketRef.current.on('participant-promoted', ({conversationID, participantID}) => {
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        const conversation = chatDataDraft.conversations.find(conv => conv._id === conversationID)
+        const promotedParticipant = conversation.participants.find(p => p._id === participantID)
+        promotedParticipant.isAdmin = true
+        console.log(chatDataDraft)
+        return chatDataDraft
+      })
+    })
+
     socket.socketRef.current.on('conversation-opened', ({ conversationID, openedBy }) => {
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))

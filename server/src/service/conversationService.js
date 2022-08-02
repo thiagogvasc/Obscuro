@@ -55,6 +55,14 @@ const removeParticipantFromConversationById = async (conversationID, participant
   )
 }
 
+const promoteParticipantFromConversationById = async (conversationID, participantID) => {
+  return Conversation.findOneAndUpdate(
+    { _id: conversationID, "participants._id": participantID },
+    { $set: {"participants.$.isAdmin": true }},
+    { new: true }
+  )
+}
+
 const getAggregateConversationById = async id => {
   const aggregateConversation = await Conversation.aggregate([
     {
@@ -105,6 +113,7 @@ module.exports = {
   getConversationByName,
   getConversationById,
   getParticipantsByConversationId,
+  promoteParticipantFromConversationById,
   addParticipantToConversationByName,
   addParticipantToConversationById,
   addParticipantsToConversationById,
