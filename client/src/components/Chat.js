@@ -105,13 +105,17 @@ function Chat() {
           >
             back
           </Button>
-          <Paper square elevation={3} sx={{ 
+          <Paper onClick={handleOpenInfo} square elevation={3} sx={{ 
             textAlign: 'center', 
             p: 1,
             borderTopLeftRadius: '25px',
             borderTopRightRadius: openInfo ? '' : '25px',
+            '&:hover': {
+              backgroundColor: 'action.hover',
+              cursor: 'pointer'
+            }
           }}>
-            <Typography component="span" onClick={handleOpenInfo}>
+            <Typography component="span">
               { currentConversation.name }
             </Typography>
           </Paper>
