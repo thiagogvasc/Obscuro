@@ -55,13 +55,13 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
   // rename to isActive?
   return (
     // mayve just pass the whole receiver
-    <Box onClick={select} sx={{
+    <Box sx={{
       display: 'flex'
     }}>
       <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
       <Box sx={{ alignSelf: 'center', fontWeight:'100', overflow: 'hidden', textOverflow: 'ellipsis'}}>
         <Typography noWrap variant="body1" sx={{ color: '#FFFFFF'}}>{user.username}</Typography>
-        <Fab color="primary" size="small" variant="extended"><SendIcon/>Send message</Fab>
+        <Fab onClick={select} color="primary" size="small" variant="extended"><SendIcon/>Send message</Fab>
       </Box>
     </Box>
   )
