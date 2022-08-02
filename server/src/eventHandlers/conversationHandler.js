@@ -125,7 +125,7 @@ const addParticipants = async (socket, io, { conversationID, participantsIDs }) 
 
     // Emit info message
     const userAdded = await userService.getUserById(participantID)
-    const newInfoMessage = await messageService.createInfoMessage(`${userAdded.username} was added to the conversation`, null, conversationID)
+    const newInfoMessage = await messageService.createInfoMessage(`${userAdded.username} was added`, null, conversationID)
     const aggregateMsg = await messageService.getAggregateMessageById(newInfoMessage._id)
     io.to(conversationID).emit('message', aggregateMsg)
   }
@@ -165,7 +165,7 @@ const removeParticipant = async (socket, io, {conversationID, participant}) => {
   await userService.removeConversationFromUserById(participant._id, conversationID)
 
   const userRemoved = await userService.getUserById(participant._id)
-  const newInfoMessage = await messageService.createInfoMessage(`${userRemoved.username} was removed from the conversation`, null, conversationID)
+  const newInfoMessage = await messageService.createInfoMessage(`${userRemoved.username} was removed`, null, conversationID)
   const aggregateMsg = await messageService.getAggregateMessageById(newInfoMessage._id)
   io.to(conversationID).emit('message', aggregateMsg)
 
@@ -182,7 +182,7 @@ const leaveConversation = async (socket, io, {conversationID}) => {
   await userService.removeConversationFromUserById(participant._id, conversationID)
 
   const userRemoved = await userService.getUserById(participant._id)
-  const newInfoMessage = await messageService.createInfoMessage(`${userRemoved.username} left the conversation`, null, conversationID)
+  const newInfoMessage = await messageService.createInfoMessage(`${userRemoved.username} left`, null, conversationID)
   const aggregateMsg = await messageService.getAggregateMessageById(newInfoMessage._id)
   io.to(conversationID).emit('message', aggregateMsg)
 
