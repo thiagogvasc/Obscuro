@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 
-import { Box, Paper, Typography, Button, Modal, Grow, Fab } from '@mui/material'
+import { Box, Paper, Typography, Button, Modal, Grow, Fab, List, ListItem, ListItemText, IconButton, ListItemSecondaryAction, ListItemAvatar, Avatar, ListSubheader, Divider } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import { grey } from '@mui/material/colors'
+
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
+import UpgradeIcon from '@mui/icons-material/Upgrade';
 
 import AddParticipantModal from './AddParticipantModal'
 
@@ -68,29 +71,35 @@ export default function ConversationInfo() {
         <Typography variant="h5">Conversation Info</Typography>
       </Paper>
       { currentConversation.isDM ? 
-        <Box> 
+        <Box sx={{ p: 1, textAlign: 'center'}}> 
           {/* <Typography variant="h6">DM info</Typography> */}
           <Typography variant="body1">(No content yet)</Typography>
         </Box>
           : 
         <Box>
             <Typography variant="h6">(No content yet)</Typography>
-            { inConversation && <Button onClick={leaveConversation}>Leave</Button>}
-            <Box sx={{ mt: 1}}>
-              <Typography display="inline-block" variant="h6">Participants</Typography>
-              {isCurrentUserAdmin() && <Fab onClick={addParticipant} sx={{}} color="primary" size="small"><AddIcon /></Fab>}
-            </Box>
-            {currentConversation.participants.map(participant => {
-              return (
-                <Box key={participant._id}>
-                  <Typography variant="body1">{ participant.username }
-                  {participant.isAdmin ? '(Admin)' : ''}
-                  </Typography>
-                  {isCurrentUserAdmin() && isNotSelf(participant) && <Button onClick={() => removeParticipant(participant)}>Remove</Button>}
-                  {isCurrentUserAdmin() && isNotSelf(participant) && !participant.isAdmin && <Button onClick={() => promoteToAdmin(participant)}>Promote</Button>}
-                </Box>
-              )
-            })}
+            { inConversation && <Button color="error" variant="outlined" onClick={leaveConversation}>Leave conversation</Button>}
+             <Box sx={{ mt: 1, px: 1, display: 'flex', alignItems: 'center', gap: 1}}>
+                <Typography display="inline-block" sx={{ color: 'text.secondary'}} variant="h6">Participants</Typography>
+                {isCurrentUserAdmin() && <Fab onClick={addParticipant} sx={{}} color="primary" size="small"><AddIcon /></Fab>}
+              </Box>
+            <List>
+
+              {currentConversation.participants.map(participant => {
+                return (
+                  <ListItem key={participant._id} sx={{ overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                    <ListItemAvatar>
+                      <Avatar />
+                    </ListItemAvatar>
+                    <ListItemText primary={`${participant.username} ${participant.isAdmin ? '(Admin)' : ''}`} primaryTypographyProps={{ style: { whiteSpace: "normal" }}}></ListItemText>
+                    <ListItemSecondaryAction>
+                        {isCurrentUserAdmin() && isNotSelf(participant) && <IconButton color="error" onClick={() => removeParticipant(participant)}><PersonRemoveIcon /></IconButton>}
+                        {isCurrentUserAdmin() && isNotSelf(participant) && !participant.isAdmin && <IconButton color="success" onClick={() => promoteToAdmin(participant)}><UpgradeIcon /></IconButton>}
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                )
+              })}
+            </List>
         </Box>}
     </Box>
   )
