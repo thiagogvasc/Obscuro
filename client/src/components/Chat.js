@@ -107,7 +107,9 @@ function Chat() {
           </Button>
           <Paper square elevation={3} sx={{ 
             textAlign: 'center', 
-            p: 1
+            p: 1,
+            borderTopLeftRadius: '25px',
+            borderTopRightRadius: openInfo ? '' : '25px',
           }}>
             <Typography component="span" onClick={handleOpenInfo}>
               { currentConversation.name }

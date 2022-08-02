@@ -66,9 +66,10 @@ export default function ConversationInfo() {
       
       <Paper square elevation={3} sx={{ 
         textAlign: 'center', 
-        p: 1
+        p: 1,
+        borderTopRightRadius: '25px',
       }}>
-        <Typography variant="h5">Conversation Info</Typography>
+        <Typography>Conversation Info</Typography>
       </Paper>
       { currentConversation.isDM ? 
         <Box sx={{ p: 1, textAlign: 'center'}}> 
@@ -78,7 +79,7 @@ export default function ConversationInfo() {
           : 
         <Box>
             <Typography variant="h6">(No content yet)</Typography>
-            { inConversation && currentConversation.name !== 'General' && <Button color="error" variant="outlined" onClick={leaveConversation}>Leave conversation</Button>}
+            { inConversation && currentConversation.name !== 'General' && <Button color="error" onClick={leaveConversation}>Leave conversation</Button>}
              <Box sx={{ mt: 1, px: 1, display: 'flex', alignItems: 'center', gap: 1}}>
                 <Typography display="inline-block" sx={{ color: 'text.secondary'}} variant="h6">Participants</Typography>
                 {isCurrentUserAdmin() && <Fab onClick={addParticipant} sx={{}} color="primary" size="small"><AddIcon /></Fab>}
