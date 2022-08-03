@@ -7,6 +7,8 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import SendIcon from '@mui/icons-material/Send';
 
+import { uuid } from 'uuidv4'
+
 import { useSocket } from '../contexts/socketContext'
 
 import MessagesWindow from './MessagesWindow'
@@ -23,6 +25,7 @@ function Chat() {
   
   const { 
     chatData,
+    setChatData,
     currentConversation,
     setCurrentConversation,
     isLoading
@@ -44,13 +47,35 @@ function Chat() {
     const text = e.target.message.value
 
     if (text !== '') {
+      const generatedID = uuid()
+      const sentAt = new Date()
       socket.emitMessage({
+        _id: generatedID,
         text,
         sender: {
           _id: user._id,
           username: user.username
         },
+        sentAt: sentAt,
         conversation: currentConversation._id
+      })
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        const conversation = chatDataDraft.conversations.find(c => c._id === currentConversation._id)
+        conversation.messages.push({
+          _id: generatedID,
+          sender: {
+            _id: user._id,
+            username: user.username
+          },
+          text,
+          read: [],
+          deliveries: [],
+          sentAt: sentAt,
+          conversation: currentConversation
+        })
+        
+        return chatDataDraft
       })
     }
     //console.log({text: text, sender: chatData._id, conversation: currentConversation._id})

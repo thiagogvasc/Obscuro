@@ -6,6 +6,10 @@ module.exports = (socket, io) => {
     messageHandler.sendMessage(socket, io, payload)
   })
 
+  socket.on('message-delivered', payload => {
+    messageHandler.markAsDelivered(socket, io, payload)
+  })
+
   socket.on('general-message', payload => {
     messageHandler.sendGeneralMessage(socket, io, payload)
   })
