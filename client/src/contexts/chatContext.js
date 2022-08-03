@@ -46,13 +46,15 @@ export function ChatProvider({ children }) {
         conversation.name = getConvName(conversation)
         console.log(conversation.name)
       })
+      console.log('chat joined')
+      console.log(user)
       setChatData(user)
       setCurrentConversation(user.conversations.find(conv => conv.name === 'General'))
       setIsLoading(false)
     })
     socket.onMessage(message => {
       console.log(message)
-      console.log(new Date(message.sentAt))
+      // console.log(new Date(message.sentAt))
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const conversation = message.conversation
@@ -61,6 +63,29 @@ export function ChatProvider({ children }) {
             conv.messages.push(message)
           }
         })
+        return chatDataDraft
+      })
+      // socket.socketRef.current.emit('message-delivered', { 
+      //   messageID: message._id,
+      //   conversationID: message.conversation._id,
+      //   delivery: {
+      //     to: userID, 
+      //     at: new Date() 
+      //   }
+      // })
+    })
+
+    socket.socketRef.current.on('message-delivered', ({conversationID, messageID, delivery}) => {
+      console.log('deliverddd')
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        const conversation = chatDataDraft.conversations.find(c => c._id === conversationID)
+        conversation.messages.forEach(message => {
+          if (message._id === messageID) {
+            message.deliveries.push(delivery)
+          }
+        })
+        console.log(chatDataDraft)
         return chatDataDraft
       })
     })

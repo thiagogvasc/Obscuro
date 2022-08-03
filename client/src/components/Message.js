@@ -5,6 +5,7 @@ import { useUser } from '../contexts/userContext'
 import { useChat } from '../contexts/chatContext'
 
 import DoneAllIcon from '@mui/icons-material/DoneAll'
+import CheckIcon from '@mui/icons-material/Check';
 
 
 export default function Message({message}) {
@@ -54,7 +55,7 @@ export default function Message({message}) {
         <Typography noWrap variant="caption" fontWeight="300" sx={{ color: 'text.secondary', pr: 1, alignSelf: 'flex-end'}}>{`${date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}`}</Typography>
       </Box>
       <Box sx={{ clear: 'both'}}>
-        {fromSelf ? isRead ? <DoneAllIcon color="success" /> : null : null}
+        {fromSelf ? isRead ? <DoneAllIcon color="success" /> : message.deliveries.length === 0 ? <CheckIcon /> : <DoneAllIcon /> : null}
       </Box>
     </Box>
     </Fade>

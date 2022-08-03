@@ -32,12 +32,12 @@ export default function MessagesWindow() {
 
       return true
     })
-    console.log(messagesNotRead)
+    // console.log(messagesNotRead)
     currentConversation.messages.map(message => {
       // if (message.read.by.includes(userID)) return message
 
       if (messagesNotRead.find(m => m._id === message._id)) return
-      console.log('got here')
+      // console.log('got here')
       return {
         ...message,
         read: [...message.read, { by: userID, at: new Date() }]
@@ -46,9 +46,9 @@ export default function MessagesWindow() {
 
     // if at least one message not read
     //if (!currentConversation.isDM) return
-    console.log(messagesNotRead)
+    // console.log(messagesNotRead)
     if (messagesNotRead.length >= 1) { 
-      console.log('emitttinggg')
+      // console.log('emitttinggg')
       socket.socketRef.current.emit('conversation-opened', {
         conversationID: currentConversation._id,
         openedBy: {

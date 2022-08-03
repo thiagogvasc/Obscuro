@@ -1,7 +1,7 @@
 const Message = require('../models/messageModel')
 const { uuid } = require('uuidv4')
 
-const createMessage = async (text, sender, conversationID) => {
+const createMessage = async (text, sender, conversationID, sentAt) => {
   const newMessage = new Message({
     _id: uuid(),
     text,
@@ -9,7 +9,22 @@ const createMessage = async (text, sender, conversationID) => {
     conversation: conversationID,
     isInfo: false,
     read: [],
-    sentAt: new Date()
+    deliveries: [],
+    sentAt
+  })
+  return newMessage.save()
+}
+
+const createMessageWithId = async (id, text, sender, conversationID, sentAt) => {
+  const newMessage = new Message({
+    _id: id,
+    text,
+    sender,
+    conversation: conversationID,
+    isInfo: false,
+    read: [],
+    deliveries: [],
+    sentAt
   })
   return newMessage.save()
 }
@@ -33,6 +48,14 @@ const markAllAsReadFromConversation = async (conversationID, readBy) => {
     conversation: conversationID
   }, {
     $push: { read: { by: readBy.by, at: readBy.at } }
+  }, { new: true })
+}
+
+const markAsDelivered = async (conversationID, messageID, delivery) => {
+  return Message.updateOne({
+    _id: messageID
+  }, {
+    $push: { deliveries: delivery }
   }, { new: true })
 }
 
@@ -78,8 +101,10 @@ const getAggregateMessageById = async id => {
 
 module.exports = {
   createMessage,
+  createMessageWithId,
   createInfoMessage,
   getMessageById,
   getAggregateMessageById,
-  markAllAsReadFromConversation
+  markAllAsReadFromConversation,
+  markAsDelivered
 }

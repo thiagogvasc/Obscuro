@@ -14,6 +14,10 @@ const messageSchema = new Schema({
     read: [{
         by: String,
         at: Date
+    }],
+    deliveries: [{
+        to: String,
+        at: Date
     }]
 })
 

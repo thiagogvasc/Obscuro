@@ -39,6 +39,24 @@ describe("message service", () => {
     }))
   })
 
+  test('should mark as delivered properly', async () => {    
+    const userID = 'userID'
+    const conversationID = 'conversationID'
+
+    const receiverID = 'receiverID'
+
+    const message = await messageService.createMessage('new message', userID, conversationID)
+    await messageService.markAsDelivered(conversationID, message._id, {
+      to: receiverID,
+      at: new Date()
+    })
+
+    const deliveredMessage = await messageService.getMessageById(message._id)
+    console.log(deliveredMessage)
+
+    expect(readByArray).toHaveLength(1)
+    expect(readByArray).toContain(userID)
+  })
   // test('should mark as read properly', async () => {    
   //   const userID = 'userID'
   //   const conversationID = 'conversationID'
