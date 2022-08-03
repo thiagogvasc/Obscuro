@@ -11,7 +11,10 @@ const messageSchema = new Schema({
     conversation: String,
     isInfo: Boolean,
     sentAt: Date,
-    readBy: [{ type: String }]
+    read: [{
+        by: String,
+        at: Date
+    }]
 })
 
 module.exports = mongoose.model('message', messageSchema)

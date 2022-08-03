@@ -27,8 +27,8 @@ export default function Message({message}) {
   // fix
   //
   let isRead = false
-  const exceptSelfFilter = user => user !== userID
-  if (fromSelf && currentConversation.isDM && message.readBy.filter(exceptSelfFilter).length > 0) {
+  const exceptSelfFilter = read => read.by !== userID
+  if (fromSelf && currentConversation.isDM && message.read.filter(exceptSelfFilter).length > 0) {
     isRead = true
 
   }

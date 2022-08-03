@@ -113,10 +113,12 @@ export function ChatProvider({ children }) {
         const conversation = chatDataDraft.conversations.find(conversation => conversation._id === conversationID)
         if (conversation) {
           conversation.messages.forEach(message => {
-            if (message.readBy.includes(openedBy)) return
-            message.readBy.push(openedBy)
+            if (message.read.filter(read => read.by === openedBy.by).length > 0) return
+            message.read.push(openedBy)
           })
         }
+        console.log('after opening')
+        console.log(chatDataDraft)
         return chatDataDraft
       })
     })

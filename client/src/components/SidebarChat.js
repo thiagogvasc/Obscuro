@@ -17,7 +17,8 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
     let count = 0
     conversation.messages.forEach(message => {
       if (message.conversation._id === currentConversation._id) return
-      if (!message.readBy.includes(userID)) count++
+      //if (!message.read.by.includes(userID)) count++
+      if (message.read.filter(read => read.by === userID).length === 0) count++
     })
     return count
   }
