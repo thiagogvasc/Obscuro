@@ -7,7 +7,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import SendIcon from '@mui/icons-material/Send';
 
-import { uuid } from 'uuidv4'
+import { v4 } from 'uuid'
 
 import { useSocket } from '../contexts/socketContext'
 
@@ -47,7 +47,7 @@ function Chat() {
     const text = e.target.message.value
 
     if (text !== '') {
-      const generatedID = uuid()
+      const generatedID = v4()
       const sentAt = new Date()
       socket.emitMessage({
         _id: generatedID,
