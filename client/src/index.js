@@ -17,10 +17,12 @@ const requestNotificationPermission = async () => {
 };
 const check = () => {
   if (!("serviceWorker" in navigator)) {
-    throw new Error("No Service Worker support!");
+    //throw new Error("No Service Worker support!");
+    console.log('no service worker in navigator')
   }
   if (!("PushManager" in window)) {
-    throw new Error("No Push API Support!");
+    //throw new Error("No Push API Support!");
+    console.log('no push manager in navigator')
   }
 };
 check();
