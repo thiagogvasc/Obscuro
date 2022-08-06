@@ -1,6 +1,9 @@
 const { getAggregateConversationById } = require('../service/conversationService')
 const messageService = require('../service/messageService')
 
+const webpush = require('web-push')
+const Subscription = require('../models/subscriptionModel')
+
 
 const sendMessage = async (socket, io, message) => {
   let newMessage
@@ -23,9 +26,8 @@ const sendMessage = async (socket, io, message) => {
     await messageService.markAsDelivered(conversationID, messageID, delivery)
     socket.emit('message-delivered', { conversationID, messageID, delivery })
   }
-
-
-  socket.to(message.conversation).emit('message', aggregateMessage)
+  
+  socket.to(message.conversation).emit('message', aggregateMessage.text)
 }
 
 const markAsDelivered = async (socket, io, {conversationID, messageID, delivery}) => {

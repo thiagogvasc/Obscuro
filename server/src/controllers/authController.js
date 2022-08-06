@@ -5,7 +5,7 @@ const conversationService = require('../service/conversationService')
 const login = async (req, res) => {
   const { username, password } = req.body
   const user = await userService.getUserByUsername(username)
-
+  console.log(req.body)
   // Error handling
   if (!user) return res.status(401).json('Username not found')
   if (user.password !== password) return res.status(401).json('incorrect password')
@@ -51,6 +51,7 @@ const signup = async (req, res) => {
 const getSession = async (req, res) => {
   const userid = req.session.userid
   const user = await userService.getUserById(userid)
+  console.log(userid)
   if (userid) 
     res.status(200).json({userid: userid, user: user})
   else 

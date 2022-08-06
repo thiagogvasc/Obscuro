@@ -8,45 +8,48 @@ const dbConnect = require('./dbConnect')
 const authRouter = require('./routes/authRouter')
 const userRouter = require('./routes/userRouter')
 const sessionMiddleware = require('./middleware/sessionMiddleware')
-
+const webpush = require('web-push')
 const app = express()
 
+const Subscription = require('../src/models/subscriptionModel')
+
 const init = async () => {
-    // Initial store setup
-    await dbConnect()
-    const existingConversation = await conversationService.getConversationByName('General')
-    if (!existingConversation) await conversationService.createConversation('General', true, false, [])
-    
-    app.use(cors({
-        origin: 'http://localhost:3000',
-        credentials: true
-    }))
-    app.use(bodyParser.urlencoded({ extended: false }))
-    app.use(bodyParser.json())
-    app.use(express.static(path.join(__dirname, '../../client/build')))
-    app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
-    })
-    app.get('/chat', (req, res) => {
-      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
-    })
-    app.get('/create-conversation', (req, res) => {
-      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
-    })
-    app.get('/signup', (req, res) => {
-      res.sendFile(path.join(__dirname, '../../client/build/index.html'))
-    })
-    app.use(sessionMiddleware)
-    app.use('/auth', authRouter)
-    app.use((req, res, next) => {
-        const session = req.session;
-        if (session && session.userid) {
-          next()
-        } else {
-          next(new Error("unauthorized"))
-        }
-    })
-    app.use('/user', userRouter)
+  // Initial store setup
+  await dbConnect()
+  const existingConversation = await conversationService.getConversationByName('General')
+  if (!existingConversation) await conversationService.createConversation('General', true, false, [])
+  
+  app.use(cors({
+      origin: 'http://localhost:3000',
+      credentials: true
+  }))
+  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.json())
+  app.use(express.static(path.join(__dirname, '../../client/build/')))
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+  })
+  app.get('/chat', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+  })
+  app.get('/create-conversation', (req, res) => {
+    console.log('create')
+    res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+  })
+  app.get('/signup', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+  })
+  app.use(sessionMiddleware)
+  app.use('/auth', authRouter)
+  app.use((req, res, next) => {
+      const session = req.session;
+      if (session && session.userid) {
+        next()
+      } else {
+        next(new Error("unauthorized"))
+      }
+  })
+  app.use('/user', userRouter)
 }
 
 init()
