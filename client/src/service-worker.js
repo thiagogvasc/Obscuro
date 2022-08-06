@@ -92,7 +92,7 @@ const urlB64ToUint8Array = base64String => {
 };
 
 const saveSubscription = async subscription => {
-  const SERVER_URL = "http://localhost:8080/save-subscription";
+  const SERVER_URL = "https://obscuro.herokuapp.com/save-subscription";
   const response = await fetch(SERVER_URL, {
     method: "post",
     headers: {
