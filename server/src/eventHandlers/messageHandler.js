@@ -25,25 +25,8 @@ const sendMessage = async (socket, io, message) => {
     }
     await messageService.markAsDelivered(conversationID, messageID, delivery)
     socket.emit('message-delivered', { conversationID, messageID, delivery })
-
-
-
-    // find subscriptions of participants and send notifications
-    console.log(p)
-    if (p._id !== socket.request.session.userid) {
-      console.log('sending to : ' + p._id)
-      const participantSubscription = await Subscription.findOne({_id: p._id}).exec()
-      console.log(participantSubscription)
-      if (participantSubscription) {
-        console.log('sending...')
-        webpush.sendNotification(participantSubscription.subscription, JSON.stringify(aggregateMessage))
-      }
-    }
   }
-
-
   
-
   socket.to(message.conversation).emit('message', aggregateMessage.text)
 }
 
