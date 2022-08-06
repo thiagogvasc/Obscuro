@@ -3,6 +3,7 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Navbar from './components/Navbar'
 import Chat from './components/Chat'
 import Login from './pages/Login'
@@ -25,6 +26,7 @@ import axios from 'axios'
 if (process.env.NODE_ENV === 'development') {
   axios.defaults.baseURL ='http://localhost:8080'
 }
+import {baseUrl} from './axiosConfig'
 
 function App() { 
   const theme = createTheme({
@@ -39,6 +41,14 @@ function App() {
     <BrowserRouter>
       <SocketProvider>
         <UserProvider>
+          <Button onClick={() => {
+            axios.get(`${baseUrl}/send-notification`, { withCredentials: true }).then(result => {
+              console.log(result.data)
+             
+            }).catch(err => {
+              console.log(err)
+            })
+          }}>send</Button>
             <ThemeProvider theme={theme}>
               <Paper square sx={{ 
                 display: "flex", 
