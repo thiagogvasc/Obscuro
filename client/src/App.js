@@ -41,14 +41,6 @@ function App() {
     <BrowserRouter>
       <SocketProvider>
         <UserProvider>
-          <Button onClick={() => {
-            axios.get(`${baseUrl}/send-notification`, { withCredentials: true }).then(result => {
-              console.log(result.data)
-             
-            }).catch(err => {
-              console.log(err)
-            })
-          }}>send</Button>
             <ThemeProvider theme={theme}>
               <Paper square sx={{ 
                 display: "flex", 
