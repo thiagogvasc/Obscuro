@@ -41,7 +41,7 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
 
   return (
     // mayve just pass the whole receiver
-    <Paper square elevation={3} onClick={select} sx={{
+    <Paper square elevation={1} onClick={select} sx={{
       display: 'flex',
       transition: 'background-color .2s',
       backgroundColor: shouldHighlight && 'action.selected',
