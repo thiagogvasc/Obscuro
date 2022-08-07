@@ -7,7 +7,7 @@ import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Box from '@mui/material/Box'
 import AddIcon from '@mui/icons-material/Add'
-import Fab from '@mui/material/Fab'
+import Fab, { fabClasses } from '@mui/material/Fab'
 import Slide from '@mui/material/Slide'
 import Collapse from '@mui/material/Collapse'
 
@@ -23,12 +23,16 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { useChat } from '../contexts/chatContext'
 import { useUsers } from '../contexts/usersContext'
+import { useUser } from '../contexts/userContext'
 import { grey } from '@mui/material/colors'
+
+import Badge from '@mui/material/Badge';
 
 export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
   const navigate = useNavigate()
   const { chatData, currentConversation } = useChat()
   const { users } = useUsers()
+  const { userID } = useUser()
   const [tab, setTab] = useState('conversations')
   const containerRef = useRef(null)
   const handleChange = (e, newValue) => {
@@ -43,6 +47,26 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
       publicConversations.push(conversation) :
       privateConversations.push(conversation) 
   }
+
+  const getNumberOfUnreadMessages = conversations => {
+    let count = 0
+    conversations.forEach(conversation => {
+      const readMessagesCount = conversation.messages.filter(message => {
+        let readByUser = false
+        message.read.forEach(read => {
+          if (read.by === userID) {
+            readByUser = true
+          }
+        })
+        return readByUser
+      }).length
+      count += (conversation.messages.length - readMessagesCount)
+    })
+    return count
+  }
+
+  const publicNotificationsCount = getNumberOfUnreadMessages(publicConversations)
+  const privateNotificationsCount = getNumberOfUnreadMessages(privateConversations)
 
 
   return (
@@ -83,7 +107,9 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
 
               <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography fontWeight="light" ml={3} mt={1} variant="h5">Public</Typography>
+                  <Badge color="primary" badgeContent={publicNotificationsCount}>
+                    <Typography fontWeight="light" ml={3} mt={1} variant="h5">Public</Typography>
+                  </Badge>
                 </AccordionSummary>
                 <AccordionDetails sx={{padding: 0}}>
                   {publicConversations.map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}  
@@ -93,7 +119,9 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
               
               <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography fontWeight="light" ml={3} mt={1} variant="h5">Private</Typography>
+                  <Badge color="primary" badgeContent={privateNotificationsCount}>
+                    <Typography fontWeight="light" ml={3} mt={1} variant="h5">Private</Typography>
+                  </Badge>
                 </AccordionSummary>
                 <AccordionDetails sx={{padding: 0}}>
                   {privateConversations.map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}
