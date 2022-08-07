@@ -27,7 +27,7 @@ const sendMessage = async (socket, io, message) => {
     socket.emit('message-delivered', { conversationID, messageID, delivery })
   }
   
-  socket.to(message.conversation).emit('message', aggregateMessage.text)
+  socket.to(message.conversation).emit('message', aggregateMessage)
 }
 
 const markAsDelivered = async (socket, io, {conversationID, messageID, delivery}) => {

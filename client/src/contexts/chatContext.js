@@ -53,16 +53,18 @@ export function ChatProvider({ children }) {
       setIsLoading(false)
     })
     socket.onMessage(message => {
-      console.log(message)
+      console.log({message})
       // console.log(new Date(message.sentAt))
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const conversation = message.conversation
+        console.log('before adding message', {chatDataDraft})
         chatDataDraft.conversations.forEach(conv => {
           if (conv._id === conversation._id) {
             conv.messages.push(message)
           }
         })
+        console.log('after', {chatDataDraft})
         return chatDataDraft
       })
       // socket.socketRef.current.emit('message-delivered', { 
