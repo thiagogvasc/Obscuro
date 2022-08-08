@@ -13,6 +13,28 @@ export function ChatProvider({ children }) {
   const { userID } = useUser()
   //console.log(currentConversation)
 
+  //Sort conversations by latest first
+  // useEffect(() => {
+  //   setChatData(prevChatData => {
+  //     const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+  //     chatDataDraft.conversations.sort((conv1, conv2) => {
+  //       const lastMessage1 = conv1.messages[conv1.messages.length - 1]
+  //       const lastMessage2 = conv2.messages[conv2.messages.length - 1]
+
+  //       if (!(lastMessage1 && lastMessage2)) return 0
+        
+  //       console.log(userID)
+  //       console.log({conv1, conv2, lastMessage1, lastMessage2})
+  //       const deliveryToMe1 = lastMessage1.deliveries.find(d => d.to === userID)
+  //       const deliveryToMe2 = lastMessage2.deliveries.find(d => d.to === userID)
+  //       console.log(deliveryToMe1)
+  //       return (new Date(deliveryToMe1.at) < new Date(deliveryToMe2.at)) - (new Date(deliveryToMe1.at) > new Date(deliveryToMe2.at))
+  //     })
+  //     return chatDataDraft
+  //   })
+  // }, [chatData.conversations])
+
+
   // Necessary to update the object reference
   // currentConversation references the chatData.conversations[?] object
   // needs to point to the same object in order to reflect the changes
@@ -46,6 +68,22 @@ export function ChatProvider({ children }) {
         conversation.name = getConvName(conversation)
         console.log(conversation.name)
       })
+
+      // sorting conversations
+      user.conversations.sort((conv1, conv2) => {
+        const lastMessage1 = conv1.messages[conv1.messages.length - 1]
+        const lastMessage2 = conv2.messages[conv2.messages.length - 1]
+
+        if (!(lastMessage1 && lastMessage2)) return 0
+        
+        console.log(userID)
+        console.log({conv1, conv2, lastMessage1, lastMessage2})
+        const deliveryToMe1 = lastMessage1.deliveries.find(d => d.to === userID)
+        const deliveryToMe2 = lastMessage2.deliveries.find(d => d.to === userID)
+        console.log(deliveryToMe1)
+        return (new Date(deliveryToMe1.at) < new Date(deliveryToMe2.at)) - (new Date(deliveryToMe1.at) > new Date(deliveryToMe2.at))
+      })
+
       console.log('chat joined')
       console.log(user)
       setChatData(user)
@@ -64,6 +102,29 @@ export function ChatProvider({ children }) {
             conv.messages.push(message)
           }
         })
+        // sort conversationg by latest first
+        // MOVE THIS TO JOIN CHAT EVNET
+        // HERE DO SAME THING THAT IT DOES ON EMIT MESSAGE
+        // chatDataDraft.conversations.sort((conv1, conv2) => {
+        //   const lastMessage1 = conv1.messages[conv1.messages.length - 1]
+        //   const lastMessage2 = conv2.messages[conv2.messages.length - 1]
+
+        //   if (!(lastMessage1 && lastMessage2)) return 0
+          
+        //   console.log(userID)
+        //   console.log({conv1, conv2, lastMessage1, lastMessage2})
+        //   const deliveryToMe1 = lastMessage1.deliveries.find(d => d.to === userID)
+        //   const deliveryToMe2 = lastMessage2.deliveries.find(d => d.to === userID)
+        //   console.log(deliveryToMe1)
+        //   return (new Date(deliveryToMe1.at) < new Date(deliveryToMe2.at)) - (new Date(deliveryToMe1.at) > new Date(deliveryToMe2.at))
+        // })
+        // sort by latest first
+
+        // find conversation with messages from chatDataDraft because the "conversations" field
+        // from the messages ovject does not contain the messages of each conversation
+        const aggregateConv = chatDataDraft.conversations.find(c => c._id === conversation._id)
+        chatDataDraft.conversations = chatDataDraft.conversations.filter(c => c._id !== conversation._id)
+        chatDataDraft.conversations.unshift(aggregateConv)
         console.log('after', {chatDataDraft})
         return chatDataDraft
       })
@@ -88,6 +149,7 @@ export function ChatProvider({ children }) {
           }
         })
         console.log(chatDataDraft)
+
         return chatDataDraft
       })
     })

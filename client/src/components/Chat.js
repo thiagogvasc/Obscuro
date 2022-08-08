@@ -75,6 +75,11 @@ function Chat() {
           conversation: currentConversation
         })
         
+        // sort by latest first
+        chatDataDraft.conversations = chatDataDraft.conversations.filter(c => c._id !== conversation._id)
+        chatDataDraft.conversations.unshift(conversation)
+
+        
         return chatDataDraft
       })
     }
