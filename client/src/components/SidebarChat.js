@@ -53,7 +53,7 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
       <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
       <Box sx={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', overflow: 'hidden', alignSelf: 'center', fontWeight:'100' }}>
         <Typography noWrap variant="body1" sx={{ }}>{conversation.name}</Typography>
-        <Typography noWrap variant="body2" sx={{ color: 'darkgray'}}>
+        <Typography noWrap variant="body2" sx={{ color: 'text.secondary', fontWeight: numberOfUnreadMessages > 0 ? 'bold' : 'regular'} }>
           { message && (message.isInfo ? message.text : message.sender.username + ': ' + message.text)}
         </Typography>
       </Box>
