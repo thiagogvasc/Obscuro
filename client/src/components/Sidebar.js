@@ -112,6 +112,7 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
                   </Badge>
                 </AccordionSummary>
                 <AccordionDetails sx={{padding: 0}}>
+                  {/* list here */}
                   {publicConversations.map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}  
                   {publicConversations.length === 0 && <Typography>No public conversations yet</Typography>}
                 </AccordionDetails>
