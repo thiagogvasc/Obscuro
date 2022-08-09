@@ -3,9 +3,13 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import GlobalStyles from '@mui/material/GlobalStyles'
+import darkScrollbar from '@mui/material/darkScrollbar'
+
 
 ReactDOM.render(
   <React.StrictMode>
+    <GlobalStyles styles={darkScrollbar()} />
     <App />
   </React.StrictMode>,
   document.getElementById('root')
