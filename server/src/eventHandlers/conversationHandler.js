@@ -178,7 +178,7 @@ const leaveConversation = async (socket, io, {conversationID}) => {
   const participant = {
     _id: userID
   }
-  await conversationService.removeParticipantFromConversationById(conversationID, participant)
+  const conv = await conversationService.removeParticipantFromConversationById(conversationID, participant)
   await userService.removeConversationFromUserById(participant._id, conversationID)
 
   const userRemoved = await userService.getUserById(participant._id)
@@ -188,6 +188,11 @@ const leaveConversation = async (socket, io, {conversationID}) => {
 
   io.to(conversationID).emit('participant-removed', {conversationID, participant})
   io.in(participant._id).socketsLeave(conversationID)
+
+  if (conv.participants.length === 0) {
+    // delete conversation
+    await conversationService.removeConversationById(conversationID)
+  }
 }
 
 module.exports = {

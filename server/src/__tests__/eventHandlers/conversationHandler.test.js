@@ -64,4 +64,44 @@ describe("conversation event handler", () => {
 
     expect(socket.emit).toHaveBeenCalledWith('conversation-joined')
   })
+
+  test('should delete conversation with no participants', async () => {
+    // Setup
+    const user1 = await userService.createUser('user1', '123')
+    const user2 = await userService.createUser('user2', '123')
+    const conversation = await conversationService.createConversation('conv', true, false, [user1._id, user2._id])
+    
+    // Mocking socket.io
+    const io = {
+      in: jest.fn().mockReturnThis(),
+      to: jest.fn().mockReturnThis(),
+      emit: jest.fn(),
+      socketsLeave: jest.fn()
+    }
+
+    const socket = {
+      request: {
+        session: {
+          userid: ''
+        }
+      }
+    }
+
+    // User1 leaving conversation
+    socket.request.session.userid = user1._id
+    await conversationHandler.leaveConversation(socket, io, { conversationID: conversation._id })
+
+    // Conversation should still exist
+    const existingConversation = await conversationService.getConversationById(conversation._id)
+    expect(existingConversation).not.toBeNull()
+
+    // User2 leaving conversation
+    socket.request.session.userid = user2._id
+    await conversationHandler.leaveConversation(socket, io, { conversationID: conversation._id })
+
+    // Conversation should be removed
+    await conversationService.removeConversationById(conversation._id)
+    const conversationRemoved = await conversationService.getConversationById(conversation._id)
+    expect(conversationRemoved).toEqual(null)
+  })
 })
