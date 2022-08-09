@@ -126,7 +126,7 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
                 </AccordionSummary>
                 <AccordionDetails sx={{padding: 0}}>
                   {privateConversations.map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}
-                  {privateConversations.length === 0 && <Typography textAlign="center">No private conversations yet</Typography>}
+                  {privateConversations.length === 0 && <Typography sx={{ color: 'text.secondary'}} textAlign="center">No private conversations yet</Typography>}
                 </AccordionDetails>
               </Accordion>
            
