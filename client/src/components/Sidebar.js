@@ -100,7 +100,7 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
             flexDirection:'column'
           }}>
             <Box sx={{
-              overflowY: 'scroll',
+              overflowY: 'auto',
               flexGrow: 1,
               height: 0 
             }}>
@@ -141,7 +141,7 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
         </Slide>
           :
         <Slide in={tab === 'users'} appear mountOnEnter unmountOnExit direction="left" orientation="horizontal" container={containerRef.current}>
-          <Box sx={{ flexGrow: 1, overflowY: 'scroll', height: 0 }}>
+          <Box sx={{ flexGrow: 1, overflowY: 'auto', height: 0 }}>
             <Typography fontWeight="light" ml={3} mt={1} color="white" variant="h5">Users</Typography>
             {users.map(user => <SidebarUser key={user._id} setTab={setTab} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} user={user} />)}  
           </Box>

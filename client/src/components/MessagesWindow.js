@@ -71,7 +71,7 @@ export default function MessagesWindow() {
       sx={{ 
         p: 5, 
         flexGrow: 1, 
-        overflowY: "scroll",
+        overflowY: "auto",
         scrollBehavior: 'smooth'
       }} 
     >

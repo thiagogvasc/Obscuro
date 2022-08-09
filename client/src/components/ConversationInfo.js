@@ -77,7 +77,7 @@ export default function ConversationInfo() {
           <Typography variant="body1">(No content yet)</Typography>
         </Box>
           : 
-        <Box sx={{ flexGrow: 1, height: 0, overflowY: 'scroll'}}>
+        <Box sx={{ flexGrow: 1, height: 0, overflowY: 'auto'}}>
             <Typography variant="h6">(No content yet)</Typography>
             { inConversation && currentConversation.name !== 'General' && <Button color="error" sx={{ color: 'error.light'}} onClick={leaveConversation}>Leave conversation</Button>}
              <Box sx={{ mt: 1, px: 1, display: 'flex', alignItems: 'center', gap: 1}}>
