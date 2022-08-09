@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import Textfield from '@mui/material/TextField'
@@ -19,6 +19,7 @@ import { useChat } from '../contexts/chatContext'
 import { useUser } from '../contexts/userContext'
 import { grey } from '@mui/material/colors'
 import { Fab, Paper, CircularProgress, Slide, Collapse } from '@mui/material'
+import SendMessageForm from './SendMessageForm'
 
 
 function Chat() {
@@ -42,53 +43,6 @@ function Chat() {
     setOpenInfo(openInfo => !openInfo)
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const text = e.target.message.value
-
-    if (text !== '') {
-      const generatedID = v4()
-      const sentAt = new Date()
-      socket.emitMessage({
-        _id: generatedID,
-        text,
-        sender: {
-          _id: user._id,
-          username: user.username
-        },
-        sentAt: sentAt,
-        conversation: currentConversation._id
-      })
-      setChatData(prevChatData => {
-        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
-        const conversation = chatDataDraft.conversations.find(c => c._id === currentConversation._id)
-        conversation.messages.push({
-          _id: generatedID,
-          sender: {
-            _id: user._id,
-            username: user.username
-          },
-          text,
-          read: [],
-          deliveries: [],
-          sentAt: sentAt,
-          conversation: currentConversation
-        })
-        
-        // sort by latest first
-        chatDataDraft.conversations = chatDataDraft.conversations.filter(c => c._id !== conversation._id)
-        chatDataDraft.conversations.unshift(conversation)
-
-        
-        return chatDataDraft
-      })
-    }
-    //console.log({text: text, sender: chatData._id, conversation: currentConversation._id})
-
-    e.target.reset()
-    e.target.message.focus()
-  }
-
   if (isLoading) {
     return (
       <Box sx={{
@@ -104,8 +58,6 @@ function Chat() {
       </Box>
     )
   }
-  console.log(user._id) // fix user issue
-  const notInConversation = (!currentConversation.participants.find(p => p._id === user._id))
 
   return (
     <Box
@@ -150,29 +102,7 @@ function Chat() {
             </Typography>
           </Paper>
           <MessagesWindow />
-          <form onSubmit={ handleSubmit }>
-            <Box 
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                alignItems: "center",
-                gap: 2,
-                m: 2,
-              }}
-              >
-                <Textfield 
-                  disabled={notInConversation}
-                  autoComplete="off" 
-                  color="primary"
-                  name="message" 
-                  label="Message"
-                  fullWidth 
-                  InputProps={{ sx: { borderRadius: '25px' }} }
-                />
-                <Box><Fab disabled={notInConversation} type="submit" color="primary" size="large"><SendIcon/></Fab></Box> 
-            </Box>
-          </form>
+          <SendMessageForm />
         </Box>
 
         {/* <Collapse mountOnEnter unmountOnExit in={openInfo} orientation='horizontal'><ConversationInfo /></Collapse> */}
