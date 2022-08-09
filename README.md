@@ -9,9 +9,11 @@ This project is currently in development.
 * Session / Logout
 * View messages / users / conversations
 * Send message (public and private)
-* Read receipts
+* Sent / Delivered / Read receipts
 * Create conversation (public and private)
-* Add participant
+* Add / Remove participant
+* Admin privileges
+* Leave Conversation
 
 ### Future features
 - Like messages
