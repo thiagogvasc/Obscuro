@@ -47,4 +47,11 @@ describe("user service", () => {
     const conversationById = await conversationService.getConversationById(conversation._id)
     expect(conversation._id).toEqual(conversationById._id)
   })
+
+  test('should remove conversation properly', async () => {
+    const conversation = await conversationService.createConversation('conversation_name', true, false, ['user1', 'user2'])
+    await conversationService.removeConversationById(conversation._id)
+    const conversationRemoved = await conversationService.getConversationById(conversation._id)
+    expect(conversationRemoved).toEqual(null)
+  })
 })

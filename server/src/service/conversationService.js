@@ -63,6 +63,10 @@ const promoteParticipantFromConversationById = async (conversationID, participan
   )
 }
 
+const removeConversationById = async conversationID => {
+  return Conversation.remove({_id: conversationID})
+}
+
 const getAggregateConversationById = async id => {
   const aggregateConversation = await Conversation.aggregate([
     {
@@ -118,5 +122,6 @@ module.exports = {
   addParticipantToConversationById,
   addParticipantsToConversationById,
   removeParticipantFromConversationById,
+  removeConversationById,
   getAggregateConversationById
 }
