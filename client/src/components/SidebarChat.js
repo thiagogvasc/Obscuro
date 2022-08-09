@@ -17,7 +17,8 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
     let count = 0
     conversation.messages.forEach(message => {
       if (message.conversation._id === currentConversation._id) return
-      if (!message.readBy.includes(userID)) count++
+      //if (!message.read.by.includes(userID)) count++
+      if (message.read.filter(read => read.by === userID).length === 0) count++
     })
     return count
   }
@@ -40,7 +41,7 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
 
   return (
     // mayve just pass the whole receiver
-    <Paper square elevation={3} onClick={select} sx={{
+    <Paper square elevation={1} onClick={select} sx={{
       display: 'flex',
       transition: 'background-color .2s',
       backgroundColor: shouldHighlight && 'action.selected',
@@ -52,7 +53,7 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
       <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
       <Box sx={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', overflow: 'hidden', alignSelf: 'center', fontWeight:'100' }}>
         <Typography noWrap variant="body1" sx={{ }}>{conversation.name}</Typography>
-        <Typography noWrap variant="body2" sx={{ color: 'darkgray'}}>
+        <Typography noWrap variant="body2" sx={{ color: 'text.secondary', fontWeight: numberOfUnreadMessages > 0 ? 'bold' : 'regular'} }>
           { message && (message.isInfo ? message.text : message.sender.username + ': ' + message.text)}
         </Typography>
       </Box>

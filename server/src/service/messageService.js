@@ -1,15 +1,30 @@
 const Message = require('../models/messageModel')
 const { uuid } = require('uuidv4')
 
-const createMessage = async (text, sender, conversationID) => {
+const createMessage = async (text, sender, conversationID, sentAt) => {
   const newMessage = new Message({
     _id: uuid(),
     text,
     sender,
     conversation: conversationID,
     isInfo: false,
-    readBy: [],
-    sentAt: new Date()
+    read: [],
+    deliveries: [],
+    sentAt
+  })
+  return newMessage.save()
+}
+
+const createMessageWithId = async (id, text, sender, conversationID, sentAt) => {
+  const newMessage = new Message({
+    _id: id,
+    text,
+    sender,
+    conversation: conversationID,
+    isInfo: false,
+    read: [],
+    deliveries: [],
+    sentAt
   })
   return newMessage.save()
 }
@@ -21,7 +36,7 @@ const createInfoMessage = async (text, sender, conversationID) => {
     sender,
     conversation: conversationID,
     isInfo: true,
-    readBy: [],
+    read: [],
     sentAt: new Date()
   })
   return newMessage.save()
@@ -29,10 +44,18 @@ const createInfoMessage = async (text, sender, conversationID) => {
 
 const markAllAsReadFromConversation = async (conversationID, readBy) => {
   return Message.updateMany({
-    readBy: { $nin: [readBy] },
+    "read.by": { $nin: [readBy.by] },
     conversation: conversationID
   }, {
-    $push: { readBy }
+    $push: { read: { by: readBy.by, at: readBy.at } }
+  }, { new: true })
+}
+
+const markAsDelivered = async (conversationID, messageID, delivery) => {
+  return Message.updateOne({
+    _id: messageID
+  }, {
+    $push: { deliveries: delivery }
   }, { new: true })
 }
 
@@ -78,8 +101,10 @@ const getAggregateMessageById = async id => {
 
 module.exports = {
   createMessage,
+  createMessageWithId,
   createInfoMessage,
   getMessageById,
   getAggregateMessageById,
-  markAllAsReadFromConversation
+  markAllAsReadFromConversation,
+  markAsDelivered
 }

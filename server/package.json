@@ -33,6 +33,7 @@
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.5.1",
     "supertest": "^6.2.3",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "web-push": "^3.5.0"
   }
 }

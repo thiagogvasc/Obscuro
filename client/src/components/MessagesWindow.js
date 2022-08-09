@@ -25,20 +25,36 @@ export default function MessagesWindow() {
   // useReadReceits
   useEffect(() => {
     // if there are new messages not read
-    const messageNotRead = currentConversation.messages.find(message => !message.readBy.includes(userID))
+    const messagesNotRead = currentConversation.messages.filter(message => {
+      if (message.read.length === 0) return true
+      const read = message.read.find(read => read.by === userID)
+      if (read) return false
+
+      return true
+    })
+    // console.log(messagesNotRead)
     currentConversation.messages.map(message => {
-      if (message.readBy.includes(userID)) return message
+      // if (message.read.by.includes(userID)) return message
+
+      if (messagesNotRead.find(m => m._id === message._id)) return
+      // console.log('got here')
       return {
         ...message,
-        readBy: [...message.readBy, userID]
+        read: [...message.read, { by: userID, at: new Date() }]
       }
     })
 
     // if at least one message not read
-    if (messageNotRead) { 
+    //if (!currentConversation.isDM) return
+    // console.log(messagesNotRead)
+    if (messagesNotRead.length >= 1) { 
+      // console.log('emitttinggg')
       socket.socketRef.current.emit('conversation-opened', {
         conversationID: currentConversation._id,
-        openedBy: userID
+        openedBy: {
+          by: userID,
+          at: new Date()
+        }
       })
     }
   }, [currentConversation])
@@ -55,7 +71,7 @@ export default function MessagesWindow() {
       sx={{ 
         p: 5, 
         flexGrow: 1, 
-        overflowY: "scroll",
+        overflowY: "auto",
         scrollBehavior: 'smooth'
       }} 
     >
