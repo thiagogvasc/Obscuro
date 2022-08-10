@@ -21,6 +21,8 @@ import SidebarUser from '../components/SidebarUser'
 import { Chip, Paper, Fab } from '@mui/material'
 
 import AddIcon from '@mui/icons-material/Add'
+import Navbar from '../components/Navbar'
+import AddParticipantModal from '../components/AddParticipantModal'
 
 
 
@@ -35,6 +37,9 @@ function CreateConversation() {
   const navigate = useNavigate()
   const socket = useSocket()
   const { chatData, setChatData, currentConversation, setCurrentConversation} = useChat()
+
+  const [open, setOpen] = useState(false)
+  const [selectedParticipants, setSelectedParticipants] = useState([])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -52,7 +57,7 @@ function CreateConversation() {
       ...formData,
       isDM: false,
       isPublic: formData.isPublic === 'public' ? true : false,
-      participants: [{_id: userID, isAdmin: true}, ...formData.participants.map(participant => ({_id: participant._id, isAdmin: false}))]
+      participants: [{_id: userID, isAdmin: true}, ...formData.participants.map(participant => ({_id: participant, isAdmin: false}))]
     }
 
     console.log(dataToSubmit)
@@ -70,6 +75,12 @@ function CreateConversation() {
     })
   }
 
+  const addParticipants = selectedUsers => {
+    setSelectedParticipants(selectedUsers)
+    setFormData({...formData, participants: selectedUsers.map(u => u._id)})
+    setOpen(false)
+  }
+
   const addParticipant = user => {
     // exits if already added
     if (formData.participants.find(participant => participant._id === user._id))
@@ -83,14 +94,14 @@ function CreateConversation() {
   }
 
   return (
-    <Box sx={{ 
-      flexGrow: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'stretch',
-     }}>
-      <Typography textAlign="center" fontWeight="100" sx={{mb: 5}} variant="h3">Create Conversation</Typography>
+    <Paper square sx={{ 
+      padding: '2vh 5vw' ,
+      height: '100vh',
+      width: '100vw'
+		}}>
+			<Navbar />
+      <AddParticipantModal open={open} setOpen={setOpen} onSubmit={addParticipants} />
+      <Typography textAlign="center" fontWeight="100" sx={{mb: 5}} variant="h4">Create Conversation</Typography>
       <form style={{ display: 'flex', flexGrow: 1}} onSubmit={ handleSubmit }>
         <Box sx={{
           flexGrow: 1,
@@ -120,24 +131,15 @@ function CreateConversation() {
               <FormControlLabel value="private" control={<Radio />} label="Private" />
             </RadioGroup>
           </FormControl>
-          <Box sx={{ flexGrow: 1, height: 0, display: 'flex', width: '75%', gap: 2}}>
-            <Paper sx={{ flexWrap: 'wrap', width: '50%', height: '100%', overflowY: 'auto', p:2, borderRadius: '25px', flexGrow: 1}} elevation={2}>
-              <Typography variant="h5">Selected participants</Typography>
+          <Box sx={{ display: 'flex', gap: 2}}>
+            <Box sx={{ flexWrap: 'wrap', width: '50%', height: '100%', overflowY: 'auto', p:2, borderRadius: '25px', flexGrow: 1}}>
+              <Typography display="inline" variant="h5">Participants</Typography><Button sx={{ ml: 2}} variant="contained" onClick={() => setOpen(true)}>Add</Button>
               <Box sx={{ }}>
-                {formData.participants.map(participant => (
+                {selectedParticipants.map(participant => (
                   <Chip label={participant.username} />
                 ))}
               </Box>
-            </Paper>
-            <Paper sx={{ overflowY: 'auto', width: '50%', height: '100%', p:2, borderRadius: '25px', flexGrow: 1}} elevation={2}>
-              <Typography variant="h5">Add participants</Typography>
-              {users.map(user => (
-                <Box>
-                  {user.username}
-                  <Fab sx={{ml: 2}} color="primary" size="small" onClick={() => addParticipant(user)}variant="outlined"><AddIcon /></Fab>
-                </Box>
-              ))}  
-            </Paper>
+            </Box>
           </Box>
           <Box sx={{ width: '25%'}}>
             <Button sx={{ width: '100%', borderRadius: '25px', mt: 2, display: "block" }} type="submit" variant="contained">Create</Button>
@@ -145,7 +147,7 @@ function CreateConversation() {
           </Box>
         </Box>
       </form>
-    </Box>
+    </Paper>
   )
 }
 

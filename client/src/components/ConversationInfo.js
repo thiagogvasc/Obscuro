@@ -51,6 +51,16 @@ export default function ConversationInfo() {
       participant
     })
   }
+  
+  const addParticipants = selectedUsers => {
+    const participantsIDs = selectedUsers.map(u => u._id)
+    console.log('adding participant')
+    console.log(participantsIDs)
+    socket.socketRef.current.emit('add-participants', {
+      conversationID: currentConversation._id,
+      participantsIDs
+    })
+  }
 
   const leaveConversation = () => {
     socket.socketRef.current.emit('leave-conversation', {
@@ -62,7 +72,7 @@ export default function ConversationInfo() {
 
   return (
     <Box sx={{ flexGrow: 2, display: 'flex', flexDirection: 'column'}}>
-      <AddParticipantModal open={open} setOpen={setOpen} />
+      <AddParticipantModal open={open} setOpen={setOpen} onSubmit={addParticipants} />
       
       <Paper square elevation={3} sx={{ 
         textAlign: 'center', 
