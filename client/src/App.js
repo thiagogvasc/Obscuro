@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Navbar from './components/Navbar'
-import Chat from './contexts/Chat'
+import Chat from './pages/Chat'
 import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 
