@@ -131,7 +131,7 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
               </Accordion>
            
             </Box>
-            <Paper elevation={3} sx={{ p: 1, textAlign: 'center' }}>
+            <Paper elevation={3} sx={{ pb: 2, pt: 1,textAlign: 'center' }}>
               <Typography mt={1} variant="body1" fontWeight="light">Create</Typography>
               <Fab color="primary" variant="contained" onClick={() => navigate('/chat/create-conversation')}>
                 <AddIcon />

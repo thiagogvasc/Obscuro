@@ -8,7 +8,7 @@ import { useChat } from '../contexts/chatContext'
 import { useUsers } from '../contexts/usersContext'
 import { useSocket } from '../contexts/socketContext'
 
-export default function AddParticipantModal({open, setOpen}) {
+export default function AddParticipantModal({open, setOpen, onSubmit}) {
   const { users } = useUsers()
   const { currentConversation } = useChat()
   const [selectedUsers, setSelectedUsers] = useState([])
@@ -30,13 +30,7 @@ export default function AddParticipantModal({open, setOpen}) {
   }
 
   const add = () => {
-    const participantsIDs = selectedUsers.map(u => u._id)
-    console.log('adding participant')
-    console.log(participantsIDs)
-    socketRef.current.emit('add-participants', {
-      conversationID: currentConversation._id,
-      participantsIDs
-    })
+    onSubmit(selectedUsers)
   }
 
   return (
