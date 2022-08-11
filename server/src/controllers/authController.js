@@ -3,6 +3,7 @@ const conversationService = require('../service/conversationService')
 
 
 const login = async (req, res) => {
+  console.log('login')
   const { username, password } = req.body
   const user = await userService.getUserByUsername(username)
   console.log(req.body)
@@ -12,9 +13,11 @@ const login = async (req, res) => {
 
   console.log('logged in: ' + user._id)
   req.session.userid = user._id
+  req.session.user = user
   res.status(200).json({
     message: 'Logged in successfully!',
-    userid: user._id
+    userid: user._id,
+    user
   }) 
 }
 
@@ -49,7 +52,9 @@ const signup = async (req, res) => {
 }
 
 const getSession = async (req, res) => {
+  console.log('get session')
   const userid = req.session.userid
+  console.log(req.session)
   const user = await userService.getUserById(userid)
   console.log(userid)
   if (userid) 

@@ -3,15 +3,14 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const path = require('path')
 
+const sessionMiddleware = require('./middleware/sessionMiddleware')
 const conversationService = require('./service/conversationService')
-const dbConnect = require('./dbConnect')
+const dbConnect = require('./db')
 const authRouter = require('./routes/authRouter')
 const userRouter = require('./routes/userRouter')
-const sessionMiddleware = require('./middleware/sessionMiddleware')
-const webpush = require('web-push')
+
 const app = express()
 
-const Subscription = require('../src/models/subscriptionModel')
 
 const init = async () => {
   // Initial store setup
@@ -39,8 +38,8 @@ const init = async () => {
   app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, '../../client/build/index.html'))
   })
-  app.use(sessionMiddleware)
-  app.use('/auth', authRouter)
+  app.use(sessionMiddleware)// switch positions
+  app.use('/auth', authRouter)// switch positions
   app.use((req, res, next) => {
       const session = req.session;
       if (session && session.userid) {
