@@ -58,7 +58,8 @@ export default function ConversationInfo() {
     console.log(participantsIDs)
     socket.socketRef.current.emit('add-participants', {
       conversationID: currentConversation._id,
-      participantsIDs
+      // Filter only participants who were not already added to the conversation
+      participantsIDs: participantsIDs.filter(id => !currentConversation.participants.map(p => p._id).includes(id))
     })
   }
 
