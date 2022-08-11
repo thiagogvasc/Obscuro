@@ -1,4 +1,9 @@
-require('dotenv').config({ path: '.env.local' })
+const dotenv = require('dotenv')
+
+if (process.env.NODE_ENV === 'development') {
+  dotenv.config({ path: '.env.development.local' })
+}
+
 const http = require('http')
 const app = require('./app')
 const io = require('./io')

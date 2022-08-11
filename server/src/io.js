@@ -29,7 +29,6 @@ const init = (server, options) => {
   io.on('connection', async socket => {
     //console.log('connectin: ', socket.request.session)
     const userID = socket.request.session.userid
-
     // !!!!! crashes on start when user connects to fast !!!!!
     
     // handle session if (!session) res.redirect()

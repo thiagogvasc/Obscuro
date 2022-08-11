@@ -14,7 +14,7 @@ import Navbar from '../components/Navbar'
 
 function Login() {
 	const navigate = useNavigate()
-	const { setUserID } = useUser()
+	const { setUserID, setUser } = useUser()
 	const [formData, setFormData] = useState({
 		username: '',
 		password: ''
@@ -46,6 +46,7 @@ function Login() {
 					type: 'success',
 					text: result.data.message
 				})
+				setUser(result.data.user)
 				setUserID(result.data.userid)
 				navigate('/chat')
 		}).catch(err => {
