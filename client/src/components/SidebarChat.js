@@ -8,10 +8,9 @@ import { useUser } from '../contexts/userContext'
 import { useSocket } from '../contexts/socketContext'
 
 export default function SidebarChat({ conversation, shouldOpenSidebar, setShouldOpenSidebar}) {
-  const { chatData, currentConversation, setCurrentConversation } = useChat()
+  const { currentConversation, setCurrentConversation } = useChat()
   const { userID } = useUser()
   const shouldHighlight = conversation._id === currentConversation._id
-  const socket = useSocket()
 
   const getNumberOfUnreadMessages = () => {
     let count = 0
