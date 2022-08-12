@@ -40,11 +40,11 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
         </Tabs>
       </Paper>
 
-      <Box sx={{ flexGrow: 1, position: 'relative' }}>
-          <Slide in={tab === 'conversations'} direction="right" container={containerRef.current}>
+      <Box sx={{ flexGrow: 1, alignSelf: 'stretch', position: 'relative'}}>
+          <Slide mountOnEnter unmountOnExit in={tab === 'conversations'} direction="right" container={containerRef.current}>
             <SidebarConversations shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar}/>
           </Slide>
-          <Slide in={tab === 'users'} direction="left" container={containerRef.current}>
+          <Slide mountOnEnter unmountOnExit in={tab === 'users'} direction="left" container={containerRef.current}>
             <SidebarUsers shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar}/>
           </Slide>
       </Box>
