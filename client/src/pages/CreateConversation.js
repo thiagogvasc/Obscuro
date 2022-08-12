@@ -23,7 +23,7 @@ import { Chip, Paper, Fab } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import Navbar from '../components/Navbar'
 import AddParticipantModal from '../components/AddParticipantModal'
-
+import { useSidebar } from '../contexts/sidebarContext'
 
 
 function CreateConversation() {
@@ -40,6 +40,7 @@ function CreateConversation() {
 
   const [open, setOpen] = useState(false)
   const [selectedParticipants, setSelectedParticipants] = useState([])
+  const { tab, setTab, setPublicExpanded, setPrivateExpanded } = useSidebar()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -70,7 +71,14 @@ function CreateConversation() {
         const getLastElem = arr => arr[arr.length - 1]
         setCurrentConversation(getLastElem(chatDataDraft.conversations))
         return chatDataDraft
+
       })
+      setTab('conversations')
+      if (conversation.isPublic) {
+        setPublicExpanded(true)
+      } else {
+        setPrivateExpanded(true)
+      }
       navigate('/chat')
     })
   }

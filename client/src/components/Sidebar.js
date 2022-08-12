@@ -8,8 +8,10 @@ import Slide from '@mui/material/Slide'
 import SidebarConversations from './SidebarConversations'
 import SidebarUsers from './SidebarUsers'
 
+import { useSidebar } from '../contexts/sidebarContext'
+
 export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
-  const [tab, setTab] = useState('conversations')
+  const { tab, setTab } = useSidebar()
   const containerRef = useRef(null)
 
   const handleTabChange = (e, newValue) => {
@@ -39,11 +41,11 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
       </Paper>
 
       <Box sx={{ flexGrow: 1, position: 'relative' }}>
-          <Slide in={tab === 'conversations'} direction="right" container={containerRef.current} /*easing={{enter: 'linear', exit: 'linear'}}*/>
+          <Slide in={tab === 'conversations'} direction="right" container={containerRef.current}>
             <SidebarConversations shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar}/>
           </Slide>
-          <Slide in={tab === 'users'} direction="left" container={containerRef.current} /*easing={{enter: 'linear', exit: 'linear'}}*/>
-            <SidebarUsers shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} setTab={setTab} />
+          <Slide in={tab === 'users'} direction="left" container={containerRef.current}>
+            <SidebarUsers shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar}/>
           </Slide>
       </Box>
     </Paper>

@@ -11,12 +11,13 @@ import { grey } from '@mui/material/colors'
 import { useChat } from '../contexts/chatContext'
 import { useUser } from '../contexts/userContext'
 import { useSocket } from '../contexts/socketContext'
+import { useSidebar } from '../contexts/sidebarContext'
 import { useNavigate } from 'react-router-dom'
 
 import SidebarChat from './SidebarChat';
 
 const SidebarConversations = React.forwardRef(({shouldOpenSidebar, setShouldOpenSidebar}, ref) => {
-  const { chatData, currentConversation } = useChat()
+  const { chatData } = useChat()
   const { userID } = useUser()
   const navigate = useNavigate()
   
@@ -49,9 +50,8 @@ const SidebarConversations = React.forwardRef(({shouldOpenSidebar, setShouldOpen
   const publicNotificationsCount = getNumberOfUnreadMessages(publicConversations)
   const privateNotificationsCount = getNumberOfUnreadMessages(privateConversations)
 
-  const [publicExpanded, setPublicExpanded] = useState(true)
-  const [privateExpanded, setPrivateExpanded] = useState(false)
-
+  
+  const { publicExpanded, setPublicExpanded, privateExpanded, setPrivateExpanded } = useSidebar()
 
   return (
     <Box ref={ref} sx={{

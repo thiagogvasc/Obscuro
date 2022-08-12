@@ -3,7 +3,7 @@ import { Typography, Box } from '@mui/material'
 import { useUsers } from '../contexts/usersContext'
 import SidebarUser from './SidebarUser';
 
-const SidebarUsers = React.forwardRef(({shouldOpenSidebar, setShouldOpenSidebar, setTab}, ref) => {
+const SidebarUsers = React.forwardRef(({shouldOpenSidebar, setShouldOpenSidebar}, ref) => {
   const { users } = useUsers()
   return (
     <Box ref={ref} sx={{ flexGrow: 1, overflowY: 'auto', width: '100%', height: '100%' }}>
@@ -11,7 +11,6 @@ const SidebarUsers = React.forwardRef(({shouldOpenSidebar, setShouldOpenSidebar,
       {users.map(user => 
         <SidebarUser 
           key={user._id} 
-          setTab={setTab} 
           shouldOpenSidebar={shouldOpenSidebar} 
           setShouldOpenSidebar={setShouldOpenSidebar} 
           user={user} 
