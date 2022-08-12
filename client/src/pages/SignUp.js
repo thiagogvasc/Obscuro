@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Alert from '@mui/material/Alert'
+
+import Navbar from '../components/Navbar'
 
 import axios from 'axios'
 import { baseUrl } from '../axiosConfig'
@@ -62,55 +65,64 @@ function SignUp() {
     })
   }
   return (
-    <Box sx={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      flexDirection: 'column',
-    }}>
-      <Typography sx={{mb: 5}} variant="h3" fontWeight="100">Sign Up</Typography>
-      { message && <Grow in><Alert sx={{m: 2}} variant="filled" severity={message.type}> { message.text } </Alert></Grow>}
-      <form onSubmit={ handleSubmit }>
-        <Box 
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "2vh"
-          }}
-        >
-          <TextField 
-            onChange={handleChange} 
-            value={formData.username} 
-            autoComplete="off" 
-            name="username"
-            label="Username"
-            InputProps={{ sx: { borderRadius: '25px' }}}
-          />
-          <TextField 
-            onChange={handleChange} 
-            value={formData.password} 
-            autoComplete="off" 
-            name="password"
-            type="password"
-            label="Password"
-            InputProps={{ sx: { borderRadius: '25px' }}}
-          />
-          <TextField 
-            onChange={handleChange} 
-            value={formData.repeatPassword} 
-            autoComplete="off" 
-            type="password"
-            name="repeatPassword"
-            label="Repeat password"
-            InputProps={{ sx: { borderRadius: '25px' }}}
-          />
-          <Button sx={{mt: 2, width: '100%', borderRadius: '25px'}} type="submit" variant="contained">Submit</Button>
-          <Button sx={{width: '100%', borderRadius: '25px'}} variant="outlined" onClick={() => navigate('/')}>Cancel</Button>
-        </Box>
-      </form>
-    </Box>
+    <Paper square sx={{ 
+			display: "flex", 
+			flexDirection: "column", 
+			width: "100vw", 
+			height: "100vh", 
+			padding: '2vh 5vw' 
+		}}>
+			<Navbar />
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'column',
+      }}>
+        <Typography sx={{mb: 5}} variant="h3" fontWeight="100">Sign Up</Typography>
+        { message && <Grow in><Alert sx={{m: 2}} variant="filled" severity={message.type}> { message.text } </Alert></Grow>}
+        <form onSubmit={ handleSubmit }>
+          <Box 
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "2vh"
+            }}
+          >
+            <TextField 
+              onChange={handleChange} 
+              value={formData.username} 
+              autoComplete="off" 
+              name="username"
+              label="Username"
+              InputProps={{ sx: { borderRadius: '25px' }}}
+            />
+            <TextField 
+              onChange={handleChange} 
+              value={formData.password} 
+              autoComplete="off" 
+              name="password"
+              type="password"
+              label="Password"
+              InputProps={{ sx: { borderRadius: '25px' }}}
+            />
+            <TextField 
+              onChange={handleChange} 
+              value={formData.repeatPassword} 
+              autoComplete="off" 
+              type="password"
+              name="repeatPassword"
+              label="Repeat password"
+              InputProps={{ sx: { borderRadius: '25px' }}}
+            />
+            <Button sx={{mt: 2, width: '100%', borderRadius: '25px'}} type="submit" variant="contained">Submit</Button>
+            <Button sx={{width: '100%', borderRadius: '25px'}} variant="outlined" onClick={() => navigate('/')}>Cancel</Button>
+          </Box>
+        </form>
+      </Box>
+    </Paper>
   )
 }
 

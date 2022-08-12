@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Navbar from './components/Navbar'
-import Chat from './components/Chat'
+import Chat from './pages/Chat'
 import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -42,14 +42,7 @@ function App() {
       <SocketProvider>
         <UserProvider>
             <ThemeProvider theme={theme}>
-              <Paper square sx={{ 
-                display: "flex", 
-                flexDirection: "column", 
-                width: "100vw", 
-                height: "100vh", 
-                padding: '2vh 5vw' 
-              }}>
-                <Navbar />
+              
                 <Routes>
                   <Route path="/" element={ <Login /> } />
                   <Route path="/signup" element={ <SignUp /> } />
@@ -58,7 +51,7 @@ function App() {
                     <Route path='create-conversation' element={ <CreateConversation /> } />
                   </Route>
                 </Routes>
-              </Paper>
+              
             </ThemeProvider>
         </UserProvider>
       </SocketProvider>

@@ -8,10 +8,9 @@ import { useUser } from '../contexts/userContext'
 import { useSocket } from '../contexts/socketContext'
 
 export default function SidebarChat({ conversation, shouldOpenSidebar, setShouldOpenSidebar}) {
-  const { chatData, currentConversation, setCurrentConversation } = useChat()
+  const { currentConversation, setCurrentConversation } = useChat()
   const { userID } = useUser()
   const shouldHighlight = conversation._id === currentConversation._id
-  const socket = useSocket()
 
   const getNumberOfUnreadMessages = () => {
     let count = 0
@@ -58,13 +57,7 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
         </Typography>
       </Box>
       <Box sx={{ pr: 3, flexGrow: 1, display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
-      {numberOfUnreadMessages ? 
-        <Box sx={{ width: '25px', height: '25px', borderRadius: '50%', backgroundColor: 'primary.main', textAlign: 'center'}}>
-          <Typography variant="body1">{numberOfUnreadMessages}</Typography>
-        </Box>
-        : 
-        null
-      }
+      {numberOfUnreadMessages ? <Badge color="primary" showZero={false} badgeContent={numberOfUnreadMessages} /> : null }
       </Box>
     </Paper>
   )

@@ -10,12 +10,13 @@ import { grey } from '@mui/material/colors'
 import { useSocket } from '../contexts/socketContext'
 import { useChat } from '../contexts/chatContext'
 import { useUser } from '../contexts/userContext'
+import { useSidebar } from '../contexts/sidebarContext'
 
-export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShouldOpenSidebar}) {
+export default function SidebarUser({ user, shouldOpenSidebar, setShouldOpenSidebar}) {
   const { chatData, setChatData, setCurrentConversation } = useChat()
   const socket = useSocket()
   const { userID } = useUser()
-  
+  const { setTab, setPublicExpanded, setPrivateExpanded } = useSidebar()
 
   const select = () => {
     for (const conversation of chatData.conversations) {
@@ -25,6 +26,11 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
         if ((participant1._id === userID && participant2._id === user._id)
             || (participant1._id === user._id && participant2._id === userID)) {
           setTab('conversations')
+          if (conversation.isPublic) {
+            setPublicExpanded(true)
+          } else {
+            setPrivateExpanded(true)
+          }
           setCurrentConversation(conversation)
           return
         }
@@ -49,6 +55,11 @@ export default function SidebarUser({ user, setTab, shouldOpenSidebar, setShould
         return chatDataDraft
       })
       setTab('conversations')
+      if (newConversation.isPublic) {
+        setPublicExpanded(true)
+      } else {
+        setPrivateExpanded(true)
+      }
     })
   }
 

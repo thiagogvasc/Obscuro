@@ -7,9 +7,13 @@ module.exports = async () => {
   console.log('connecting...')
   //await mongoose.connect(mongoServer.getUri())
   if (process.env.NODE_ENV === 'development') {
-    const mongoServer = await MongoMemoryServer.create()
+    const mongoServer = await MongoMemoryServer.create({
+      instance: {
+        port: 8081
+      }
+    })
     const mongoServerURI = mongoServer.getUri()
-    process.env.MONGODB_URI = mongoServerURI
+    // process.env.MONGODB_URI = mongoServerURI
     console.log('connecting to local database')
     console.log(mongoServerURI)
     await mongoose.connect(mongoServerURI)
@@ -17,7 +21,4 @@ module.exports = async () => {
     // production
     await mongoose.connect(process.env.MONGODB_URI)
   }
-
-
-  //return mongoServer.getUri()
 }
