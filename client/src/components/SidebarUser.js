@@ -1,7 +1,8 @@
 import React from 'react'
 
 import Box from '@mui/material/Box'
-import { Avatar, Typography, Button, Fab } from '@mui/material'
+import { Typography, Button, Fab } from '@mui/material'
+import Avatar from 'avataaars'
 import SendIcon from '@mui/icons-material/Send'
 
 
@@ -69,7 +70,12 @@ export default function SidebarUser({ user, shouldOpenSidebar, setShouldOpenSide
     <Box sx={{
       display: 'flex'
     }}>
-      <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
+      <Box sx={{ border: 3, borderColor: 'primary.light', borderRadius: '50%', m: 2 }}>
+        <Avatar
+          style={{ width: '50px', height: '50px', }}
+          avatarStyle='Circle' 
+          {...JSON.parse(user.avatarOptions) } />
+      </Box>
       <Box sx={{ alignSelf: 'center', fontWeight:'100', overflow: 'hidden', textOverflow: 'ellipsis'}}>
         <Typography noWrap variant="body1" sx={{ color: '#FFFFFF'}}>{user.username}</Typography>
         <Fab onClick={select} color="primary" size="small" variant="extended"><SendIcon/>Send message</Fab>

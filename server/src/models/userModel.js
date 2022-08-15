@@ -5,7 +5,8 @@ const userSchema = new Schema({
     _id: { type: String, required: true},
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true},
-    conversations: [{ type: String, required: true }]
+    conversations: [{ type: String, required: true }],
+    avatarOptions: { type: String }
 })
 
 module.exports = mongoose.model('user', userSchema)
