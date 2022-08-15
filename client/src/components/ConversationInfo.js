@@ -13,6 +13,8 @@ import { useChat } from '../contexts/chatContext'
 import { useUser } from '../contexts/userContext'
 import { useUsers } from '../contexts/usersContext'
 import { useSocket } from '../contexts/socketContext'
+import UserAvatar from './UserAvatar'
+import MuiAvatar from '@mui/material/Avatar'
 
 export default function ConversationInfo() {
   const { currentConversation } = useChat()
@@ -72,7 +74,7 @@ export default function ConversationInfo() {
   const inConversation = (currentConversation.participants.find(p => p._id === user._id))
 
   return (
-    <Box sx={{ flexGrow: 2, display: 'flex', flexDirection: 'column'}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: '250px'}}>
       <AddParticipantModal open={open} setOpen={setOpen} onSubmit={addParticipants} />
       
       <Paper square elevation={3} sx={{ 
@@ -99,11 +101,14 @@ export default function ConversationInfo() {
 
               {currentConversation.participants.map(participant => {
                 return (
-                  <ListItem key={participant._id} sx={{ overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                  <ListItem key={participant._id}>
                     <ListItemAvatar>
-                      <Avatar />
+                      {/* <Avatar /> */}
+                      <MuiAvatar sx={{ border: 2, borderColor: 'primary.light', backgroundColor: 'inherit'}}>
+                        <UserAvatar user={participant} ></UserAvatar>
+                      </MuiAvatar>
                     </ListItemAvatar>
-                    <ListItemText primary={`${participant.username} ${participant.isAdmin ? '(Admin)' : ''}`} primaryTypographyProps={{ style: { whiteSpace: "normal" }}}></ListItemText>
+                    <ListItemText primary={`${participant.username} ${participant.isAdmin ? '(Admin)' : ''}`} primaryTypographyProps={{ sx: { whiteSpace: "nowrap", textOverflow: 'ellipsis', overflow: 'hidden'}}}></ListItemText>
                     <ListItemSecondaryAction>
                         {isCurrentUserAdmin() && isNotSelf(participant) && <IconButton color="error" onClick={() => removeParticipant(participant)}><PersonRemoveIcon /></IconButton>}
                         {isCurrentUserAdmin() && isNotSelf(participant) && !participant.isAdmin && <IconButton color="success" onClick={() => promoteToAdmin(participant)}><UpgradeIcon /></IconButton>}

@@ -21,6 +21,9 @@ import { useUser } from '../contexts/userContext'
 import { grey } from '@mui/material/colors'
 import { Fab, Paper, CircularProgress, Slide, Collapse } from '@mui/material'
 import SendMessageForm from '../components/SendMessageForm'
+import MuiAvatar from '@mui/material/Avatar'
+import ConversationAvatar from '../components/ConversationAvatar'
+import UserAvatar from '../components/UserAvatar'
 
 
 function Chat() {
@@ -38,7 +41,7 @@ function Chat() {
   const [shouldOpenSidebar, setShouldOpenSidebar] = useState(false)
   const [openInfo, setOpenInfo] = useState(false)
 
-  const { user } = useUser()
+  const { user, userID } = useUser()
 
   const handleOpenInfo = () => {
     setOpenInfo(openInfo => !openInfo)
@@ -104,8 +107,15 @@ function Chat() {
               '&:hover': {
                 backgroundColor: 'action.hover',
                 cursor: 'pointer'
-              }
+              },
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 1
             }}>
+              <MuiAvatar sx={{ border: 2, borderColor: 'primary.light', backgroundColor: 'inherit'}}>
+                {currentConversation.isDM ? <UserAvatar user={currentConversation.participants.find(u => u._id !== userID)} /> : <ConversationAvatar />}
+              </MuiAvatar>
               <Typography component="span">
                 { currentConversation.name }
               </Typography>

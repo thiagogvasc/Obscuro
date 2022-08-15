@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
-import { Avatar, Typography, Badge, Fab } from '@mui/material'
+import { Avatar, Typography, Badge, Fab, List } from '@mui/material'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -74,9 +74,8 @@ const SidebarConversations = React.forwardRef(({shouldOpenSidebar, setShouldOpen
             </Badge>
           </AccordionSummary>
           <AccordionDetails sx={{padding: 0}}>
-            {/* list here */}
-            {publicConversations.map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}  
-            {publicConversations.length === 0 && <Typography>No public conversations yet</Typography>}
+              {publicConversations.map(conversation => <SidebarChat key={conversation._id} shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar} conversation={conversation} />)}  
+              {publicConversations.length === 0 && <Typography>No public conversations yet</Typography>}
           </AccordionDetails>
         </Accordion>
         

@@ -1,15 +1,23 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
-import { Avatar, Typography, Badge } from '@mui/material'
+import { Typography, Badge, IconButton } from '@mui/material'
+import Avatar from 'avataaars'
+
+import { generateRandomAvatarOptions } from '../avatars'
 import { grey } from '@mui/material/colors'
 import { useChat } from '../contexts/chatContext'
 import { useUser } from '../contexts/userContext'
 import { useSocket } from '../contexts/socketContext'
+import UserAvatar from './UserAvatar'
+import ConversationAvatar from './ConversationAvatar'
+
+import { ListItem, ListItemAvatar, ListItemText, ListItemSecondaryAction } from '@mui/material'
+import MuiAvatar from '@mui/material/Avatar'
 
 export default function SidebarChat({ conversation, shouldOpenSidebar, setShouldOpenSidebar}) {
-  const { currentConversation, setCurrentConversation } = useChat()
-  const { userID } = useUser()
+  const { currentConversation, setCurrentConversation, chatData} = useChat()
+  const { userID, user} = useUser()
   const shouldHighlight = conversation._id === currentConversation._id
 
   const getNumberOfUnreadMessages = () => {
@@ -40,8 +48,7 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
 
   return (
     // mayve just pass the whole receiver
-    <Paper square elevation={1} onClick={select} sx={{
-      display: 'flex',
+    <ListItem square elevation={1} onClick={select} sx={{
       transition: 'background-color .2s',
       backgroundColor: shouldHighlight && 'action.selected',
       '&:hover': {
@@ -49,16 +56,25 @@ export default function SidebarChat({ conversation, shouldOpenSidebar, setShould
         cursor: 'pointer'
       }
     }}>
-      <Avatar sx={{ width: '50px', height: '50px', m: 2 }}/>
-      <Box sx={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', overflow: 'hidden', alignSelf: 'center', fontWeight:'100' }}>
-        <Typography noWrap variant="body1" sx={{ }}>{conversation.name}</Typography>
-        <Typography noWrap variant="body2" sx={{ color: 'text.secondary', fontWeight: numberOfUnreadMessages > 0 ? 'bold' : 'regular'} }>
-          { message && (message.isInfo ? message.text : message.sender.username + ': ' + message.text)}
-        </Typography>
-      </Box>
-      <Box sx={{ pr: 3, flexGrow: 1, display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
-      {numberOfUnreadMessages ? <Badge color="primary" showZero={false} badgeContent={numberOfUnreadMessages} /> : null }
-      </Box>
-    </Paper>
+      <ListItemAvatar>
+        <MuiAvatar sx={{ border: 2, borderColor: 'primary.light', backgroundColor: 'inherit'}}>
+          {conversation.isDM ? <UserAvatar user={conversation.participants.find(u => u._id !== userID)} /> : <ConversationAvatar />}
+        </MuiAvatar>
+      </ListItemAvatar>
+
+      <ListItemText 
+        primary={conversation.name} 
+        secondary={message && (message.isInfo ? message.text : message.sender.username + ': ' + message.text)} 
+        secondaryTypographyProps={{ 
+          sx: { 
+            overflow: 'hidden', 
+            textOverflow: 'ellipsis', 
+            whiteSpace: 'nowrap', 
+            fontWeight: numberOfUnreadMessages > 0 ? 'bold' : 'regular' 
+          }
+        }}
+      />
+      <IconButton edge="end">{numberOfUnreadMessages ? <Badge color="primary" showZero={false} badgeContent={numberOfUnreadMessages} /> : null }</IconButton>
+    </ListItem>
   )
 }
