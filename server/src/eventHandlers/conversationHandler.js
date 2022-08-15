@@ -64,7 +64,8 @@ const joinChat = async (socket, io) => {
 
 const joinConversation = async (socket, io, conversationID) => {
   const userID = socket.request.session.userid 
-  await conversationService.addParticipantToConversationById(conversationID, {_id: userID, isAdmin: false, addedAt: new Date()})
+  const avatarOptions = await userService.getUserById(userID)
+  await conversationService.addParticipantToConversationById(conversationID, {_id: userID, isAdmin: false, addedAt: new Date(), avatarOptions})
   await userService.addConversationToUserById(userID, conversationID)
   await socket.join(conversationID)
   socket.emit('conversation-joined') // io.emit(new user joined)
@@ -89,18 +90,19 @@ const conversationOpened = async (socket, io, { conversationID, openedBy }) => {
 }
 
 const addParticipants = async (socket, io, { conversationID, participantsIDs }) => {
-  const updated = await conversationService.addParticipantsToConversationById(conversationID, participantsIDs.map(p => ({_id: p, isAdmin: false})))
+ // const updated = await conversationService.addParticipantsToConversationById(conversationID, participantsIDs.map(p => ({_id: p, isAdmin: false })))
+  for (const participantID of participantsIDs) {
+    const participant = await userService.getUserById(participantID)
+    await conversationService.addParticipantToConversationById(conversationID, {_id: participantID, isAdmin: false, avatarOptions: participant.avatarOptions})
+  }
  
- console.log('updateee.. conv')
- console.log(participantsIDs.map(p => ({_id: p, isAdmin: false})))
- console.log(updated)
   // !!!CAREFULL WITH THIS WHEN CHANGIN PARTICIPANT MODEL !!!!
   io.in(participantsIDs).socketsJoin(conversationID)
   for (const participantID of participantsIDs) {
     await userService.addConversationToUserById(participantID, conversationID)
   }
   const aggregateConversation = await conversationService.getAggregateConversationById(conversationID)
-  console.log(aggregateConversation)
+  
   // fix temp thing
   aggregateConversation.participants = aggregateConversation.participants.map(participant => {
     return {...participant.temp, isAdmin: participant.isAdmin, addedAt: participant.addedAt}

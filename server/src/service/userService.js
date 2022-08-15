@@ -2,9 +2,16 @@ const User = require('../models/userModel')
 const { uuid } = require('uuidv4')
 
 const conversationService = require('./conversationService')
+const { generateRandomAvatarOptions } = require('../avatars')
 
 const createUser = async (username, password) => {
-  return new User({_id: uuid(), username, password, conversations: []}).save()
+  return new User({
+    _id: uuid(), 
+    username, 
+    password,
+    conversations: [],
+    avatarOptions: JSON.stringify(generateRandomAvatarOptions())
+  }).save()
 }
 
 const createUserWithId = async (id, username, password) => {
