@@ -3,6 +3,7 @@ Obscuro is a real time messaging application, built with React, Socket.io, Expre
 
 ## Project Status
 This project is currently in development.
+[Click here for the demo.](https://obscuro.herokuapp.com)
 
 ### Current Features
 * Login / Sign Up
