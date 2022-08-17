@@ -13,9 +13,10 @@ import UserAvatar from './UserAvatar'
 import Avatar from 'avataaars'
 import { configs } from '../avatars'
 import axios from 'axios'
+import { baseUrl } from '../axiosConfig'
 
 export default function ChangeAvatarModal({open, setOpen}) {
-  const { user } = useUser()
+  const { user, setUser } = useUser()
   const [avatarOptions, setAvatarOptions] = useState(JSON.parse(user.avatarOptions))
   console.log(avatarOptions)
 
@@ -27,6 +28,17 @@ export default function ChangeAvatarModal({open, setOpen}) {
 
   const handleSubmit = () => {
     // POST request
+    axios.put(`${baseUrl}/user/${user._id}/avatar`, {avatarOptions: JSON.stringify(avatarOptions)}, { withCredentials: true }).then(res=> {
+      console.log(res)
+      setUser(prevUser => {
+        return {
+          ...prevUser,
+          avatarOptions: res.data.avatarOptions
+        }
+      })
+    }).catch(err => {
+        console.log(err)
+    })
   }
 
   const handleChange = (key, value) => {
