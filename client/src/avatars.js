@@ -1,4 +1,4 @@
-const configs = {
+export const configs = {
   topType: [
     'NoHair',
     'Eyepatch',
