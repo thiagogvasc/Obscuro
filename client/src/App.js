@@ -27,6 +27,7 @@ if (process.env.NODE_ENV === 'development') {
   axios.defaults.baseURL ='http://localhost:8080'
 }
 import {baseUrl} from './axiosConfig'
+import Profile from './pages/Profile'
 
 function App() { 
   const theme = createTheme({
@@ -49,6 +50,7 @@ function App() {
                   <Route path="/chat" element={ <ChatRoutes /> }>
                     <Route index element={ <Chat /> } />
                     <Route path='create-conversation' element={ <CreateConversation /> } />
+                    <Route path='profile' element={ <Profile /> } />
                   </Route>
                 </Routes>
               
