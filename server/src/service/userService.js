@@ -46,6 +46,10 @@ const getUserByUsername = async username => {
   return User.findOne({ username })
 }
 
+const changeAvatarById = async (id, avatarOptions) => {
+  return User.findOneAndUpdate({ _id: id }, {avatarOptions}, { new: true})
+}
+
 // const getAggregateUserById = async id => {
 //   let user = await User.findOne({ _id: id })
 //   let aggregateConvs = []
@@ -121,5 +125,6 @@ module.exports = {
   removeConversationFromUserById,
   getUserById,
   getUserByUsername,
+  changeAvatarById
   // getAggregateUserById
 }
