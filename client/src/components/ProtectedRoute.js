@@ -35,7 +35,7 @@ function ProtectedRoute({ children }) {
             }
         })
     }, [])
-    return (<>{ userID ? children : 'not authenticated' }</>)
+    return (<>{ user ? children : 'not authenticated' }</>)
 }
 
 export default ProtectedRoute
