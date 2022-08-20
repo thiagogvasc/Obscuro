@@ -18,12 +18,14 @@ import Navbar from '../components/Navbar'
 
 import { useChat } from '../contexts/chatContext'
 import { useUser } from '../contexts/userContext'
+import { useInfoSidebar } from '../contexts/infoSidebarContext'
 import { grey } from '@mui/material/colors'
 import { Fab, Paper, CircularProgress, Slide, Collapse } from '@mui/material'
 import SendMessageForm from '../components/SendMessageForm'
 import MuiAvatar from '@mui/material/Avatar'
 import ConversationAvatar from '../components/ConversationAvatar'
 import UserAvatar from '../components/UserAvatar'
+import MessageInfo from '../components/MessageInfo'
 
 
 function Chat() {
@@ -39,12 +41,21 @@ function Chat() {
   const socket = useSocket()
   const navigate = useNavigate()
   const [shouldOpenSidebar, setShouldOpenSidebar] = useState(false)
-  const [openInfo, setOpenInfo] = useState(false)
+  //const [openInfo, setOpenInfo] = useState(false)
+
+  const {
+    openConversationInfo,
+    setOpenConversationInfo,
+    openMessageInfo,
+    setOpenMessageInfo,
+    currentMessage
+  } = useInfoSidebar()
 
   const { user, userID } = useUser()
 
   const handleOpenInfo = () => {
-    setOpenInfo(openInfo => !openInfo)
+    setOpenConversationInfo(prev => !prev)
+    setOpenMessageInfo(false)
   }
 
   if (isLoading) {
@@ -103,7 +114,7 @@ function Chat() {
               textAlign: 'center', 
               p: 1,
               borderTopLeftRadius: '25px',
-              borderTopRightRadius: openInfo ? '' : '25px',
+              borderTopRightRadius: openConversationInfo || openMessageInfo ? '' : '25px',
               '&:hover': {
                 backgroundColor: 'action.hover',
                 cursor: 'pointer'
@@ -125,7 +136,8 @@ function Chat() {
           </Box>
 
           {/* <Collapse mountOnEnter unmountOnExit in={openInfo} orientation='horizontal'><ConversationInfo /></Collapse> */}
-          {openInfo && <ConversationInfo />}
+          {openConversationInfo && <ConversationInfo />}
+          {openMessageInfo && <MessageInfo message={currentMessage}/>}
         </Paper> 
       </Box>
     </Paper>
