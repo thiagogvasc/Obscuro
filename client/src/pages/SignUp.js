@@ -33,7 +33,7 @@ function SignUp() {
       [name]: value
     })
 
-    console.log(formData)
+    // console.log(formData)
   }
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -50,7 +50,7 @@ function SignUp() {
       return
     }
 
-    console.log(dataToSubmit)
+    // console.log(dataToSubmit)
 		axios.post(`${baseUrl}/auth/signup`, dataToSubmit, { withCredentials: true }).then(result => {
 			console.log(result.data)
       setMessage({

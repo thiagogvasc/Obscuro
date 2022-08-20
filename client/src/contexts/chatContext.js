@@ -48,8 +48,8 @@ export function ChatProvider({ children }) {
   }, [chatData])
 
   const getConvName = (conversation) => {
-    console.log(conversation)
-    console.log(chatData._id)
+    // console.log(conversation)
+    // console.log(chatData._id)
     if (conversation.isDM) {
       const [participant1, participant2] = conversation.participants
       if (participant1._id === userID) { // is self
@@ -76,27 +76,27 @@ export function ChatProvider({ children }) {
 
         if (!(lastMessage1 && lastMessage2)) return 0
         
-        console.log(userID)
-        console.log({conv1, conv2, lastMessage1, lastMessage2})
+        // console.log(userID)
+        // console.log({conv1, conv2, lastMessage1, lastMessage2})
         const deliveryToMe1 = lastMessage1.deliveries.find(d => d.to === userID)
         const deliveryToMe2 = lastMessage2.deliveries.find(d => d.to === userID)
-        console.log(deliveryToMe1)
+        // console.log(deliveryToMe1)
         return (new Date(deliveryToMe1.at) < new Date(deliveryToMe2.at)) - (new Date(deliveryToMe1.at) > new Date(deliveryToMe2.at))
       })
 
       console.log('chat joined')
-      console.log(user)
+      // console.log(user)
       setChatData(user)
       setCurrentConversation(user.conversations.find(conv => conv.name === 'General'))
       setIsLoading(false)
     })
     socket.onMessage(message => {
-      console.log({message})
+      // console.log({message})
       // console.log(new Date(message.sentAt))
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const conversation = message.conversation
-        console.log('before adding message', {chatDataDraft})
+        // console.log('before adding message', {chatDataDraft})
         chatDataDraft.conversations.forEach(conv => {
           if (conv._id === conversation._id) {
             conv.messages.push(message)
@@ -125,7 +125,7 @@ export function ChatProvider({ children }) {
         const aggregateConv = chatDataDraft.conversations.find(c => c._id === conversation._id)
         chatDataDraft.conversations = chatDataDraft.conversations.filter(c => c._id !== conversation._id)
         chatDataDraft.conversations.unshift(aggregateConv)
-        console.log('after', {chatDataDraft})
+        // console.log('after', {chatDataDraft})
         return chatDataDraft
       })
       // socket.socketRef.current.emit('message-delivered', { 
@@ -148,14 +148,14 @@ export function ChatProvider({ children }) {
             message.deliveries.push(delivery)
           }
         })
-        console.log(chatDataDraft)
+        // console.log(chatDataDraft)
 
         return chatDataDraft
       })
     })
 
     socket.socketRef.current.on('new-conversation', conversation => {
-      console.log(conversation)
+      // console.log(conversation)
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const alreadyExists = chatDataDraft.conversations.find(c => c._id === conversation._id)
@@ -180,7 +180,7 @@ export function ChatProvider({ children }) {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         const conversation = chatDataDraft.conversations.find(conv => conv._id === conversationID)
         conversation.participants = conversation.participants.filter(p => p._id !== participant._id)
-        console.log(chatDataDraft)
+        // console.log(chatDataDraft)
         return chatDataDraft
       })
     })
@@ -191,7 +191,7 @@ export function ChatProvider({ children }) {
         const conversation = chatDataDraft.conversations.find(conv => conv._id === conversationID)
         const promotedParticipant = conversation.participants.find(p => p._id === participantID)
         promotedParticipant.isAdmin = true
-        console.log(chatDataDraft)
+        // console.log(chatDataDraft)
         return chatDataDraft
       })
     })
@@ -206,8 +206,8 @@ export function ChatProvider({ children }) {
             message.read.push(openedBy)
           })
         }
-        console.log('after opening')
-        console.log(chatDataDraft)
+        // console.log('after opening')
+        // console.log(chatDataDraft)
         return chatDataDraft
       })
     })

@@ -28,7 +28,7 @@ function Login() {
 			...formData,
 			[name]: value
 		})
-		console.log(formData)
+		// console.log(formData)
 	}
 
 	const handleSubmit = (e) => {
@@ -41,7 +41,7 @@ function Login() {
 		})
 
 		axios.post(`${baseUrl}/auth/login`, formData, { withCredentials: true }).then(result => {
-				console.log(result.data.message)
+				// console.log(result.data.message)
 				setMessage({
 					type: 'success',
 					text: result.data.message
@@ -54,10 +54,10 @@ function Login() {
 				type: 'error',
 				text: err.response.data
 			})
-			console.log(err.response.data)
+			// console.log(err.response.data)
 		})
 	}
-	console.log(message)
+	// console.log(message)
 	return (
 		<Paper square sx={{ 
 			display: "flex", 

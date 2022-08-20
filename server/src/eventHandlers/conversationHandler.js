@@ -17,7 +17,7 @@ const createConversation = async (socket, io, {name, isPublic, isDM, participant
   socket.to(newConversation._id).emit('new-conversation', aggregateConversation)
   
 
-  console.log(aggregateConversation)
+  // console.log(aggregateConversation)
   // Acknowledge response
   ack(aggregateConversation) 
 }
@@ -44,7 +44,7 @@ const joinChat = async (socket, io) => {
     })
 
     const userParticipant = newConv.participants.find(p => p._id === userID)
-    console.log({userParticipant})
+    // console.log({userParticipant})
     newConv.messages = newConv.messages.filter(m => {
       const messageDate = new Date(m.sentAt)
       console.log('message date: ' + messageDate)
@@ -53,7 +53,7 @@ const joinChat = async (socket, io) => {
       return messageDate > participantAddedDate
     })
     console.log("messagess")
-    console.log(newConv.messages)
+    // console.log(newConv.messages)
     convs.push(newConv)
   }
 
@@ -70,7 +70,7 @@ const joinConversation = async (socket, io, conversationID) => {
   await socket.join(conversationID)
   socket.emit('conversation-joined') // io.emit(new user joined)
   // emit 10 last messages
-  console.log('conv after joining ' + await conversationService.getConversationById(conversationID))
+  // console.log('conv after joining ' + await conversationService.getConversationById(conversationID))
 
   // Refactor ugly code
   // Improve performance by creating new service that handles this
@@ -114,12 +114,12 @@ const addParticipants = async (socket, io, { conversationID, participantsIDs }) 
     const newConv = aggregateConversation
     // filter messages
     const userParticipant = newConv.participants.find(p => p._id === participantID)
-    console.log({userParticipant})
+    // console.log({userParticipant})
     newConv.messages = newConv.messages.filter(m => {
       const messageDate = new Date(m.sentAt)
-      console.log('message date: ' + messageDate)
+      // console.log('message date: ' + messageDate)
       const participantAddedDate = new Date(userParticipant.addedAt)
-      console.log('participant added: ' + participantAddedDate)
+      // console.log('participant added: ' + participantAddedDate)
       return messageDate > participantAddedDate
     })
 
@@ -139,15 +139,15 @@ const addParticipants = async (socket, io, { conversationID, participantsIDs }) 
   // Emit event to the old participants
   // New participants already have updated data
   const newParticipants = aggregateConversation.participants.filter(p => !originalParticipants.includes(p))
-  console.log('new')
-  console.log(newParticipants)
+  // console.log('new')
+  // console.log(newParticipants)
   originalParticipants.forEach(participant => {
     io.to(participant._id).emit('new-participants', {
       conversationID,
       participants: newParticipants
     })
-    console.log('aggre participants')
-    console.log(aggregateConversation.participants)
+    // console.log('aggre participants')
+    // console.log(aggregateConversation.participants)
   })
 }
 

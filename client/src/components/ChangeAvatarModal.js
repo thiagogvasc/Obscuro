@@ -18,7 +18,6 @@ import { baseUrl } from '../axiosConfig'
 export default function ChangeAvatarModal({open, setOpen}) {
   const { user, setUser } = useUser()
   const [avatarOptions, setAvatarOptions] = useState(JSON.parse(user.avatarOptions))
-  console.log(avatarOptions)
 
 
   const handleClose = () => {
@@ -29,7 +28,6 @@ export default function ChangeAvatarModal({open, setOpen}) {
   const handleSubmit = () => {
     // POST request
     axios.put(`${baseUrl}/user/${user._id}/avatar`, {avatarOptions: JSON.stringify(avatarOptions)}, { withCredentials: true }).then(res=> {
-      console.log(res)
       setUser(prevUser => {
         return {
           ...prevUser,
