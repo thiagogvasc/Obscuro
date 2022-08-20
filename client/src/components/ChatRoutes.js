@@ -4,6 +4,7 @@ import ProtectedRoute from './ProtectedRoute'
 import { UsersProvider } from '../contexts/usersContext'
 import { Outlet } from 'react-router-dom'
 import { SidebarProvider } from '../contexts/sidebarContext'
+import { InfoSidebarProvider } from '../contexts/infoSidebarContext'
 
 
 export default function ChatRoutes() {
@@ -12,7 +13,9 @@ export default function ChatRoutes() {
       <UsersProvider>
         <ChatProvider>
           <SidebarProvider>
-            <Outlet />
+            <InfoSidebarProvider>
+              <Outlet />
+            </InfoSidebarProvider>
           </SidebarProvider>
         </ChatProvider>
       </UsersProvider>
