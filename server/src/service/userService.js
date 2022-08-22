@@ -2,9 +2,16 @@ const User = require('../models/userModel')
 const { uuid } = require('uuidv4')
 
 const conversationService = require('./conversationService')
+const { generateRandomAvatarOptions } = require('../avatars')
 
 const createUser = async (username, password) => {
-  return new User({_id: uuid(), username, password, conversations: []}).save()
+  return new User({
+    _id: uuid(), 
+    username, 
+    password,
+    conversations: [],
+    avatarOptions: JSON.stringify(generateRandomAvatarOptions())
+  }).save()
 }
 
 const createUserWithId = async (id, username, password) => {
@@ -37,6 +44,10 @@ const getUserById = async id => {
 
 const getUserByUsername = async username => {
   return User.findOne({ username })
+}
+
+const changeAvatarById = async (id, avatarOptions) => {
+  return User.findOneAndUpdate({ _id: id }, {avatarOptions}, { new: true})
 }
 
 // const getAggregateUserById = async id => {
@@ -114,5 +125,6 @@ module.exports = {
   removeConversationFromUserById,
   getUserById,
   getUserByUsername,
+  changeAvatarById
   // getAggregateUserById
 }

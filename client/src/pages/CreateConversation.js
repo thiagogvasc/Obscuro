@@ -49,7 +49,7 @@ function CreateConversation() {
       [name]: value
     })
 
-    console.log(formData)
+    // console.log(formData)
   }
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -61,10 +61,10 @@ function CreateConversation() {
       participants: [{_id: userID, isAdmin: true}, ...formData.participants.map(participant => ({_id: participant, isAdmin: false}))]
     }
 
-    console.log(dataToSubmit)
+    // console.log(dataToSubmit)
 
     socket.emitCreateConversation(dataToSubmit, conversation => {
-      console.log(conversation)
+      // console.log(conversation)
       setChatData(prevChatData => {
         const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
         chatDataDraft.conversations.push(conversation)

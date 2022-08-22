@@ -12,7 +12,7 @@ const sendMessage = async (socket, io, message) => {
   } else {
     newMessage = await messageService.createMessage(message.text, message.sender, message.conversation, message.sentAt)
   }
-  console.log(newMessage)
+  // console.log(newMessage)
   const aggregateMessage = await messageService.getAggregateMessageById(newMessage._id)
 
 
