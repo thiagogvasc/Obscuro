@@ -7,6 +7,7 @@ import { useChat } from '../contexts/chatContext'
 import DoneAllIcon from '@mui/icons-material/DoneAll'
 import CheckIcon from '@mui/icons-material/Check';
 import MessagePopover from './MessagePopover'
+import { grey } from '@mui/material/colors'
 
 
 export default function Message({message}) {
@@ -55,7 +56,7 @@ export default function Message({message}) {
         onMouseLeave={handleMouseLeave}
         sx={{ 
           display: 'flex', 
-          backgroundColor: 'primary.main', 
+          backgroundColor: fromSelf ? 'primary.main' : '#303030', 
           borderRadius: '10px',
           transition: 'transform 0.1s',
           '&:hover': {
