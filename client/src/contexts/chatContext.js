@@ -154,6 +154,23 @@ export function ChatProvider({ children }) {
       })
     })
 
+    socket.socketRef.current.on('message-liked', ({conversationID, messageID, like}) => {
+      console.log('liked')
+      setChatData(prevChatData => {
+        const chatDataDraft = JSON.parse(JSON.stringify(prevChatData))
+        const conversation = chatDataDraft.conversations.find(c => c._id === conversationID)
+        conversation.messages.forEach(message => {
+          if (message._id === messageID) {
+            console.log('pushed like')
+            message.likes.push(like)
+          }
+        })
+        // console.log(chatDataDraft)
+
+        return chatDataDraft
+      })
+    })
+
     socket.socketRef.current.on('new-conversation', conversation => {
       // console.log(conversation)
       setChatData(prevChatData => {
