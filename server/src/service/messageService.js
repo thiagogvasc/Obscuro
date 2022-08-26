@@ -59,6 +59,14 @@ const markAsDelivered = async (conversationID, messageID, delivery) => {
   }, { new: true })
 }
 
+const likeMessage = async (messageID, like) => {
+  return Message.updateOne({
+    _id: messageID
+  }, {
+    $push: { likes: like }
+  }, { new: true })
+}
+
 const getMessageById = async id => {
   return Message.findOne({ _id: id })
 }
@@ -106,5 +114,6 @@ module.exports = {
   getMessageById,
   getAggregateMessageById,
   markAllAsReadFromConversation,
-  markAsDelivered
+  markAsDelivered,
+  likeMessage
 }
