@@ -7,7 +7,6 @@ const SidebarUsers = React.forwardRef(({shouldOpenSidebar, setShouldOpenSidebar}
   const { users } = useUsers()
   return (
     <Box ref={ref} sx={{ position: 'absolute', overflowY: 'auto', width: '100%', height: '100%' }}>
-      <Typography fontWeight="light" ml={3} mt={1} color="white" variant="h5">Users</Typography>
       {users.map(user => 
         <SidebarUser 
           key={user._id} 
@@ -16,6 +15,7 @@ const SidebarUsers = React.forwardRef(({shouldOpenSidebar, setShouldOpenSidebar}
           user={user} 
         />
       )}  
+      {users.length === 0 && <Typography sx={{ mt: 2, color: 'text.secondary'}} textAlign="center">No users yet</Typography>}
     </Box>
   )
 })
