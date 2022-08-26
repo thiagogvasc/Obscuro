@@ -13,4 +13,8 @@ module.exports = (socket, io) => {
   socket.on('general-message', payload => {
     messageHandler.sendGeneralMessage(socket, io, payload)
   })
+
+  socket.on('like-message', payload => {
+    messageHandler.likeMessage(socket, io, payload)
+  })
 }

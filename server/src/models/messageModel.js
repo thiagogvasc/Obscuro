@@ -18,6 +18,10 @@ const messageSchema = new Schema({
     deliveries: [{
         to: String,
         at: Date
+    }],
+    likes: [{
+        by: String,
+        at: Date
     }]
 })
 

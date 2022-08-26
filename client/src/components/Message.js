@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import Box from '@mui/material/Box'
-import { Typography, Grow, Fade } from '@mui/material'
+import { Typography, Grow, Fade, AvatarGroup } from '@mui/material'
 import { useUser } from '../contexts/userContext'
 import { useChat } from '../contexts/chatContext'
 
@@ -8,16 +8,18 @@ import DoneAllIcon from '@mui/icons-material/DoneAll'
 import CheckIcon from '@mui/icons-material/Check';
 import MessagePopover from './MessagePopover'
 import { grey } from '@mui/material/colors'
+import ThumbUpAlt from '@mui/icons-material/ThumbUpAlt'
+
+import MuiAvatar from '@mui/material/Avatar'
 
 
 export default function Message({message}) {
   const { currentConversation } = useChat()
   const { userID } = useUser()
 
-  let sender = message.sender
-  const fromSelf = sender._id === userID
+  const fromSelf = message.sender._id === userID
 
-  // fix
+  // fix (test message.read.some(r => r.by === userID))
   let isRead = false
   const exceptSelfFilter = read => read.by !== userID
   if (fromSelf && currentConversation.isDM && message.read.filter(exceptSelfFilter).length > 0) {
@@ -48,7 +50,7 @@ export default function Message({message}) {
       alignSelf: fromSelf ? 'flex-end' : 'flex-start',
       textAlign: fromSelf ? 'right' : 'left',
     }}>
-      <Typography variant="body1">{ sender.username }</Typography>
+      <Typography variant="body1">{ message.sender.username }</Typography>
       <Box
         ref={messageRef}
         onClick={handleClick} 
@@ -56,6 +58,7 @@ export default function Message({message}) {
         onMouseLeave={handleMouseLeave}
         sx={{ 
           display: 'flex', 
+          position: 'relative',
           backgroundColor: fromSelf ? 'primary.main' : '#303030', 
           borderRadius: '10px',
           transition: 'transform 0.1s',
@@ -64,6 +67,24 @@ export default function Message({message}) {
             transform: 'scale(1.05)'
           }
       }}>
+        <Box sx={{
+          position: 'absolute',
+          top: 0,
+          right: fromSelf ? 'unset' : 0,
+          left: fromSelf ? 0 : 'unset',
+          transform: fromSelf ? 'translate(-50%, -50%)' : 'translate(50%,-50%)'
+        }}>
+          <AvatarGroup spacing="medium" max={3} sx={{ '& > .MuiAvatar-root': { color: 'text.disabled', backgroundColor: grey[800], width: 30, height: 30, border: 1, borderColor: '#222222' }}}>
+            {message.likes.map(like => (
+              <Grow in>
+                <MuiAvatar>
+                  <ThumbUpAlt fontSize="small" color="disabled"/>
+                </MuiAvatar> 
+              </Grow>
+            ))}
+
+          </AvatarGroup>
+        </Box>
         {open && <MessagePopover open={open} anchorEl={messageRef.current} message={message} />}
         <Typography fontWeight="300" variant="body2" sx={{
           p: 1,

@@ -35,6 +35,11 @@ const markAsDelivered = async (socket, io, {conversationID, messageID, delivery}
   socket.to(conversationID).emit('message-delivered', {conversationID, messageID, delivery})
 }
 
+const likeMessage = async (socket, io, {conversationID, messageID, by, at}) => {
+  await messageService.likeMessage(messageID, {by, at})
+  io.to(conversationID).emit('message-liked', {conversationID, messageID, like: {by, at}})
+}
+
 // Sends message to the General chat
 // messages in the General chat are not persistent
 const sendGeneralMessage = async (socket, io, message) => {
@@ -44,5 +49,6 @@ const sendGeneralMessage = async (socket, io, message) => {
 module.exports = {
   sendMessage,
   markAsDelivered,
-  sendGeneralMessage
+  sendGeneralMessage,
+  likeMessage
 }
