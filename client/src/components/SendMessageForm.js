@@ -47,6 +47,7 @@ function SendMessageForm() {
           text,
           read: [],
           deliveries: [],
+          likes: [],
           sentAt: sentAt,
           conversation: currentConversation
         })
