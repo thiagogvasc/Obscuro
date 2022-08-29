@@ -33,7 +33,7 @@ export default function Sidebar({ shouldOpenSidebar, setShouldOpenSidebar }) {
       overflow: 'hidden'
     }}>
 
-      <Paper elevation={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Paper elevation={2} sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs variant="fullWidth" value={tab} onChange={handleTabChange}>
           <Tab label="Conversations" value="conversations" />
           <Tab label="Users" value="users" />
