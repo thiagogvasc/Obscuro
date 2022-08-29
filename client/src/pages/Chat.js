@@ -111,7 +111,7 @@ function Chat() {
               >
                 back
               </Button>
-              <Paper onClick={handleOpenInfo} square elevation={3} sx={{ 
+              <Paper onClick={handleOpenInfo} square elevation={2} sx={{ 
                 textAlign: 'center', 
                 p: 1,
                 borderTopLeftRadius: '25px',
@@ -136,8 +136,12 @@ function Chat() {
               <SendMessageForm />
             </Box>
 
-            {openConversationInfo && <ConversationInfo />}
-            {openMessageInfo && <MessageInfo message={currentMessage}/>}
+            <Collapse in={openConversationInfo} orientation="horizontal" mountOnEnter unmountOnExit>
+              <ConversationInfo />
+            </Collapse>
+            <Collapse in={openMessageInfo} orientation="horizontal" mountOnEnter unmountOnExit>
+              <MessageInfo message={currentMessage}/>
+            </Collapse>
             </>
             :
             <NoActiveConversation />
