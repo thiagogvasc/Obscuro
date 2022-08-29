@@ -72,9 +72,9 @@ export default function ConversationInfo() {
   const inConversation = (currentConversation.participants.find(p => p._id === user._id))
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: '250px'}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minWidth: '250px', height: '100%'}}>
       <AddParticipantModal open={open} setOpen={setOpen} onSubmit={addParticipants} />
-      
+     
       <Paper square elevation={3} sx={{ 
         textAlign: 'center', 
         p: 1,
