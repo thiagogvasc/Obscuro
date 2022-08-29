@@ -8,7 +8,7 @@ const chatContext = createContext()
 export function ChatProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true)
   const [chatData, setChatData] = useState({conversations: []})
-  const [currentConversation, setCurrentConversation] = useState({name: '', messages: []})
+  const [currentConversation, setCurrentConversation] = useState(null)
   const socket = useSocket()
   const { userID } = useUser()
   //console.log(currentConversation)
@@ -40,7 +40,7 @@ export function ChatProvider({ children }) {
   // needs to point to the same object in order to reflect the changes
   useEffect(() => {
     chatData.conversations.forEach(conv => {
-      if (conv._id === currentConversation._id) {
+      if (conv._id === currentConversation?._id) {
         setCurrentConversation(conv)
         console.log('changed reference')
       }
@@ -87,7 +87,7 @@ export function ChatProvider({ children }) {
       console.log('chat joined')
       // console.log(user)
       setChatData(user)
-      setCurrentConversation(user.conversations.find(conv => conv.name === 'General'))
+     // setCurrentConversation(user.conversations.find(conv => conv.name === 'General'))
       setIsLoading(false)
     })
     socket.onMessage(message => {
