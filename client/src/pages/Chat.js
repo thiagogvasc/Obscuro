@@ -26,7 +26,7 @@ import MuiAvatar from '@mui/material/Avatar'
 import ConversationAvatar from '../components/ConversationAvatar'
 import UserAvatar from '../components/UserAvatar'
 import MessageInfo from '../components/MessageInfo'
-
+import NoActiveConversation from '../components/NoActiveConversation'
 
 function Chat() {
   
@@ -93,52 +93,56 @@ function Chat() {
         }}
       >
         <Sidebar shouldOpenSidebar={shouldOpenSidebar} setShouldOpenSidebar={setShouldOpenSidebar}/>
-        <Paper elevation={2} sx={{
-          flexGrow: 1, 
-          display: shouldOpenSidebar ? 'none' : 'flex', 
-          borderRadius: '25px',
-        }}>
-          <Box sx={{
-            flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'column',
+          <Paper elevation={2} sx={{
+            flexGrow: 1, 
+            display: shouldOpenSidebar ? 'none' : 'flex', 
+            borderRadius: '25px',
           }}>
-            <Button sx={{
-              display: {xs: 'block', sm: 'none'}, 
-              alignSelf: "flex-start"}} 
-              onClick={() => setShouldOpenSidebar(true)}
-            >
-              back
-            </Button>
-            <Paper onClick={handleOpenInfo} square elevation={3} sx={{ 
-              textAlign: 'center', 
-              p: 1,
-              borderTopLeftRadius: '25px',
-              borderTopRightRadius: openConversationInfo || openMessageInfo ? '' : '25px',
-              '&:hover': {
-                backgroundColor: 'action.hover',
-                cursor: 'pointer'
-              },
+            {currentConversation ? <>
+            <Box sx={{
+              flexGrow: 1,
               display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 1
+              flexDirection: 'column',
             }}>
-              <MuiAvatar sx={{ border: 2, borderColor: 'primary.light', backgroundColor: 'inherit'}}>
-                {currentConversation.isDM ? <UserAvatar user={currentConversation.participants.find(u => u._id !== userID)} /> : <ConversationAvatar />}
-              </MuiAvatar>
-              <Typography component="span">
-                { currentConversation.name }
-              </Typography>
-            </Paper>
-            <MessagesWindow />
-            <SendMessageForm />
-          </Box>
+              <Button sx={{
+                display: {xs: 'block', sm: 'none'}, 
+                alignSelf: "flex-start"}} 
+                onClick={() => setShouldOpenSidebar(true)}
+              >
+                back
+              </Button>
+              <Paper onClick={handleOpenInfo} square elevation={3} sx={{ 
+                textAlign: 'center', 
+                p: 1,
+                borderTopLeftRadius: '25px',
+                borderTopRightRadius: openConversationInfo || openMessageInfo ? '' : '25px',
+                '&:hover': {
+                  backgroundColor: 'action.hover',
+                  cursor: 'pointer'
+                },
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 1
+              }}> 
+                <MuiAvatar sx={{ border: 2, borderColor: 'primary.light', backgroundColor: 'inherit'}}>
+                  {currentConversation.isDM ? <UserAvatar user={currentConversation.participants.find(u => u._id !== userID)} /> : <ConversationAvatar />}
+                </MuiAvatar>
+                <Typography component="span">
+                  { currentConversation.name }
+                </Typography>
+              </Paper>
+              <MessagesWindow />
+              <SendMessageForm />
+            </Box>
 
-          {/* <Collapse mountOnEnter unmountOnExit in={openInfo} orientation='horizontal'><ConversationInfo /></Collapse> */}
-          {openConversationInfo && <ConversationInfo />}
-          {openMessageInfo && <MessageInfo message={currentMessage}/>}
-        </Paper> 
+            {openConversationInfo && <ConversationInfo />}
+            {openMessageInfo && <MessageInfo message={currentMessage}/>}
+            </>
+            :
+            <NoActiveConversation />
+          }
+        </Paper>
       </Box>
     </Paper>
   );
